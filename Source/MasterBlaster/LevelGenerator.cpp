@@ -7,13 +7,30 @@
 ALevelGenerator::ALevelGenerator(){
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
+	
+	mapWidth = 100;
+	mapHeight = 20;
 
+	
 }
+
+
+//Private Functions
+void ALevelGenerator::GenerateMap() {
+	FVector location(0, 0, 0);
+	FRotator rotation(0, 0, 0);
+	FActorSpawnParameters spawnInfo;
+	
+	ABaseTile* newTile = GetWorld()->SpawnActor<ABaseTile>(tile, location, rotation, spawnInfo);
+	
+	map.Add(newTile);
+}
+
 
 // Called when the game starts or when spawned
 void ALevelGenerator::BeginPlay(){
 	Super::BeginPlay();
-	
+	GenerateMap();
 }
 
 // Called every frame

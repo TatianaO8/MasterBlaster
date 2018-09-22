@@ -2,6 +2,9 @@
 
 #pragma once
 
+#include "PaperSpriteComponent.h"
+#include "ConstructorHelpers.h"
+
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "BaseTile.generated.h"
@@ -10,7 +13,11 @@ UCLASS()
 class MASTERBLASTER_API ABaseTile : public AActor
 {
 	GENERATED_BODY()
+
+private:
+	//UPaperSpriteComponent* tileSpriteComponent;
 	
+
 public:	
 	// Sets default values for this actor's properties
 	ABaseTile();
@@ -23,6 +30,4 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	
-	
 };

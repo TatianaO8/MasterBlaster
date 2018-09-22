@@ -1,10 +1,12 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #pragma once
-
-#include "PaperSPriteComponent.h"
-
 #include "CoreMinimal.h"
+
+#include "PaperSpriteComponent.h"
+#include "BaseTile.h"
+
+
 #include "GameFramework/Actor.h"
 #include "LevelGenerator.generated.h"
 
@@ -16,15 +18,25 @@ public:
 	// Sets default values for this actor's properties
 	ALevelGenerator();
 
+private:
+	void GenerateMap();
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
 public:	
-	TArray<UPaperSpriteComponent *> map;
+	TArray<ABaseTile*> map;
+
+
+	UPROPERTY(EditAnywhere, Category = LevelGeneration)
+	int mapWidth;
+
+	UPROPERTY(EditAnywhere, Category = LevelGeneration)
+	int mapHeight;
 	
-	UPROPERTY(EditAnywhere)
-	UPaperSpriteComponent* basicTile;
+	UPROPERTY(EditAnywhere, Category = LevelGeneration)
+	TSubclassOf<ABaseTile> tile;
 
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
