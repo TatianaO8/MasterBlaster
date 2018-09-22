@@ -4,24 +4,20 @@
 
 
 // Sets default values
-ALevelGenerator::ALevelGenerator()
-{
+ALevelGenerator::ALevelGenerator(){
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
 }
 
 // Called when the game starts or when spawned
-void ALevelGenerator::BeginPlay()
-{
+void ALevelGenerator::BeginPlay(){
 	Super::BeginPlay();
 	
 }
 
 // Called every frame
-void ALevelGenerator::Tick(float DeltaTime)
-{
+void ALevelGenerator::Tick(float DeltaTime){
 	Super::Tick(DeltaTime);
-
 }
 

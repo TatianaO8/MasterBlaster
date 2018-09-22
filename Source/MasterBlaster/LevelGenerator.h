@@ -2,13 +2,14 @@
 
 #pragma once
 
+#include "PaperSPriteComponent.h"
+
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "LevelGenerator.generated.h"
 
 UCLASS()
-class MASTERBLASTER_API ALevelGenerator : public AActor
-{
+class MASTERBLASTER_API ALevelGenerator : public AActor{
 	GENERATED_BODY()
 	
 public:	
@@ -20,6 +21,11 @@ protected:
 	virtual void BeginPlay() override;
 
 public:	
+	TArray<UPaperSpriteComponent *> map;
+	
+	UPROPERTY(EditAnywhere)
+	UPaperSpriteComponent* basicTile;
+
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 

@@ -10,8 +10,7 @@
  * 
  */
 UCLASS()
-class MASTERBLASTER_API ABaseUnit : public APaperCharacter
-{
+class MASTERBLASTER_API ABaseUnit : public APaperCharacter{
 	GENERATED_BODY()
 	
 	
