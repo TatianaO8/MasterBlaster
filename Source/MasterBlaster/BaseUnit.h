@@ -34,6 +34,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Health")
 		float HealthPercentage;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Location")
+		FVector UnitLocation;
+
 	UFUNCTION(BlueprintPure, Category = "Health")
 		float GetHealth();
 

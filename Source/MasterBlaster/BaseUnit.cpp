@@ -2,6 +2,8 @@
 
 #include "BaseUnit.h"
 #include "Kismet/KismetMathLibrary.h"
+#include "Engine/World.h"
+#include "Engine.h"
 
 
 // Sets default values
@@ -27,6 +29,9 @@ void ABaseUnit::BeginPlay()
 void ABaseUnit::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
+	UnitLocation = GetActorLocation();
+	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, UnitLocation.ToString());
 
 }
 
