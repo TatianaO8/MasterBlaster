@@ -33,7 +33,7 @@ public:
 	int mapWidth;
 
 	UPROPERTY(EditAnywhere, Category = LevelGeneration)
-	int mapHeight;
+	int ceilingHeight;
 	
 	UPROPERTY(EditAnywhere, Category = LevelGeneration)
 	TSubclassOf<ABaseTile> tile;

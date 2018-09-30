@@ -9,7 +9,7 @@ ALevelGenerator::ALevelGenerator(){
 	PrimaryActorTick.bCanEverTick = true;
 	
 	mapWidth = 100;
-	mapHeight = 20;
+	ceilingHeight = 10;
 
 	
 }

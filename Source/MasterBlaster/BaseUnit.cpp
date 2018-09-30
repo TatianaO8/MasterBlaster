@@ -31,7 +31,7 @@ void ABaseUnit::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 
 	UnitLocation = GetActorLocation();
-	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, UnitLocation.ToString());
+	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, UnitLocation.ToString());
 
 }
 
