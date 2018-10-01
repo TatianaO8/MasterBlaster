@@ -14,13 +14,16 @@ class MASTERBLASTER_API ABaseTile : public AActor
 {
 	GENERATED_BODY()
 
+public:
+	// Sets default values for this actor's properties
+	ABaseTile();
+
 private:
 	//UPaperSpriteComponent* tileSpriteComponent;
 	
+protected:
+	bool isOccupied;
 
-public:	
-	// Sets default values for this actor's properties
-	ABaseTile();
 
 protected:
 	// Called when the game starts or when spawned

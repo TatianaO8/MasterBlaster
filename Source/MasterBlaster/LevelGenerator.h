@@ -36,6 +36,9 @@ public:
 	int ceilingHeight;
 	
 	UPROPERTY(EditAnywhere, Category = LevelGeneration)
+	int slope;
+	
+	UPROPERTY(EditAnywhere, Category = LevelGeneration)
 	TSubclassOf<ABaseTile> tile;
 
 	// Called every frame
