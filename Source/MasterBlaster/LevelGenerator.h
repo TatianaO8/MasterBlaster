@@ -19,6 +19,10 @@ public:
 	ALevelGenerator();
 
 private:
+	void GetTileSpawnLocation(const ABaseTile* previousTile, FVector &location, bool &canChangeDirection);
+	void GetTileSpawnRotation(const ABaseTile* previousTile, FRotator &rotation, bool canChangeDirection);
+	void GenerateFloor();
+	void GenerateCeiling();
 	void GenerateMap();
 
 protected:
@@ -26,14 +30,17 @@ protected:
 	virtual void BeginPlay() override;
 
 public:	
-	TArray<ABaseTile*> map;
-
+	TArray<ABaseTile*> floor;
+	TArray<ABaseTile*> ceiling;
 
 	UPROPERTY(EditAnywhere, Category = LevelGeneration)
 	int mapWidth;
 
 	UPROPERTY(EditAnywhere, Category = LevelGeneration)
 	int ceilingHeight;
+
+	UPROPERTY(EditAnywhere, Category = LevelGeneration)
+	int tileSize;
 	
 	UPROPERTY(EditAnywhere, Category = LevelGeneration)
 	int slope;
@@ -44,6 +51,7 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	
+private:
+	const float pi = 3.141592;
 	
 };

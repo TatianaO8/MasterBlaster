@@ -12,55 +12,94 @@ ALevelGenerator::ALevelGenerator(){
 	
 	mapWidth = 10;
 	ceilingHeight = 10;
+	tileSize = 128;
 	slope = 15;
 }
 
 
 //Private Functions
-void GetSpawnPosition(const ABaseTile *previousTile, FVector &location) {
-	float pX = previousTile->GetActorLocation().X;
-	float pY = previousTile->GetActorLocation().Y;
-	float pZ = previousTile->GetActorLocation().Z;
-	FRotator pR = previousTile->GetActorRotation();
-
-	if (previousTile->GetActorRotation() == FRotator(0, 0, 0)) {
-		location = FVector(pX + 128, 0, pZ);
-		return;
+void ALevelGenerator::GetTileSpawnLocation(const ABaseTile* previousTile, FVector &location, bool &canChangeDirection) {
+	if (previousTile->GetActorRotation().Pitch != 0) {
+		location.X = previousTile->GetActorLocation().X + tileSize * FMath::Cos(slope * pi / 180);
+		canChangeDirection = false;
 	}
-	
-	
-	// Cos/Sin is in radians for some reason
-
-	float nX = pX + (128 * FMath::Cos(pR.Pitch));
-	float nZ = pZ + (128 * FMath::Sin(pR.Pitch));
-	location = FVector(nX, 0, nZ);
-	return;
+	else{
+		location.X = previousTile->GetActorLocation().X + tileSize;
+		canChangeDirection = true;
+	}
 }
-void ALevelGenerator::GenerateMap() {
-	//Generate Floor
+void ALevelGenerator::GetTileSpawnRotation(const ABaseTile* previousTile, FRotator &rotation, bool canChangeDirection) {
+	float previousRotation = previousTile->GetActorRotation().Pitch;
+	bool goUp = FMath::RandRange(1, 10) <= 5; //50 / 50 chance to go up or down
+	if (!canChangeDirection) {
+		rotation.Pitch = previousRotation;
+	}
+	else if (goUp) {
+		rotation.Pitch = slope;
+	}
+	else {
+		rotation.Pitch = -slope;
+	}
+
+}
+
+void ALevelGenerator::GenerateFloor() {
 	float currElevation = 0;
-	
+	bool canChangeDirection;
+
+	//Generate Floor
 	//The root tile for the whole map goes at 0,0,0 with no rotations
 	ABaseTile* rootTile = GetWorld()->SpawnActor<ABaseTile>(tile, FVector(0, 0, 0), FRotator(0, 0, 0), FActorSpawnParameters());
-	map.Add(rootTile);
-	
+	floor.Add(rootTile);
+
 	for (int i = 1; i < mapWidth; i++) {
-		FVector location;
-		FRotator rotation(0,0,0);
+		FVector location(i * 128, 0, currElevation);
+		FRotator rotation(0, 0, 0);
 		FActorSpawnParameters spawnInfo;
 
-		GetSpawnPosition(map[i - 1], location);
+		GetTileSpawnLocation(floor[i - 1], location, canChangeDirection);
 
 		//Determine deltaElevation
 		bool changeElevation = FMath::RandRange(1, 10) <= 2; //20% chance to change elevation
 		if (changeElevation) {
-			rotation = FRotator(15, 0, 0);
-			currElevation += 64 * FMath::Sin(slope);
+			GetTileSpawnRotation(floor[i - 1], rotation, canChangeDirection);
+			currElevation += tileSize * FMath::Sin(rotation.Pitch * pi / 180);
 		}
 		ABaseTile* newTile = GetWorld()->SpawnActor<ABaseTile>(tile, location, rotation, spawnInfo);
 
-		map.Add(newTile);
+		floor.Add(newTile);
 	}
+}
+void ALevelGenerator::GenerateCeiling() {
+	float currElevation = ceilingHeight * 128;
+	bool canChangeDirection;
+
+	//Generate Floor
+	//The root tile for the whole map goes at 0,0,0 with no rotations
+	ABaseTile* rootTile = GetWorld()->SpawnActor<ABaseTile>(tile, FVector(0, 0, currElevation), FRotator(0, 0, 0), FActorSpawnParameters());
+	ceiling.Add(rootTile);
+
+	for (int i = 1; i < mapWidth; i++) {
+		FVector location(i * 128, 0, currElevation);
+		FRotator rotation(0, 0, 0);
+		FActorSpawnParameters spawnInfo;
+
+		GetTileSpawnLocation(ceiling[i - 1], location, canChangeDirection);
+
+		//Determine deltaElevation
+		bool changeElevation = FMath::RandRange(1, 10) <= 2; //20% chance to change elevation
+		if (changeElevation) {
+			GetTileSpawnRotation(ceiling[i - 1], rotation, canChangeDirection);
+			currElevation += tileSize * FMath::Sin(rotation.Pitch * pi / 180);
+		}
+		ABaseTile* newTile = GetWorld()->SpawnActor<ABaseTile>(tile, location, rotation, spawnInfo);
+
+		ceiling.Add(newTile);
+	}
+}
+void ALevelGenerator::GenerateMap() {
+	GenerateFloor();
+	GenerateCeiling();
 }
 
 
