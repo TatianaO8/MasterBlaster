@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "Blaster.generated.h"
+#include "Components/BoxComponent.h"
 
 UENUM(BlueprintType)
 namespace EWeaponProjectile
@@ -43,7 +44,25 @@ struct FWeaponData
 UCLASS()
 class MASTERBLASTER_API ABlaster : public AActor
 {
-	GENERATED_BODY()
+	GENERATED_UCLASS_BODY()
+
+	UFUNCTION()
+	void Fire();
+
+	UFUNCTION()
+	void Instant_Fire();
+
+	UPROPERTY(EditDefaultsOnly, Category = "Config")
+	FWeaponData WeaponConfig;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Config")
+	TEnumAsByte<EWeaponProjectile::ProjectileType> ProjectileType;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Collision")
+	UBoxComponent *CollisionComp;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Config")
+		USkeletalMeshComponent *WeaponMesh;
 	
 public:	
 	// Sets default values for this actor's properties

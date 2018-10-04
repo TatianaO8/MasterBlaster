@@ -4,10 +4,14 @@
 
 
 // Sets default values
-ABlaster::ABlaster()
+ABlaster::ABlaster(const class FPostConstructInitializeProperties& PCIP)
+	: Super(PCIP)
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
+
+	CollisionComp = PCIP.CreateDefaultSubobject<UBoxComponent>(this, TEXT("CollisionComp"));
+	RootComponent = CollisionComp;
 
 }
 
