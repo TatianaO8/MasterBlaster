@@ -9,12 +9,55 @@
 /**
  * 
  */
+USTRUCT(BlueprintType)
+struct FDoor {
+	GENERATED_USTRUCT_BODY()
+
+	FDoor(){
+	
+	}
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Doors)
+	int x;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Doors)
+	int y;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Doors)
+	int height;
+
+	//Equality Comparison overload
+	bool operator==(const FDoor &other) {
+		return (
+			height == other.height 
+			&& x == other.x
+			&& y == other.y
+		);
+	}
+
+};
 UCLASS()
 class MASTERBLASTER_API ARoom : public APaperTileMapActor
 {
 	GENERATED_BODY()
 
+private:
+	//Private Variables
+	UPROPERTY(EditAnywhere, Category = Doors)
+	FDoor leftEntrance;
+
+	//UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Doors)
+	FDoor rightEntrance;
+	//Private Functions
+
+protected:
+	//Protected Variables
+
+	//Protected Functions
+
 public:
+	//Public Variables
+	
+	//Public Functions
 	int GetRoomWidthTiles();
 	int GetRoomWidthPixels();
 
