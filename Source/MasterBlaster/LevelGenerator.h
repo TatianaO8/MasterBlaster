@@ -27,6 +27,7 @@ public:
 	int numRooms;
 
 protected:
+	void GenerateLevel();
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 

@@ -14,12 +14,11 @@ ALevelGenerator::ALevelGenerator(){
 
 }
 
-// Called when the game starts or when spawned
-void ALevelGenerator::BeginPlay(){
-	Super::BeginPlay();
+void ALevelGenerator::GenerateLevel() {
+
 	int deltaX = 0;
 	for (int i = 0; i < numRooms; i++) {
-		FVector location(deltaX , 0, 0);
+		FVector location(deltaX, 0, 0);
 		FRotator rotation(0, 0, 0);
 
 		FActorSpawnParameters spawnInfo;
@@ -28,7 +27,14 @@ void ALevelGenerator::BeginPlay(){
 
 		deltaX += testRoom->GetRoomWidthPixels();
 	}
+
+}
+
+// Called when the game starts or when spawned
+void ALevelGenerator::BeginPlay(){
+	Super::BeginPlay();
 	
+	GenerateLevel();
 }
 
 // Called every frame
