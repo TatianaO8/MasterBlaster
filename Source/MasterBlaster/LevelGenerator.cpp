@@ -2,6 +2,7 @@
 
 #include "LevelGenerator.h"
 
+#include "CombatMap.h"
 #include "Room.h"
 
 
@@ -15,15 +16,17 @@ ALevelGenerator::ALevelGenerator(){
 }
 
 void ALevelGenerator::GenerateLevel() {
+	ACombatMap* map = GetWorld()->SpawnActor<ACombatMap>(FVector(0, 0, 0), FRotator(0, 0, 0), FActorSpawnParameters());
 
 	int deltaX = 0;
 	for (int i = 0; i < numRooms; i++) {
+		//Room position
 		FVector location(deltaX, 0, 0);
 		FRotator rotation(0, 0, 0);
-
 		FActorSpawnParameters spawnInfo;
 
-		ARoom* testRoom = GetWorld()->SpawnActor<ARoom>(rooms[0], location, rotation, spawnInfo);
+		//Spawn Room
+		map->AddRoom( GetWorld()->SpawnActor<ARoom>(rooms[0], location, rotation, spawnInfo));
 
 		deltaX += testRoom->GetRoomWidthPixels();
 	}
