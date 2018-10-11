@@ -13,9 +13,8 @@ USTRUCT(BlueprintType)
 struct FDoor {
 	GENERATED_USTRUCT_BODY()
 
-	FDoor(){
+	FDoor(){}
 	
-	}
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Doors)
 	int x;
 
@@ -45,8 +44,9 @@ private:
 	UPROPERTY(EditAnywhere, Category = Doors)
 	FDoor leftEntrance;
 
-	//UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Doors)
+	UPROPERTY(EditAnywhere, Category = Doors)
 	FDoor rightEntrance;
+	
 	//Private Functions
 
 protected:

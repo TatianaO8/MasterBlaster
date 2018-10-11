@@ -12,25 +12,48 @@ ALevelGenerator::ALevelGenerator(){
 	PrimaryActorTick.bCanEverTick = true;
 
 	numRooms = 5;
+	return;
+}
 
+int ALevelGenerator::SelectRoom() {
+	int roomSelection = -1;
+
+
+
+	return 1;
+}
+
+void ALevelGenerator::SpawnRoom(int roomNum, int &x) {
+	//Room position
+	FVector location(x, 0, 0);
+	FRotator rotation(0, 0, 0);
+	FActorSpawnParameters spawnInfo;
+
+	//Spawn Room
+	ARoom* newRoom = GetWorld()->SpawnActor<ARoom>(rooms[0], location, rotation, spawnInfo);
+	map->AddRoom(newRoom);
+	
+	x += newRoom->GetRoomWidthPixels();
+
+	return;
 }
 
 void ALevelGenerator::GenerateLevel() {
-	ACombatMap* map = GetWorld()->SpawnActor<ACombatMap>(FVector(0, 0, 0), FRotator(0, 0, 0), FActorSpawnParameters());
+	
+	map = GetWorld()->SpawnActor<ACombatMap>(FVector(0, 0, 0), FRotator(0, 0, 0), FActorSpawnParameters());
 
 	int deltaX = 0;
 	for (int i = 0; i < numRooms; i++) {
-		//Room position
-		FVector location(deltaX, 0, 0);
-		FRotator rotation(0, 0, 0);
-		FActorSpawnParameters spawnInfo;
-
-		//Spawn Room
-		map->AddRoom( GetWorld()->SpawnActor<ARoom>(rooms[0], location, rotation, spawnInfo));
-
-		deltaX += testRoom->GetRoomWidthPixels();
+		int roomNum = SelectRoom();
+		if (roomNum == -1) {
+			if (GEngine) {
+				GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("ERROR: Unable to select room. Aborting level generation"));
+			}
+			return;
+		}
+		SpawnRoom(roomNum, deltaX);
+	
 	}
-
 }
 
 // Called when the game starts or when spawned

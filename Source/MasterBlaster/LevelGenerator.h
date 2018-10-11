@@ -13,7 +13,7 @@ class MASTERBLASTER_API ALevelGenerator : public AActor{
 	GENERATED_BODY()
 	
 private:
-	
+	ACombatMap* map;
 
 public:	
 	// Sets default values for this actor's properties
@@ -23,10 +23,12 @@ public:
 	UPROPERTY(EditAnywhere)
 	TArray<TSubclassOf<ARoom>> rooms;
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, Category = MapGeneration)
 	int numRooms;
 
 protected:
+	int SelectRoom();
+	void SpawnRoom(int roomNum, int &x);
 	void GenerateLevel();
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
