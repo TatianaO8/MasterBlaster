@@ -25,7 +25,8 @@ int ALevelGenerator::SelectRoom() {
 
 void ALevelGenerator::SpawnRoom(int roomNum, int &x) {
 	//Room position
-	FVector location(x, 0, 0);
+
+	FVector location(x, 0, this->GetActorLocation().Z + 1152);
 	FRotator rotation(0, 0, 0);
 	FActorSpawnParameters spawnInfo;
 
