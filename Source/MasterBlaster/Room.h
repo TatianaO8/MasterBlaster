@@ -16,10 +16,7 @@ struct FDoor {
 	FDoor(){}
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Doors)
-	int x;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Doors)
-	int y;
+	int base;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Doors)
 	int height;
@@ -27,9 +24,8 @@ struct FDoor {
 	//Equality Comparison overload
 	bool operator==(const FDoor &other) {
 		return (
-			height == other.height 
-			&& x == other.x
-			&& y == other.y
+			base == other.base 
+			&& height == other.height
 		);
 	}
 
@@ -40,6 +36,7 @@ class MASTERBLASTER_API ARoom : public APaperTileMapActor
 	GENERATED_BODY()
 
 private:
+
 	//Private Variables
 	UPROPERTY(EditAnywhere, Category = Doors)
 	FDoor leftEntrance;
