@@ -6,14 +6,7 @@
 
 // Sets default values
 ACombatMap::ACombatMap(){
- 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
 
-}
-
-//Public Functions
-void ACombatMap::AddRoom(ARoom* room) {
-	map.Add(room);
 }
 
 
@@ -23,9 +16,15 @@ void ACombatMap::BeginPlay(){
 	
 }
 
-// Called every frame
-void ACombatMap::Tick(float DeltaTime){
-	Super::Tick(DeltaTime);
-
+ARoom* ACombatMap::GetSpawnRoom() {
+	return rooms[0];
 }
 
+ARoom* ACombatMap::GetLastRoom(){
+	return (rooms.Num() > 0) ? rooms[rooms.Num()-1] : nullptr;
+}
+
+//Public Functions
+void ACombatMap::AddRoom(ARoom* room) {
+	rooms.Add(room);
+}

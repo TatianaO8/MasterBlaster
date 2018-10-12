@@ -4,6 +4,17 @@
 #include "PaperTileMapComponent.h"
 #include "PaperTileMap.h"
 
+void ARoom::EnterRoom(){
+	isEntered = true;
+	//When a room is entered
+
+	//Remove Fog of war
+
+	//Activate Enemy Units in the room
+
+	return;
+}
+
 int ARoom::GetRoomWidthTiles() {
 	return GetRenderComponent()->TileMap->MapWidth;
 }
@@ -24,3 +35,6 @@ int ARoom::GetRoomHeightPixels() {
 	return width * tileSize;
 }
 
+bool ARoom::CanConnectTo(ARoom* other){
+	return rightEntrance == other->leftEntrance;
+}

@@ -13,7 +13,7 @@ class MASTERBLASTER_API ACombatMap : public AActor
 	GENERATED_BODY()
 
 private:
-	TArray<ARoom*> map;
+	TArray<ARoom*> rooms;
 	
 	//APlayerSquad object reference
 	//EnemyForce object reference
@@ -22,16 +22,20 @@ private:
 public:	
 	// Sets default values for this actor's properties
 	ACombatMap();
-	void AddRoom(ARoom* room);
+
 
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
+public:
+	UFUNCTION(BlueprintCallable)
+	ARoom* GetSpawnRoom();
 
+	UFUNCTION(BlueprintCallable)
+	ARoom* GetLastRoom();
+	
+	void AddRoom(ARoom* room);
 	
 	
 };

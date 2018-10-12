@@ -44,6 +44,8 @@ private:
 	UPROPERTY(EditAnywhere, Category = Doors)
 	FDoor rightEntrance;
 	
+	bool isEntered;
+
 	//Private Functions
 
 protected:
@@ -53,11 +55,21 @@ protected:
 
 public:
 	//Public Variables
-	
+	void EnterRoom();
+
 	//Public Functions
+	UFUNCTION(BlueprintCallable)
 	int GetRoomWidthTiles();
+
+	UFUNCTION(BlueprintCallable)
 	int GetRoomWidthPixels();
 
+	UFUNCTION(BlueprintCallable)
 	int GetRoomHeightTiles();
+
+	UFUNCTION(BlueprintCallable)
 	int GetRoomHeightPixels();
+
+	bool CanConnectTo(ARoom* other);
+
 };
