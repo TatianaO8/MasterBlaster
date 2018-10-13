@@ -27,6 +27,12 @@ public:
 	//Array of rooms the level generator can use
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TArray<TSubclassOf<ARoom>> RoomLibrary;
+	
+	//Array of rooms the generator can use to cap off a level
+	UPROPERTY(EditAnywhere)
+	TArray<TSubclassOf<ARoom>> EndRoomLibrary;
+
+	
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = MapGeneration)
 	int numRooms;
@@ -39,11 +45,13 @@ private:
 
 	void SpawnCombatMap();
 	
-	TMap<int, TSubclassOf<ARoom>> GetValidRooms(ARoom * previousRoom);
-	int SelectRoom(ARoom* previousRoom);
-	void SpawnRoom(int roomNumber, int xPosition);
+	TArray<TSubclassOf<ARoom>> GetValidRooms(ARoom * previousRoom, TArray<TSubclassOf<ARoom>> targetLibrary);
+	TSubclassOf<ARoom> SelectRoom(ARoom* previousRoom, TArray<TSubclassOf<ARoom>> targetLibrary);
+	void SpawnRoom(TSubclassOf<ARoom> room, int xPosition);
 	void PlaceRooms(ARoom* root);
 	void GenerateLevel();
+
+	bool validateEditorInput();
 
 protected:
 	// Called when the game starts or when spawned

@@ -23,10 +23,7 @@ struct FDoor {
 
 	//Equality Comparison overload
 	bool operator==(const FDoor &other) {
-		return (
-			base == other.base 
-			&& height == other.height
-		);
+		return (base == other.base && height == other.height);
 	}
 
 };

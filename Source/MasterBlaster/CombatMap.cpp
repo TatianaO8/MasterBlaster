@@ -13,7 +13,6 @@ ACombatMap::ACombatMap(){
 // Called when the game starts or when spawned
 void ACombatMap::BeginPlay(){
 	Super::BeginPlay();
-	
 }
 
 ARoom* ACombatMap::GetSpawnRoom() {

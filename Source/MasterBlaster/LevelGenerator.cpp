@@ -26,82 +26,93 @@ void ALevelGenerator::SpawnCombatMap() {
 
 	//Spawn Combat Map
 	map = GetWorld()->SpawnActor<ACombatMap>(mapSpawnLocation, mapSpawnRotation, FActorSpawnParameters());
-
+	
+	//Place Spawn Room
 	ARoom* spawnRoom = GetWorld()->SpawnActor<ARoom>(spawnRoomBP, mapSpawnLocation, mapSpawnRotation, FActorSpawnParameters());
 	map->AddRoom(spawnRoom);
 }
 
-TMap<int, TSubclassOf<ARoom>> ALevelGenerator::GetValidRooms(ARoom * previousRoom){
-	TMap<int, TSubclassOf<ARoom>> validRooms;
+//Returns the subset of the target room library that can be placed based on the previous room in the map.
+TArray<TSubclassOf<ARoom>> ALevelGenerator::GetValidRooms(ARoom * previousRoom, TArray<TSubclassOf<ARoom>> targetLibrary){
+	TArray<TSubclassOf<ARoom>> validRooms;
 	int validRoomCount = 0;
-
-	for (int i = 0; i < RoomLibrary.Num(); i++) {
-		ARoom* tempRoom = GetWorld()->SpawnActor<ARoom>(RoomLibrary[i], FVector(0, -100, 0), FRotator(0, 0, 0), FActorSpawnParameters());
+	
+	for (int i = 0; i < targetLibrary.Num(); i++) {
+		ARoom* tempRoom = GetWorld()->SpawnActor<ARoom>(targetLibrary[i], FVector(0, -100, 0), FRotator(0, 0, 0), FActorSpawnParameters());
 		if (previousRoom->CanConnectTo(tempRoom)) {
-			validRooms.Add(validRoomCount++, RoomLibrary[i]);
+			validRooms.Add(targetLibrary[i]);
 		}
 		tempRoom->Destroy();
 	}
+	return validRooms;
 }
 
-int ALevelGenerator::SelectRoom(ARoom* previousRoom) {
+
+//Selects and returns a room from the Room Library
+TSubclassOf<ARoom> ALevelGenerator::SelectRoom(ARoom* previousRoom, TArray<TSubclassOf<ARoom>> targetLibrary) {
 	//Hashmap of valid rooms and their library index
-	auto validRooms = GetValidRooms(previousRoom);
-	
-	float seededRandomNumber = FGenericPlatformMath::SRand();
-	int roomSelection;
-	//Convert float to int in range 0 -> validRooms.Num();
-	
+	auto validRooms = GetValidRooms(previousRoom, targetLibrary);
+	//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Valid Rooms: %d"), validRooms.Num()));
 
-	return roomSelection;
+	float seededRandomNumber = FGenericPlatformMath::SRand();
+	int roomSelection = 0;
+	
+	//Convert float to int in range 0 -> validRooms.Num();
+	roomSelection = (seededRandomNumber * 10);
+	roomSelection = roomSelection % validRooms.Num();
+
+	return validRooms[roomSelection];
 }
 
 
 
-void ALevelGenerator::SpawnRoom(int roomNumber, int xPosition) {
+void ALevelGenerator::SpawnRoom(TSubclassOf<ARoom> room, int xPosition) {
 	//Room position
 	FVector location(xPosition, 0, 1152);
 	FRotator rotation(0, 0, 0);
 	FActorSpawnParameters spawnInfo;
 
 	//Spawn Room
-	ARoom* newRoom = GetWorld()->SpawnActor<ARoom>(RoomLibrary[roomNumber], location, rotation, spawnInfo);
+	ARoom* newRoom = GetWorld()->SpawnActor<ARoom>(room, location, rotation, spawnInfo);
 	map->AddRoom(newRoom);
-	
-	
-	return;
-
 }
 
 
 void ALevelGenerator::PlaceRooms(ARoom* root){
+	
+
 	//Where the next room should be placed.
 	int xPosition = root->GetRoomWidthPixels();
 	ARoom* previousRoom = root;
 
+	//Place middle rooms of map
 	for (int i = 0; i < numRooms; i++) {
 		//Select room
-		int roomNum = SelectRoom(previousRoom);
-		
-		//Validate Selection
-		if (roomNum == -1) {
-			if (GEngine) {
-				GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Room Selection Failed."));
-			}
-			return;
-		}
+		auto selectedRoom = SelectRoom(previousRoom, RoomLibrary);
 
-		//Spawn Selection
-		SpawnRoom(roomNum, xPosition);
+		//Spawn and save reference to created actor
+		SpawnRoom(selectedRoom, xPosition);
+
+		//Update spawn position for next room
+		previousRoom = map->GetLastRoom();
+		xPosition += previousRoom->GetRoomWidthPixels();
 	}
+
+	//Place ending room
+	auto selectedRoom = SelectRoom(previousRoom, EndRoomLibrary);
+	SpawnRoom(selectedRoom, xPosition);
+
 }
 
 void ALevelGenerator::GenerateLevel() {
+	//Seed the random number generator
+	FGenericPlatformMath::SRandInit(seed);
+
 	//Spawns the CombatMap and puts down the spawn room.
 	SpawnCombatMap();
 
 	//Handled by the level-gen blueprint
-	PlaceRooms(map->getSpawnRoom());
+	PlaceRooms(map->GetSpawnRoom());
 
 	//Spawns player units in spawn room
 	//SpawnPlayerTeam();
@@ -110,6 +121,40 @@ void ALevelGenerator::GenerateLevel() {
 	//SpawnEnemyTeam();
 }
 
+bool ALevelGenerator::validateEditorInput(){
+	//Validate Spawn Room
+	if (spawnRoomBP) {
+		;
+	}
+	else {
+		return false;
+	}
+
+	//Validate Room Library
+	for (TSubclassOf<ARoom> room : RoomLibrary) {
+		if (room) {
+			continue;
+		} 
+		else {
+			return false;
+		}
+	}
+
+	//Validate End rooms
+	for (TSubclassOf<ARoom> room : EndRoomLibrary) {
+		if (room) {
+			continue;
+		}
+		else {
+			return false;
+		}
+	}
+
+	return true;
+}
+
+
+
 
 /// Protected Functions
 
@@ -117,7 +162,10 @@ void ALevelGenerator::GenerateLevel() {
 void ALevelGenerator::BeginPlay(){
 	Super::BeginPlay();
 
-	FGenericPlatformMath::SRandInit(seed);
+	if (!validateEditorInput()) {
+		GEngine->AddOnScreenDebugMessage(-1, 10000.f, FColor::Red, FString::Printf(TEXT("ERROR: Please properly set up the level generator in the editor.")));
+	}
+	
 	GenerateLevel();
 }
 
@@ -126,7 +174,6 @@ void ALevelGenerator::BeginPlay(){
 // Called every frame
 void ALevelGenerator::Tick(float DeltaTime){
 	Super::Tick(DeltaTime);
-
 }
 
 ACombatMap* ALevelGenerator::GetCombatMap(){
