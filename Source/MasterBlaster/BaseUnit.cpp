@@ -2,9 +2,13 @@
 
 #include "BaseUnit.h"
 #include "Kismet/KismetMathLibrary.h"
+#include "Projectile.h"
 #include "Engine/World.h"
 #include "Engine.h"
 
+
+const FName ABaseUnit::FireForwardBinding("FireForward");
+const FName ABaseUnit::FireRightBinding("FireRight");
 
 // Sets default values
 ABaseUnit::ABaseUnit()
@@ -12,6 +16,23 @@ ABaseUnit::ABaseUnit()
 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
+	// Create a camera boom...
+	CameraBoom = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraBoom"));
+	CameraBoom->SetupAttachment(RootComponent);
+	CameraBoom->bAbsoluteRotation = true; // Don't want arm to rotate when ship does
+	CameraBoom->TargetArmLength = 1200.f;
+	CameraBoom->RelativeRotation = FRotator(-80.f, 0.f, 0.f);
+	CameraBoom->bDoCollisionTest = false; // Don't want to pull camera in when it collides with level
+
+	// Create a camera...
+	CameraComponent = CreateDefaultSubobject<UCameraComponent>(TEXT("TopDownCamera"));
+	CameraComponent->SetupAttachment(CameraBoom, USpringArmComponent::SocketName);
+	CameraComponent->bUsePawnControlRotation = false;	// Camera does not rotate relative to arm
+
+	// Weapon
+	GunOffset = FVector(90.f, 0.f, 0.f);
+	FireRate = 0.1f;
+	bCanFire = true;
 }
 
 // Called when the game starts or when spawned
@@ -33,12 +54,22 @@ void ABaseUnit::Tick(float DeltaTime)
 	UnitLocation = GetActorLocation();
 	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, UnitLocation.ToString());
 
+	// Create fire direction vector
+	const float FireForwardValue = GetInputAxisValue(FireForwardBinding);
+	const float FireRightValue = GetInputAxisValue(FireRightBinding);
+	const FVector FireDirection = FVector(FireForwardValue, FireRightValue, 0.f);
+
+	FireShot(FireDirection);
 }
 
 // Called to bind functionality to input
 void ABaseUnit::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
+
+	// Set up "action" bindings.
+	PlayerInputComponent->BindAxis(FireForwardBinding);
+	PlayerInputComponent->BindAxis(FireRightBinding);
 
 }
 
@@ -74,3 +105,34 @@ void ABaseUnit::UpdateHealth(float HealthChange)
 	HealthPercentage = Health / FullHealth;
 }
 
+void ABaseUnit::FireShot(FVector FireDirection)
+{
+	// If it's ok to fire again
+	if (bCanFire == true)
+	{
+		// If we are pressing fire stick in a direction
+		if (FireDirection.SizeSquared() > 0.0f)
+		{
+			const FRotator FireRotation = FireDirection.Rotation();
+			// Spawn projectile at an offset from this pawn
+			const FVector SpawnLocation = GetActorLocation() + FireRotation.RotateVector(GunOffset);
+
+			UWorld* const World = GetWorld();
+			if (World != NULL)
+			{
+				// spawn the projectile
+				World->SpawnActor<AProjectile>(SpawnLocation, FireRotation);
+			}
+
+			bCanFire = false;
+			World->GetTimerManager().SetTimer(TimerHandle_ShotTimerExpired, this, &ABaseUnit::ShotTimerExpired, FireRate);
+
+			bCanFire = false;
+		}
+	}
+}
+
+void ABaseUnit::ShotTimerExpired()
+{
+	bCanFire = true;
+}
