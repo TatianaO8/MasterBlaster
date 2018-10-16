@@ -6,22 +6,29 @@
 #include "Engine/World.h"
 #include "Engine.h"
 
-
-const FName ABaseUnit::FireForwardBinding("FireForward");
 const FName ABaseUnit::FireRightBinding("FireRight");
+const FName ABaseUnit::FireForwardBinding("FireForward");
 
 // Sets default values
 ABaseUnit::ABaseUnit()
 {
 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
+	//PrimaryActorTick.bCanEverTick = true;
+
+	static ConstructorHelpers::FObjectFinder<UPaperSprite> UnitSprite(TEXT("/Game/Sprites/UnitPlaceholderSprite.UnitPlaceholderSprite"));
+	// Create the sprite component
+	UnitSpriteComponent = CreateDefaultSubobject<UPaperSpriteComponent>(TEXT("UnitSprite"));
+	RootComponent = UnitSpriteComponent;
+	UnitSpriteComponent->SetCollisionProfileName(UCollisionProfile::Pawn_ProfileName);
+	UPaperSprite *Sprite = UnitSprite.Object;
+	UnitSpriteComponent->SetSprite(Sprite);
 
 	// Create a camera boom...
 	CameraBoom = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraBoom"));
 	CameraBoom->SetupAttachment(RootComponent);
 	CameraBoom->bAbsoluteRotation = true; // Don't want arm to rotate when ship does
 	CameraBoom->TargetArmLength = 1200.f;
-	CameraBoom->RelativeRotation = FRotator(-80.f, 0.f, 0.f);
+	CameraBoom->RelativeRotation = FRotator(0.f, -100.f, 0.f);
 	CameraBoom->bDoCollisionTest = false; // Don't want to pull camera in when it collides with level
 
 	// Create a camera...
@@ -46,6 +53,17 @@ void ABaseUnit::BeginPlay()
 	bCanBeDamaged = true;
 }
 
+// Called to bind functionality to input
+void ABaseUnit::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
+{
+	check(PlayerInputComponent);
+
+	// Set up gameplay key bindings
+	PlayerInputComponent->BindAxis(FireRightBinding);
+	PlayerInputComponent->BindAxis(FireForwardBinding);
+
+}
+
 // Called every frame
 void ABaseUnit::Tick(float DeltaTime)
 {
@@ -55,23 +73,15 @@ void ABaseUnit::Tick(float DeltaTime)
 	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, UnitLocation.ToString());
 
 	// Create fire direction vector
-	const float FireForwardValue = GetInputAxisValue(FireForwardBinding);
 	const float FireRightValue = GetInputAxisValue(FireRightBinding);
-	const FVector FireDirection = FVector(FireForwardValue, FireRightValue, 0.f);
+	const float FireForwardValue = GetInputAxisValue(FireForwardBinding);
+	const FVector FireDirection = FVector(FireRightValue, 0.f, FireForwardValue);
 
+	// Try and fire a shot
 	FireShot(FireDirection);
 }
 
-// Called to bind functionality to input
-void ABaseUnit::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
-{
-	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
-	// Set up "action" bindings.
-	PlayerInputComponent->BindAxis(FireForwardBinding);
-	PlayerInputComponent->BindAxis(FireRightBinding);
-
-}
 
 float ABaseUnit::GetHealth()
 {

@@ -4,6 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "PaperCharacter.h"
+#include "PaperSpriteComponent.h"
+#include "PaperSprite.h"
 #include "BaseUnit.generated.h"
 
 /**
@@ -14,11 +16,15 @@ class MASTERBLASTER_API ABaseUnit : public APaperCharacter{
 	
 	GENERATED_BODY()
 
-	/** The camera */
+	/* The mesh component */
+	UPROPERTY(Category = Mesh, VisibleDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+		class UPaperSpriteComponent* UnitSpriteComponent;
+
+	// The camera 
 	UPROPERTY(Category = Camera, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 		class UCameraComponent* CameraComponent;
 
-	/** Camera boom positioning the camera above the character */
+	// Camera boom positioning the camera above the character
 	UPROPERTY(Category = Camera, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 		class USpringArmComponent* CameraBoom;
 
@@ -27,8 +33,8 @@ public:
 	ABaseUnit();
 
 	// Static names for axis bindings
-	static const FName FireForwardBinding;
 	static const FName FireRightBinding;
+	static const FName FireForwardBinding;
 
 protected:
 	// Called when the game starts or when spawned
@@ -90,9 +96,6 @@ public:
 	// How fast the weapon will fire 
 	UPROPERTY(Category = Gameplay, EditAnywhere, BlueprintReadWrite)
 		float FireRate;
-	
-	// Projectile class to spawn.
-	UPROPERTY(EditDefaultsOnly, Category = Projectile)
-		TSubclassOf<class AProjectile> ProjectileClass;
+
 
 };

@@ -15,6 +15,7 @@ class MASTERBLASTER_API AMasterBlasterGameModeBase : public AGameModeBase
 	GENERATED_BODY()
 	
 	
-	
+public:
+	AMasterBlasterGameModeBase();
 	
 };
