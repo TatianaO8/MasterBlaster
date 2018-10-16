@@ -18,15 +18,15 @@ class MASTERBLASTER_API ABaseUnit : public APaperCharacter{
 
 	/* The mesh component */
 	UPROPERTY(Category = Mesh, VisibleDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
-		class UPaperSpriteComponent* UnitSpriteComponent;
+	class UPaperSpriteComponent* UnitSpriteComponent;
 
 	// The camera 
-	UPROPERTY(Category = Camera, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
-		class UCameraComponent* CameraComponent;
+	//UPROPERTY(Category = Camera, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	//class UCameraComponent* CameraComponent;
 
 	// Camera boom positioning the camera above the character
-	UPROPERTY(Category = Camera, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
-		class USpringArmComponent* CameraBoom;
+	//UPROPERTY(Category = Camera, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	//class USpringArmComponent* CameraBoom;
 
 public:
 	// Sets default values for this character's properties

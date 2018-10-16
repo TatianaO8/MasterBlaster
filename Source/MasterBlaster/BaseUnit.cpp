@@ -15,14 +15,8 @@ ABaseUnit::ABaseUnit()
 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	//PrimaryActorTick.bCanEverTick = true;
 
-	static ConstructorHelpers::FObjectFinder<UPaperSprite> UnitSprite(TEXT("/Game/Sprites/UnitPlaceholderSprite.UnitPlaceholderSprite"));
-	// Create the sprite component
-	UnitSpriteComponent = CreateDefaultSubobject<UPaperSpriteComponent>(TEXT("UnitSprite"));
-	RootComponent = UnitSpriteComponent;
-	UnitSpriteComponent->SetCollisionProfileName(UCollisionProfile::Pawn_ProfileName);
-	UPaperSprite *Sprite = UnitSprite.Object;
-	UnitSpriteComponent->SetSprite(Sprite);
 
+	/*
 	// Create a camera boom...
 	CameraBoom = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraBoom"));
 	CameraBoom->SetupAttachment(RootComponent);
@@ -35,11 +29,15 @@ ABaseUnit::ABaseUnit()
 	CameraComponent = CreateDefaultSubobject<UCameraComponent>(TEXT("TopDownCamera"));
 	CameraComponent->SetupAttachment(CameraBoom, USpringArmComponent::SocketName);
 	CameraComponent->bUsePawnControlRotation = false;	// Camera does not rotate relative to arm
-
+	*/
 	// Weapon
 	GunOffset = FVector(90.f, 0.f, 0.f);
 	FireRate = 0.1f;
 	bCanFire = true;
+
+	FullHealth = 100.0f;
+	Health = FullHealth;
+	HealthPercentage = 1.0f;
 }
 
 // Called when the game starts or when spawned
@@ -47,9 +45,7 @@ void ABaseUnit::BeginPlay()
 {
 	Super::BeginPlay();
 
-	FullHealth = 100.0f;
-	Health = FullHealth;
-	HealthPercentage = 1.0f;
+	
 	bCanBeDamaged = true;
 }
 

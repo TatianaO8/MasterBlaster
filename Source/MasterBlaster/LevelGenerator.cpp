@@ -121,7 +121,7 @@ void ALevelGenerator::GenerateLevel() {
 	//SpawnEnemyTeam();
 }
 
-bool ALevelGenerator::validateEditorInput(){
+bool ALevelGenerator::ValidateEditorInput(){
 	//Validate Spawn Room
 	if (spawnRoomBP) {
 		;
@@ -130,6 +130,8 @@ bool ALevelGenerator::validateEditorInput(){
 		return false;
 	}
 
+	if (RoomLibrary.Num() == 0) return false;
+	
 	//Validate Room Library
 	for (TSubclassOf<ARoom> room : RoomLibrary) {
 		if (room) {
@@ -139,6 +141,8 @@ bool ALevelGenerator::validateEditorInput(){
 			return false;
 		}
 	}
+
+	if (EndRoomLibrary.Num() == 0) return false;
 
 	//Validate End rooms
 	for (TSubclassOf<ARoom> room : EndRoomLibrary) {
@@ -162,8 +166,9 @@ bool ALevelGenerator::validateEditorInput(){
 void ALevelGenerator::BeginPlay(){
 	Super::BeginPlay();
 
-	if (!validateEditorInput()) {
+	if (!ValidateEditorInput()) {
 		GEngine->AddOnScreenDebugMessage(-1, 10000.f, FColor::Red, FString::Printf(TEXT("ERROR: Please properly set up the level generator in the editor.")));
+		return;
 	}
 	
 	GenerateLevel();
