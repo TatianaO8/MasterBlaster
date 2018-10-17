@@ -16,7 +16,7 @@ void ACombatMap::BeginPlay(){
 }
 
 ARoom* ACombatMap::GetSpawnRoom() {
-	return rooms[0];
+	return (rooms.Num() > 0) ? rooms[0] : nullptr;
 }
 
 ARoom* ACombatMap::GetLastRoom(){

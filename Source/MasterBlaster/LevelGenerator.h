@@ -51,7 +51,7 @@ private:
 	void PlaceRooms(ARoom* root);
 	void GenerateLevel();
 
-	bool validateEditorInput();
+	bool ValidateEditorInput();
 
 protected:
 	// Called when the game starts or when spawned
