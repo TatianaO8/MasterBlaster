@@ -84,6 +84,7 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 	// Fire a shot in the specified direction 
+	UFUNCTION(BlueprintCallable)
 	void FireShot(FVector FireDirection);
 
 	// Handler for the fire timer expiry 
