@@ -15,7 +15,7 @@ class MASTERBLASTER_API AUnitController : public AAIController
 {
 	GENERATED_BODY()
 
-	TArray<TSubclassOf<ABaseUnit>> team;
+	TArray<ABaseUnit*> team;
 	
 	
 };

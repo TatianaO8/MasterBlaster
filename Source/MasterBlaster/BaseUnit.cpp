@@ -44,9 +44,8 @@ ABaseUnit::ABaseUnit()
 void ABaseUnit::BeginPlay()
 {
 	Super::BeginPlay();
-
-	
 	bCanBeDamaged = true;
+
 }
 
 // Called to bind functionality to input
