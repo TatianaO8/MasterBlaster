@@ -68,14 +68,15 @@ public:
 	UFUNCTION(BlueprintPure, Category = "Health")
 		FText GetHealthIntText();
 
+	UFUNCTION(BlueprintCallable, Category = "Health")
+		void UpdateHealth(float HealthChange);
+
 	UFUNCTION()
 		void SetDamageState();
 
 
 	// void ReceivePointDamage(float Damage, const UDamageType * DamageType, FVector HitLocation, FVector HitNormal, UPrimitiveComponent * Hit Component, FName BoneName, FVector ShotFromDirection, AController * InstigatedBy, AActor * DamageCauser, const FHitResult & HitInfo);
 
-	UFUNCTION(BlueprintCallable, Category = "Health")
-		void UpdateHealth(float HealthChange);
 
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
