@@ -4,24 +4,18 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Pawn.h"
-#include "PlayerCameraPawn.generated.h"
+#include "PlayerPawn.generated.h"
 
 UCLASS()
-class MASTERBLASTER_API APlayerCameraPawn : public APawn
+class MASTERBLASTER_API APlayerPawn : public APawn
 {
 	GENERATED_BODY()
 
-	// The camera 
-	UPROPERTY(Category = Camera, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
-	class UCameraComponent* CameraComponent;
-
-	// Camera boom positioning the camera above the character
-	//UPROPERTY(Category = Camera, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
-	class USpringArmComponent* CameraBoom;
-
 public:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float Speed;
 	// Sets default values for this pawn's properties
-	APlayerCameraPawn();
+	APlayerPawn();
 
 protected:
 	// Called when the game starts or when spawned
