@@ -2,8 +2,10 @@
 
 #include "LevelGenerator.h"
 
-#include "CombatMap.h"
 #include "Room.h"
+#include "CombatMap.h"
+#include "BaseUnit.h"
+#include "PlayerUnit.h"
 
 #include "GenericPlatformMath.h"
 

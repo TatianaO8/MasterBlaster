@@ -4,6 +4,8 @@
 
 class ARoom;
 class ACombatMap;
+class ABaseUnit;
+class APlayerUnit;
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "LevelGenerator.generated.h"
@@ -17,25 +19,26 @@ private:
 
 public:	
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, Category = MapGeneration)
 	int seed;
 
 	//Special Spawn Room
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, Category = MapGeneration)
 	TSubclassOf<ARoom> spawnRoomBP;
 
 	//Array of rooms the level generator can use
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = MapGeneration)
 	TArray<TSubclassOf<ARoom>> RoomLibrary;
 	
 	//Array of rooms the generator can use to cap off a level
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, Category = MapGeneration)
 	TArray<TSubclassOf<ARoom>> EndRoomLibrary;
-
 	
-
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = MapGeneration)
 	int numRooms;
+
+	UPROPERTY(EditAnywhere, Category = Units)
+	TSubclassOf<ABaseUnit> PlayerUnitBP;
 
 public: 	
 	// Sets default values for this actor's properties
