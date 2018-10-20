@@ -17,9 +17,9 @@ class MASTERBLASTER_API AMasterBlasterPC : public APlayerController
 {
 	GENERATED_BODY()
 
+private:
+	int SelectedUnit;
+	
 public:
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	TArray<ABaseUnit*> PlayerTeam;
-	
-	
+	AMasterBlasterPC();
 };
