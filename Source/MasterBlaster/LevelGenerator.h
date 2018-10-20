@@ -38,6 +38,9 @@ public:
 	int numRooms;
 
 	UPROPERTY(EditAnywhere, Category = Units)
+	int DefaulPlayerTeamSize;
+
+	UPROPERTY(EditAnywhere, Category = Units)
 	TSubclassOf<ABaseUnit> PlayerUnitBP;
 
 public: 	
@@ -52,6 +55,7 @@ private:
 	TSubclassOf<ARoom> SelectRoom(ARoom* previousRoom, TArray<TSubclassOf<ARoom>> targetLibrary);
 	void SpawnRoom(TSubclassOf<ARoom> room, int xPosition);
 	void PlaceRooms(ARoom* root);
+	void SpawnPlayerTeam();
 	void GenerateLevel();
 
 	bool ValidateEditorInput();

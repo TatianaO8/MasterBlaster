@@ -18,6 +18,9 @@ ALevelGenerator::ALevelGenerator(){
 
 	numRooms = 5;
 	seed = FGenericPlatformMath::Rand();
+
+	DefaulPlayerTeamSize = 3;
+
 	return;
 }
 
@@ -106,6 +109,16 @@ void ALevelGenerator::PlaceRooms(ARoom* root){
 
 }
 
+void ALevelGenerator::SpawnPlayerTeam(){
+	int x = 0;
+	for (int i = 0; i < DefaulPlayerTeamSize; i++) {
+		FVector location(128 + i*128, 0, 1152);
+		FRotator rotation(0, 0, 0);
+		APlayerUnit* unit = GetWorld()->SpawnActor<APlayerUnit>(PlayerUnitBP, location, rotation);
+		GEngine->AddOnScreenDebugMessage(-1, 10000.f, FColor::Red, FString::Printf(TEXT("Spawn")));
+	}
+}
+
 void ALevelGenerator::GenerateLevel() {
 	//Seed the random number generator
 	FGenericPlatformMath::SRandInit(seed);
@@ -117,7 +130,7 @@ void ALevelGenerator::GenerateLevel() {
 	PlaceRooms(map->GetSpawnRoom());
 
 	//Spawns player units in spawn room
-	//SpawnPlayerTeam();
+	SpawnPlayerTeam();
 
 	//Spawns Enemy Units in each room.
 	//SpawnEnemyTeam();
