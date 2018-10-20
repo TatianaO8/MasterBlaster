@@ -2,6 +2,13 @@
 
 #include "PlayerUnit.h"
 
+#include "MasterBlasterGameState.h"
 
+void APlayerUnit::BeginPlay() {
+	Super::BeginPlay();
 
+	gameState = GetWorld()->GetGameState<AMasterBlasterGameState>();
+	gameState->AddUnit(this);
+
+}
 
