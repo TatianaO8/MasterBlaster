@@ -45,6 +45,10 @@ void ABaseUnit::BeginPlay()
 {
 	Super::BeginPlay();
 
+	//Maybe this doesn't go here but testing because doesn't work
+	FullHealth = 100.0f;
+	Health = FullHealth;
+	HealthPercentage = 1.0f;
 	
 	bCanBeDamaged = true;
 }
@@ -106,8 +110,9 @@ float ABaseUnit::TakeDamage(float DamageAmount, struct FDamageEvent const & Dama
 }
 
 void ABaseUnit::UpdateHealth(float HealthChange)
-{
-	Health = FMath::Clamp(Health += HealthChange, 0.0f, FullHealth);
+{ 
+	Health += HealthChange;
+	Health = FMath::Clamp(Health, 0.0f, FullHealth);
 	HealthPercentage = Health / FullHealth;
 }
 
