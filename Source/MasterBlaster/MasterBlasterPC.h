@@ -18,6 +18,7 @@ class MASTERBLASTER_API AMasterBlasterPC : public APlayerController
 	GENERATED_BODY()
 
 private:
+	UPROPERTY(BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	int SelectedUnit;
 	
 public:
