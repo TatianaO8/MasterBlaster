@@ -112,10 +112,10 @@ void ALevelGenerator::PlaceRooms(ARoom* root){
 void ALevelGenerator::SpawnPlayerTeam(){
 	int x = 0;
 	for (int i = 0; i < DefaulPlayerTeamSize; i++) {
-		FVector location(128 + i*128, 0, 1152);
+		FVector location(128 + i*128, 0, 500);
 		FRotator rotation(0, 0, 0);
 		APlayerUnit* unit = GetWorld()->SpawnActor<APlayerUnit>(PlayerUnitBP, location, rotation);
-		GEngine->AddOnScreenDebugMessage(-1, 10000.f, FColor::Red, FString::Printf(TEXT("Spawn")));
+		//GEngine->AddOnScreenDebugMessage(-1, 10000.f, FColor::Red, FString::Printf(TEXT("Spawn")));
 	}
 }
 
