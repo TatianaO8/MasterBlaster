@@ -3,6 +3,7 @@
 #include "BaseUnit.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "Projectile.h"
+#include "Engine/Public/CollisionQueryParams.h"
 #include "Engine/World.h"
 #include "Engine.h"
 
@@ -107,6 +108,8 @@ void ABaseUnit::Tick(float DeltaTime)
 	const float FireForwardValue = GetInputAxisValue(FireForwardBinding);
 	const FVector FireDirection = FVector(FireRightValue, 0.f, FireForwardValue);
 
+	Raycast();
+
 	if (IsMoving) {
 		Move(DeltaTime);
 	}
@@ -156,4 +159,20 @@ void ABaseUnit::FireShot(FVector FireDirection)
 void ABaseUnit::ShotTimerExpired()
 {
 	bCanFire = true;
+}
+
+void ABaseUnit::Raycast()
+{
+	FHitResult *HitResult = new FHitResult();
+	FVector StartTrace = GetActorLocation();
+	FVector ForwardVector = GetActorForwardVector();
+	FVector EndTrace = ((ForwardVector * 5000.f) * StartTrace);
+	FCollisionQueryParams *TraceParams = new FCollisionQueryParams();
+
+	if (GetWorld()->LineTraceSingleByChannel(*HitResult, StartTrace, EndTrace, ECC_Visibility, *TraceParams))
+	{
+		DrawDebugLine(GetWorld(), StartTrace, EndTrace, FColor(255, 0, 0), true);
+
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("You hit: %s"), *HitResult->Actor->GetName()));
+	}
 }

@@ -60,8 +60,6 @@ public:
 	UPROPERTY(Category = Gameplay, EditAnywhere, BlueprintReadWrite)
 		float FireRate;
 
-
-
 	// Sets default values for this character's properties
 	ABaseUnit();
 
@@ -88,6 +86,8 @@ protected:
 	void Move(float DeltaTime);
 
 	void FinishMove();
+
+	void Raycast();
 
 	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const & DamageEvent, class AController * EventInstigator, AActor * DamageCauser);
 
