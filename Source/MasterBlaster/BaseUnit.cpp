@@ -1,6 +1,8 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "BaseUnit.h"
+
+#include "GenericPlatformMath.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "Projectile.h"
 #include "Engine/World.h"
@@ -61,6 +63,10 @@ void ABaseUnit::SetDamageState()
 }
 
 void ABaseUnit::BeginMove(FVector dest){
+	if (IsMoving) {
+		//One movement at a time, please
+		return;
+	}
 	MoveDestination = dest;
 	IsMoving = true;
 	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Blue, UnitLocation.ToString());
@@ -68,7 +74,7 @@ void ABaseUnit::BeginMove(FVector dest){
 
 void ABaseUnit::Move(float DeltaTime){
 	FVector loc = GetActorLocation();
-	if (loc == MoveDestination) {
+	if (FGenericPlatformMath::Abs(loc.X - MoveDestination.X) <= 1) {
 		FinishMove();
 	}
 	FVector moveDirection = MoveDestination - loc;
