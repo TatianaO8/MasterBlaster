@@ -30,10 +30,16 @@ public:
 	void AddUnit(ABaseUnit* unit);
 
 	UFUNCTION(BlueprintCallable)
+	void SetActiveUnit(int index);
+
+	UFUNCTION(BlueprintCallable)
 	void CycleUnit();
 
 	UFUNCTION(BlueprintCallable)
 	ABaseUnit* GetActiveUnit();
 
+	UFUNCTION(BlueprintCallable)
+	int SearchForUnitIndex(ABaseUnit* unit);
 
+	int GetPlayerTeamSize();
 };

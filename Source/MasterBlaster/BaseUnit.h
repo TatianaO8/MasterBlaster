@@ -29,6 +29,12 @@ class MASTERBLASTER_API ABaseUnit : public APaperCharacter{
 	//class USpringArmComponent* CameraBoom;
 
 public:
+	bool IsMoving;
+	FVector MoveDestination;
+	
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	float MoveSpeed;
+
 	// Sets default values for this character's properties
 	ABaseUnit();
 
@@ -37,6 +43,9 @@ public:
 	static const FName FireForwardBinding;
 
 protected:
+	
+	
+
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
@@ -45,6 +54,13 @@ protected:
 
 	// Handle for efficient management of ShotTimerExpired timer 
 	FTimerHandle TimerHandle_ShotTimerExpired;
+
+	UFUNCTION(BlueprintCallable)
+	void BeginMove(FVector dest);
+
+	void Move(float DeltaTime);
+
+	void FinishMove();
 
 	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const & DamageEvent, class AController * EventInstigator, AActor * DamageCauser);
 
@@ -61,6 +77,14 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Location")
 		FVector UnitLocation;
+
+	// Offset from the unit location to spawn projectiles 
+	UPROPERTY(Category = Gameplay, EditAnywhere, BlueprintReadWrite)
+		FVector GunOffset;
+
+	// How fast the weapon will fire 
+	UPROPERTY(Category = Gameplay, EditAnywhere, BlueprintReadWrite)
+		float FireRate;
 
 	UFUNCTION(BlueprintPure, Category = "Health")
 		float GetHealth();
@@ -91,13 +115,7 @@ public:
 	// Handler for the fire timer expiry 
 	void ShotTimerExpired();
 
-	// Offset from the unit location to spawn projectiles 
-	UPROPERTY(Category = Gameplay, EditAnywhere, BlueprintReadWrite)
-		FVector GunOffset;
-
-	// How fast the weapon will fire 
-	UPROPERTY(Category = Gameplay, EditAnywhere, BlueprintReadWrite)
-		float FireRate;
+	
 
 
 };

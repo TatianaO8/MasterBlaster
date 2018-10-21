@@ -12,24 +12,7 @@ const FName ABaseUnit::FireForwardBinding("FireForward");
 // Sets default values
 ABaseUnit::ABaseUnit()
 {
-	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	//PrimaryActorTick.bCanEverTick = true;
-
-
-	/*
-	// Create a camera boom...
-	CameraBoom = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraBoom"));
-	CameraBoom->SetupAttachment(RootComponent);
-	CameraBoom->bAbsoluteRotation = true; // Don't want arm to rotate when ship does
-	CameraBoom->TargetArmLength = 1200.f;
-	CameraBoom->RelativeRotation = FRotator(0.f, -100.f, 0.f);
-	CameraBoom->bDoCollisionTest = false; // Don't want to pull camera in when it collides with level
-
-	// Create a camera...
-	CameraComponent = CreateDefaultSubobject<UCameraComponent>(TEXT("TopDownCamera"));
-	CameraComponent->SetupAttachment(CameraBoom, USpringArmComponent::SocketName);
-	CameraComponent->bUsePawnControlRotation = false;	// Camera does not rotate relative to arm
-	*/
+	IsMoving = false;
 	// Weapon
 	GunOffset = FVector(90.f, 0.f, 0.f);
 	FireRate = 0.1f;
@@ -38,6 +21,8 @@ ABaseUnit::ABaseUnit()
 	FullHealth = 100.0f;
 	Health = FullHealth;
 	HealthPercentage = 1.0f;
+
+	MoveSpeed = 200;
 }
 
 // Called when the game starts or when spawned
@@ -53,36 +38,6 @@ void ABaseUnit::BeginPlay()
 	bCanBeDamaged = true;
 
 }
-
-// Called to bind functionality to input
-void ABaseUnit::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
-{
-	check(PlayerInputComponent);
-
-	// Set up gameplay key bindings
-	PlayerInputComponent->BindAxis(FireRightBinding);
-	PlayerInputComponent->BindAxis(FireForwardBinding);
-
-}
-
-// Called every frame
-void ABaseUnit::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
-
-	UnitLocation = GetActorLocation();
-	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, UnitLocation.ToString());
-
-	// Create fire direction vector
-	const float FireRightValue = GetInputAxisValue(FireRightBinding);
-	const float FireForwardValue = GetInputAxisValue(FireForwardBinding);
-	const FVector FireDirection = FVector(FireRightValue, 0.f, FireForwardValue);
-
-	// Try and fire a shot
-	FireShot(FireDirection);
-}
-
-
 
 float ABaseUnit::GetHealth()
 {
@@ -103,6 +58,26 @@ void ABaseUnit::SetDamageState()
 	bCanBeDamaged = true;
 }
 
+void ABaseUnit::BeginMove(FVector dest){
+	MoveDestination = dest;
+	IsMoving = true;
+}
+
+void ABaseUnit::Move(float DeltaTime){
+	FVector loc = GetActorLocation();
+	if (loc == MoveDestination) {
+		FinishMove();
+	}
+	FVector moveDirection = loc - MoveDestination;
+	moveDirection.Normalize();
+	AddMovementInput(moveDirection * MoveSpeed * DeltaTime);
+
+}
+
+void ABaseUnit::FinishMove() {
+	IsMoving = false;
+}
+
 float ABaseUnit::TakeDamage(float DamageAmount, struct FDamageEvent const & DamageEvent, class AController * EventInstigator, AActor * DamageCauser)
 {
 	bCanBeDamaged = false;
@@ -115,6 +90,38 @@ void ABaseUnit::UpdateHealth(float HealthChange)
 	Health += HealthChange;
 	Health = FMath::Clamp(Health, 0.0f, FullHealth);
 	HealthPercentage = Health / FullHealth;
+}
+
+// Called every frame
+void ABaseUnit::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+
+	UnitLocation = GetActorLocation();
+	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, UnitLocation.ToString());
+
+	// Create fire direction vector
+	const float FireRightValue = GetInputAxisValue(FireRightBinding);
+	const float FireForwardValue = GetInputAxisValue(FireForwardBinding);
+	const FVector FireDirection = FVector(FireRightValue, 0.f, FireForwardValue);
+
+	if (IsMoving) {
+		Move(DeltaTime);
+	}
+
+	// Try and fire a shot
+	FireShot(FireDirection);
+}
+
+// Called to bind functionality to input
+void ABaseUnit::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
+{
+	check(PlayerInputComponent);
+
+	// Set up gameplay key bindings
+	PlayerInputComponent->BindAxis(FireRightBinding);
+	PlayerInputComponent->BindAxis(FireForwardBinding);
+
 }
 
 void ABaseUnit::FireShot(FVector FireDirection)
