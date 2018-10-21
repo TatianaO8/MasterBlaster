@@ -63,6 +63,7 @@ void ABaseUnit::SetDamageState()
 void ABaseUnit::BeginMove(FVector dest){
 	MoveDestination = dest;
 	IsMoving = true;
+	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Blue, UnitLocation.ToString());
 }
 
 void ABaseUnit::Move(float DeltaTime){
@@ -70,7 +71,7 @@ void ABaseUnit::Move(float DeltaTime){
 	if (loc == MoveDestination) {
 		FinishMove();
 	}
-	FVector moveDirection = loc - MoveDestination;
+	FVector moveDirection = MoveDestination - loc;
 	moveDirection.Normalize();
 	AddMovementInput(moveDirection * MoveSpeed * DeltaTime);
 
