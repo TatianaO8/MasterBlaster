@@ -17,7 +17,8 @@ ALevelGenerator::ALevelGenerator(){
 	PrimaryActorTick.bCanEverTick = true;
 
 	numRooms = 5;
-	seed = FGenericPlatformMath::Rand();
+	seed = -1;
+	//seed = FGenericPlatformMath::Rand();
 
 	DefaulPlayerTeamSize = 3;
 
@@ -57,6 +58,9 @@ TArray<TSubclassOf<ARoom>> ALevelGenerator::GetValidRooms(ARoom * previousRoom, 
 TSubclassOf<ARoom> ALevelGenerator::SelectRoom(ARoom* previousRoom, TArray<TSubclassOf<ARoom>> targetLibrary) {
 	//Hashmap of valid rooms and their library index
 	auto validRooms = GetValidRooms(previousRoom, targetLibrary);
+	if (validRooms.Num() == 0) {
+		return targetLibrary[0];
+	}
 	//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Valid Rooms: %d"), validRooms.Num()));
 
 	float seededRandomNumber = FGenericPlatformMath::SRand();
@@ -180,7 +184,10 @@ bool ALevelGenerator::ValidateEditorInput(){
 // Called when the game starts or when spawned
 void ALevelGenerator::BeginPlay(){
 	Super::BeginPlay();
-
+	if (seed == -1) {
+		seed = FGenericPlatformMath::Rand();
+	}
+	
 	if (!ValidateEditorInput()) {
 		GEngine->AddOnScreenDebugMessage(-1, 10000.f, FColor::Red, FString::Printf(TEXT("ERROR: Please properly set up the level generator in the editor.")));
 		return;

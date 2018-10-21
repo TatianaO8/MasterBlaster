@@ -1,6 +1,8 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "BaseUnit.h"
+
+#include "GenericPlatformMath.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "Projectile.h"
 #include "Engine/Public/CollisionQueryParams.h"
@@ -23,7 +25,7 @@ ABaseUnit::ABaseUnit()
 	Health = FullHealth;
 	HealthPercentage = 1.0f;
 
-	ActionPoints = 2;
+	MaxActionPoints = ActionPoints = 2;
 
 	MoveSpeed = 200;
 }
@@ -62,16 +64,29 @@ void ABaseUnit::SetDamageState()
 }
 
 void ABaseUnit::BeginMove(FVector dest){
-	MoveDestination = dest;
+	if (IsMoving) {
+		//One movement at a time, please
+		return;
+	}
+	if (ActionPoints < 1) {
+		if (GEngine) {
+			GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, TEXT("This unit is out of action points"));
+		}
+		return;
+	}
+
 	IsMoving = true;
+	UseActionPoint();
+	MoveDestination = dest;
+	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Blue, UnitLocation.ToString());
 }
 
 void ABaseUnit::Move(float DeltaTime){
 	FVector loc = GetActorLocation();
-	if (loc == MoveDestination) {
+	if (FGenericPlatformMath::Abs(loc.X - MoveDestination.X) <= 1) {
 		FinishMove();
 	}
-	FVector moveDirection = loc - MoveDestination;
+	FVector moveDirection = MoveDestination - loc;
 	moveDirection.Normalize();
 	AddMovementInput(moveDirection * MoveSpeed * DeltaTime);
 
@@ -86,6 +101,22 @@ float ABaseUnit::TakeDamage(float DamageAmount, struct FDamageEvent const & Dama
 	bCanBeDamaged = false;
 	UpdateHealth(-DamageAmount);
 	return DamageAmount;
+}
+
+int ABaseUnit::GetActionPoints(){
+	return ActionPoints;
+}
+
+void ABaseUnit::UseActionPoint(){
+	ActionPoints--;
+}
+
+void ABaseUnit::EmptyActionPoints(){
+	ActionPoints = 0;
+}
+
+void ABaseUnit::RefreshActionPoints(){
+	ActionPoints = MaxActionPoints;
 }
 
 void ABaseUnit::UpdateHealth(float HealthChange)
