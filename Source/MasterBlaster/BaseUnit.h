@@ -28,12 +28,39 @@ class MASTERBLASTER_API ABaseUnit : public APaperCharacter{
 	//UPROPERTY(Category = Camera, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	//class USpringArmComponent* CameraBoom;
 
-public:
+private:
 	bool IsMoving;
 	FVector MoveDestination;
 	
-	UPROPERTY(BlueprintReadWrite, EditAnywhere)
-	float MoveSpeed;
+public:
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Health")
+		float FullHealth;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Health")
+		float Health;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Health")
+		float HealthPercentage;
+
+	UPROPERTY(EditAnywhere, BLueprintReadWrite, Category = "Movement")
+		int ActionPoints;
+	
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Movement")
+		float MoveSpeed;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Location")
+		FVector UnitLocation;
+
+	// Offset from the unit location to spawn projectiles 
+	UPROPERTY(Category = Gameplay, EditAnywhere, BlueprintReadWrite)
+		FVector GunOffset;
+
+	// How fast the weapon will fire 
+	UPROPERTY(Category = Gameplay, EditAnywhere, BlueprintReadWrite)
+		float FireRate;
+
+
 
 	// Sets default values for this character's properties
 	ABaseUnit();
@@ -66,25 +93,6 @@ protected:
 
 public:
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Health")
-		float FullHealth;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Health")
-		float Health;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Health")
-		float HealthPercentage;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Location")
-		FVector UnitLocation;
-
-	// Offset from the unit location to spawn projectiles 
-	UPROPERTY(Category = Gameplay, EditAnywhere, BlueprintReadWrite)
-		FVector GunOffset;
-
-	// How fast the weapon will fire 
-	UPROPERTY(Category = Gameplay, EditAnywhere, BlueprintReadWrite)
-		float FireRate;
 
 	UFUNCTION(BlueprintPure, Category = "Health")
 		float GetHealth();

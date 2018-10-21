@@ -22,6 +22,8 @@ ABaseUnit::ABaseUnit()
 	Health = FullHealth;
 	HealthPercentage = 1.0f;
 
+	ActionPoints = 2;
+
 	MoveSpeed = 200;
 }
 
