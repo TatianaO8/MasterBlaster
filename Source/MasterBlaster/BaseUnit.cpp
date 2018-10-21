@@ -24,7 +24,7 @@ ABaseUnit::ABaseUnit()
 	Health = FullHealth;
 	HealthPercentage = 1.0f;
 
-	ActionPoints = 2;
+	MaxActionPoints = ActionPoints = 2;
 
 	MoveSpeed = 200;
 }
@@ -67,9 +67,17 @@ void ABaseUnit::BeginMove(FVector dest){
 		//One movement at a time, please
 		return;
 	}
-	MoveDestination = dest;
+	if (ActionPoints < 1) {
+		if (GEngine) {
+			GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, TEXT("This unit is out of action points"));
+		}
+		return;
+	}
+
 	IsMoving = true;
-	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Blue, UnitLocation.ToString());
+	UseActionPoint();
+	MoveDestination = dest;
+	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Blue, UnitLocation.ToString());
 }
 
 void ABaseUnit::Move(float DeltaTime){
@@ -92,6 +100,22 @@ float ABaseUnit::TakeDamage(float DamageAmount, struct FDamageEvent const & Dama
 	bCanBeDamaged = false;
 	UpdateHealth(-DamageAmount);
 	return DamageAmount;
+}
+
+int ABaseUnit::GetActionPoints(){
+	return ActionPoints;
+}
+
+void ABaseUnit::UseActionPoint(){
+	ActionPoints--;
+}
+
+void ABaseUnit::EmptyActionPoints(){
+	ActionPoints = 0;
+}
+
+void ABaseUnit::RefreshActionPoints(){
+	ActionPoints = MaxActionPoints;
 }
 
 void ABaseUnit::UpdateHealth(float HealthChange)

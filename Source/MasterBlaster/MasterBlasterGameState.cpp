@@ -19,6 +19,7 @@ void AMasterBlasterGameState::SetActiveUnit(int index){
 void AMasterBlasterGameState::CycleUnit(){
 	activeUnit++;  
 	activeUnit %= PlayerTeam.Num();
+
 	//GEngine->AddOnScreenDebugMessage(-1, 10000.f, FColor::Red, FString::Printf(TEXT("%d"), activeUnit));
 }
 

@@ -44,6 +44,9 @@ public:
 		float HealthPercentage;
 
 	UPROPERTY(EditAnywhere, BLueprintReadWrite, Category = "Movement")
+		int MaxActionPoints;
+
+	UPROPERTY(EditAnywhere, BLueprintReadWrite, Category = "Movement")
 		int ActionPoints;
 	
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Movement")
@@ -70,9 +73,6 @@ public:
 	static const FName FireForwardBinding;
 
 protected:
-	
-	
-
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
@@ -90,6 +90,13 @@ protected:
 	void FinishMove();
 
 	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const & DamageEvent, class AController * EventInstigator, AActor * DamageCauser);
+
+	UFUNCTION(BlueprintCallable)
+	int GetActionPoints();
+	
+	void UseActionPoint();
+	void EmptyActionPoints();
+	void RefreshActionPoints();
 
 public:
 
