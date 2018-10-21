@@ -11,6 +11,18 @@
 const FName ABaseUnit::FireRightBinding("FireRight");
 const FName ABaseUnit::FireForwardBinding("FireForward");
 
+bool ABaseUnit::InWalkRange(FVector dest){
+	FVector loc = GetActorLocation();
+	float distance = FGenericPlatformMath::Abs(loc.X - dest.X);
+	//GEngine->AddOnScreenDebugMessage(-1, 10000.f, FColor::Red, FString::Printf(TEXT("MoveDistance: %f."), distance));
+	return distance <= MoveRange;
+}
+
+bool ABaseUnit::InSprintRange(FVector dest){
+	FVector loc = GetActorLocation();
+	return FGenericPlatformMath::Abs(loc.X - dest.X) <= 2 * MoveRange;
+}
+
 // Sets default values
 ABaseUnit::ABaseUnit()
 {
@@ -27,6 +39,7 @@ ABaseUnit::ABaseUnit()
 	MaxActionPoints = ActionPoints = 2;
 
 	MoveSpeed = 200;
+	MoveRange = 1280;
 }
 
 // Called when the game starts or when spawned
@@ -74,9 +87,31 @@ void ABaseUnit::BeginMove(FVector dest){
 		return;
 	}
 
-	IsMoving = true;
-	UseActionPoint();
-	MoveDestination = dest;
+	if (InWalkRange(dest)) {
+		if (GEngine) {
+			GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Cyan, TEXT("Walking"));
+		}
+		IsMoving = true;
+		UseActionPoint();
+		MoveDestination = dest;
+	}
+	else if (InSprintRange(dest) && ActionPoints > 1) {
+		if (GEngine) {
+			GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Cyan, TEXT("Running"));
+		}
+		IsMoving = true;
+		EmptyActionPoints();
+		MoveDestination = dest;
+	}
+	else {
+		if (GEngine) {
+			GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, TEXT("That's too far pal"));
+		}
+	}
+
+
+	
+	
 	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Blue, UnitLocation.ToString());
 }
 
