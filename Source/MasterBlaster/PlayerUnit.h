@@ -4,6 +4,8 @@
 
 class AMasterBlasterGameState;
 
+
+
 #include "CoreMinimal.h"
 #include "BaseUnit.h"
 #include "PlayerUnit.generated.h"
