@@ -99,8 +99,7 @@ protected:
 
 	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const & DamageEvent, class AController * EventInstigator, AActor * DamageCauser);
 
-	UFUNCTION(BlueprintCallable)
-	int GetActionPoints();
+	
 	
 	void UseActionPoint();
 	void EmptyActionPoints();
@@ -124,6 +123,14 @@ public:
 	UFUNCTION()
 		void SetDamageState();
 
+	UFUNCTION(BlueprintCallable)
+		int GetActionPoints();
+
+	UFUNCTION(BlueprintCallable)
+		void BeginTurn();
+
+	UFUNCTION(BlueprintCallable)
+		bool GetIsMoving();
 
 	// void ReceivePointDamage(float Damage, const UDamageType * DamageType, FVector HitLocation, FVector HitNormal, UPrimitiveComponent * Hit Component, FName BoneName, FVector ShotFromDirection, AController * InstigatedBy, AActor * DamageCauser, const FHitResult & HitInfo);
 
