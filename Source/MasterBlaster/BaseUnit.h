@@ -6,6 +6,7 @@
 #include "PaperCharacter.h"
 #include "PaperSpriteComponent.h"
 #include "PaperSprite.h"
+#include "MasterBlasterGameState.h"
 #include "BaseUnit.generated.h"
 
 /**
@@ -31,6 +32,7 @@ class MASTERBLASTER_API ABaseUnit : public APaperCharacter{
 private:
 	bool IsMoving;
 	FVector MoveDestination;
+	AMasterBlasterGameState *gameState;
 	
 public:
 

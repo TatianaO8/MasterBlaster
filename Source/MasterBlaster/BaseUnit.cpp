@@ -1,10 +1,10 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "BaseUnit.h"
-
 #include "GenericPlatformMath.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "Projectile.h"
+#include "GameFramework/PlayerController.h"
 #include "Engine/Public/CollisionQueryParams.h"
 #include "Engine/World.h"
 #include "Engine.h"
@@ -194,16 +194,22 @@ void ABaseUnit::ShotTimerExpired()
 
 void ABaseUnit::Raycast()
 {
+	gameState = GetWorld()->GetGameState<AMasterBlasterGameState>();
+	UGameViewportClient *GameViewport = GEngine->GameViewport;
+	FVector2D MousePosition;
+	GameViewport->GetMousePosition(MousePosition);
+	FVector WorldPosition, WorldDirection;
 	FHitResult *HitResult = new FHitResult();
-	FVector StartTrace = GetActorLocation();
-	FVector ForwardVector = GetActorForwardVector();
-	FVector EndTrace = ((ForwardVector * 5000.f) * StartTrace);
+	FVector StartTrace = gameState->GetActiveUnit()->UnitLocation;
+	GetWorld()->GetFirstPlayerController()->DeprojectMousePositionToWorld(WorldPosition, WorldDirection);
+	FVector ForwardVector = WorldPosition;
+	FVector EndTrace = ForwardVector;
 	FCollisionQueryParams *TraceParams = new FCollisionQueryParams();
 
 	if (GetWorld()->LineTraceSingleByChannel(*HitResult, StartTrace, EndTrace, ECC_Visibility, *TraceParams))
 	{
 		DrawDebugLine(GetWorld(), StartTrace, EndTrace, FColor(255, 0, 0), true);
 
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("You hit: %s"), *HitResult->Actor->GetName()));
+		//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("You hit: %s"), *HitResult->Actor->GetName()));
 	}
 }
