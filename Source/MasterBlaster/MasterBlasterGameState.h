@@ -17,8 +17,12 @@ class MASTERBLASTER_API AMasterBlasterGameState : public AGameStateBase
 	GENERATED_BODY()
 
 private:
+
+	//determine who's turn it is
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+		int true;
 	UPROPERTY(BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
-	int activeUnit;
+		int activeUnit;
 	UPROPERTY(BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	TArray<ABaseUnit*> PlayerTeam;
 
