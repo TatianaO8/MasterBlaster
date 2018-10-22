@@ -68,12 +68,12 @@ bool AMasterBlasterGameState::GetIsPlayerTurn(){
 }
 
 void AMasterBlasterGameState::BeginEnemyTurn(){
-	GEngine->AddOnScreenDebugMessage(-1, 10000.f, FColor::Red, FString::Printf(TEXT("Begin Enemy Turn")));
+	//GEngine->AddOnScreenDebugMessage(-1, 10000.f, FColor::Red, FString::Printf(TEXT("Begin Enemy Turn")));
 	IsPlayerTurn = false;
 }
 
 void AMasterBlasterGameState::BeginPlayerTurn(){
-	GEngine->AddOnScreenDebugMessage(-1, 10000.f, FColor::Cyan, FString::Printf(TEXT("Begin Player Turn")));
+	//GEngine->AddOnScreenDebugMessage(-1, 10000.f, FColor::Cyan, FString::Printf(TEXT("Begin Player Turn")));
 	for (auto x : PlayerTeam) {
 		x->BeginTurn();
 	}
