@@ -110,6 +110,7 @@ void ABaseUnit::BeginMove(FVector dest){
 	else {
 		if (GEngine) {
 			GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, TEXT("That's too far pal"));
+			GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, FString::Printf(TEXT("AP: %d"), ActionPoints));
 		}
 	}
 	
@@ -225,6 +226,8 @@ void ABaseUnit::FireShot()
 		GetWorld()->GetFirstPlayerController()->DeprojectMousePositionToWorld(WorldPosition, WorldDirection);
 		FVector FireDirection = FVector(WorldPosition.X, 0.f, WorldPosition.Y);
 		//GEngine->AddOnScreenDebugMessage(-1, 0.1f, FColor::Red, WorldPosition.ToString());
+		
+		
 
 		// If we are pressing fire stick in a direction
 		if (FireDirection.SizeSquared() > 0.0f)
@@ -232,6 +235,11 @@ void ABaseUnit::FireShot()
 			const FRotator FireRotation = FireDirection.Rotation();
 			// Spawn projectile at an offset from this pawn
 			const FVector SpawnLocation = GetActorLocation() + FireRotation.RotateVector(GunOffset);
+			
+			FVector MousePosition3(0, 0, 0);
+			GetWorld()->GetFirstPlayerController()->GetMousePosition(MousePosition3.X, MousePosition3.Z);
+
+			FVector difference =  MousePosition3 - GetActorLocation();
 			
 			
 
@@ -241,7 +249,7 @@ void ABaseUnit::FireShot()
 				bAllowRaycast = false;
 
 				// spawn the projectile
-				World->SpawnActor<AProjectile>(SpawnLocation, FireRotation);
+				World->SpawnActor<AProjectile>(SpawnLocation, difference.Rotation());
 			}
 
 			//bCanFire = false;
@@ -269,7 +277,7 @@ void ABaseUnit::Raycast()
 	FVector StartTrace = gameState->GetActiveUnit()->UnitLocation;
 	GetWorld()->GetFirstPlayerController()->DeprojectMousePositionToWorld(WorldPosition, WorldDirection);
 	FVector ForwardVector = WorldPosition;
-	GEngine->AddOnScreenDebugMessage(-1, 0.1f, FColor::Red, WorldPosition.ToString());
+	//GEngine->AddOnScreenDebugMessage(-1, 0.1f, FColor::Red, WorldPosition.ToString());
 	FVector EndTrace = ForwardVector;
 	FCollisionQueryParams *TraceParams = new FCollisionQueryParams();
 

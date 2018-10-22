@@ -2,6 +2,8 @@
 
 #pragma once
 
+class AProjectile;
+
 #include "CoreMinimal.h"
 #include "PaperCharacter.h"
 #include "PaperSpriteComponent.h"
@@ -20,7 +22,7 @@ class MASTERBLASTER_API ABaseUnit : public APaperCharacter{
 	/* The mesh component */
 	UPROPERTY(Category = Mesh, VisibleDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	class UPaperSpriteComponent* UnitSpriteComponent;
-
+	
 	// The camera 
 	//UPROPERTY(Category = Camera, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	//class UCameraComponent* CameraComponent;
