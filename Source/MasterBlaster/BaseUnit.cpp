@@ -1,4 +1,6 @@
 #include "BaseUnit.h"
+
+#include "GenericPlatformMath.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "Projectile.h"
 #include "Engine/World.h"
@@ -6,6 +8,18 @@
 
 const FName ABaseUnit::FireRightBinding("FireRight");
 const FName ABaseUnit::FireForwardBinding("FireForward");
+
+bool ABaseUnit::InWalkRange(FVector dest){
+	FVector loc = GetActorLocation();
+	float distance = FGenericPlatformMath::Abs(loc.X - dest.X);
+	//GEngine->AddOnScreenDebugMessage(-1, 10000.f, FColor::Red, FString::Printf(TEXT("MoveDistance: %f."), distance));
+	return distance <= MoveRange;
+}
+
+bool ABaseUnit::InSprintRange(FVector dest){
+	FVector loc = GetActorLocation();
+	return FGenericPlatformMath::Abs(loc.X - dest.X) <= 2 * MoveRange;
+}
 
 // Sets default values
 ABaseUnit::ABaseUnit()
@@ -20,7 +34,10 @@ ABaseUnit::ABaseUnit()
 	Health = FullHealth;
 	HealthPercentage = 1.0f;
 
+	MaxActionPoints = ActionPoints = 2;
+
 	MoveSpeed = 200;
+	MoveRange = 1280;
 }
 
 // Called when the game starts or when spawned
@@ -42,6 +59,10 @@ float ABaseUnit::GetHealth()
 	return HealthPercentage;
 }
 
+float ABaseUnit::GetHealthPercentage(){
+	return Health / FullHealth;
+}
+
 FText ABaseUnit::GetHealthIntText()
 {
 	int32 hp = FMath::RoundHalfFromZero(HealthPercentage * 100);
@@ -57,16 +78,48 @@ void ABaseUnit::SetDamageState()
 }
 
 void ABaseUnit::BeginMove(FVector dest){
-	MoveDestination = dest;
-	IsMoving = true;
+	if (IsMoving) {
+		//One movement at a time, please
+		return;
+	}
+	if (ActionPoints < 1) {
+		if (GEngine) {
+			GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, TEXT("This unit is out of action points"));
+		}
+		return;
+	}
+
+	if (InWalkRange(dest)) {
+		if (GEngine) {
+			GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Cyan, TEXT("Walking"));
+		}
+		IsMoving = true;
+		UseActionPoint();
+		MoveDestination = dest;
+	}
+	else if (InSprintRange(dest) && ActionPoints > 1) {
+		if (GEngine) {
+			GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Cyan, TEXT("Running"));
+		}
+		IsMoving = true;
+		EmptyActionPoints();
+		MoveDestination = dest;
+	}
+	else {
+		if (GEngine) {
+			GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, TEXT("That's too far pal"));
+		}
+	}
+	
+	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Blue, UnitLocation.ToString());
 }
 
 void ABaseUnit::Move(float DeltaTime){
 	FVector loc = GetActorLocation();
-	if (loc == MoveDestination) {
+	if (FGenericPlatformMath::Abs(loc.X - MoveDestination.X) <= 1) {
 		FinishMove();
 	}
-	FVector moveDirection = loc - MoveDestination;
+	FVector moveDirection = MoveDestination - loc;
 	moveDirection.Normalize();
 	AddMovementInput(moveDirection * MoveSpeed * DeltaTime);
 
@@ -81,6 +134,22 @@ float ABaseUnit::TakeDamage(float DamageAmount, struct FDamageEvent const & Dama
 	bCanBeDamaged = false;
 	UpdateHealth(-DamageAmount);
 	return DamageAmount;
+}
+
+int ABaseUnit::GetActionPoints(){
+	return ActionPoints;
+}
+
+void ABaseUnit::UseActionPoint(){
+	ActionPoints--;
+}
+
+void ABaseUnit::EmptyActionPoints(){
+	ActionPoints = 0;
+}
+
+void ABaseUnit::RefreshActionPoints(){
+	ActionPoints = MaxActionPoints;
 }
 
 void ABaseUnit::UpdateHealth(float HealthChange)
