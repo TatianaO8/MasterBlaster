@@ -83,7 +83,7 @@ void AMasterBlasterGameState::BeginPlayerTurn(){
 void AMasterBlasterGameState::PlayerTurnUpdate(){
 	bool turnOverFlag = true;
 	for (auto x : PlayerTeam) {
-		if (x->GetActionPoints() > 0 || x->GetIsMoving() == false) {
+		if (x->GetActionPoints() > 0) {
 			turnOverFlag = false;
 			break;
 		}
@@ -97,7 +97,7 @@ void AMasterBlasterGameState::PlayerTurnUpdate(){
 void AMasterBlasterGameState::EnemyTurnUpdate(){
 	bool turnOverFlag = true;
 	for (auto x : EnemyTeam) {
-		if (x->GetActionPoints() > 0 || x->GetIsMoving() == false) {
+		if (x->GetActionPoints() > 0) {
 			turnOverFlag = false;
 			break;
 		}

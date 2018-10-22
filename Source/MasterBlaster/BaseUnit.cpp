@@ -216,7 +216,7 @@ void ABaseUnit::FireShot()
 	// If it's ok to fire again
 	if (bCanFire == true)
 	{
-		gameState = GetWorld()->GetGameState<AMasterBlasterGameState>();
+		/*gameState = GetWorld()->GetGameState<AMasterBlasterGameState>();
 		UGameViewportClient *GameViewport = GEngine->GameViewport;
 		FVector2D MousePosition;
 		GameViewport->GetMousePosition(MousePosition);
@@ -225,22 +225,29 @@ void ABaseUnit::FireShot()
 		FVector StartTrace = gameState->GetActiveUnit()->UnitLocation;
 		GetWorld()->GetFirstPlayerController()->DeprojectMousePositionToWorld(WorldPosition, WorldDirection);
 		FVector FireDirection = FVector(WorldPosition.X, 0.f, WorldPosition.Y);
-		//GEngine->AddOnScreenDebugMessage(-1, 0.1f, FColor::Red, WorldPosition.ToString());
+		*///GEngine->AddOnScreenDebugMessage(-1, 0.1f, FColor::Red, WorldPosition.ToString());
 		
 		
 
 		// If we are pressing fire stick in a direction
-		if (FireDirection.SizeSquared() > 0.0f)
+		if (true)
 		{
-			const FRotator FireRotation = FireDirection.Rotation();
+			//const FRotator FireRotation = FireDirection.Rotation();
 			// Spawn projectile at an offset from this pawn
-			const FVector SpawnLocation = GetActorLocation() + FireRotation.RotateVector(GunOffset);
+			//const FVector SpawnLocation = GetActorLocation() + FireRotation.RotateVector(GunOffset);
 			
-			FVector MousePosition3(0, 0, 0);
-			GetWorld()->GetFirstPlayerController()->GetMousePosition(MousePosition3.X, MousePosition3.Z);
+			
+			FVector start = GetActorLocation();
+			start += GunOffset;
 
-			FVector difference =  MousePosition3 - GetActorLocation();
-			
+			FHitResult result;
+			GetWorld()->GetFirstPlayerController()->GetHitResultUnderCursor(ECollisionChannel::ECC_Visibility, false, result);
+			FVector target = result.Location;
+
+
+			//GetWorld()->GetFirstPlayerController()->GetMousePosition(target.X, target.Z);
+
+			FRotator direction = UKismetMathLibrary::FindLookAtRotation(start, target);
 			
 
 			UWorld* const World = GetWorld();
@@ -249,7 +256,8 @@ void ABaseUnit::FireShot()
 				bAllowRaycast = false;
 
 				// spawn the projectile
-				World->SpawnActor<AProjectile>(SpawnLocation, difference.Rotation());
+				AProjectile *proj = World->SpawnActor<AProjectile>(start, direction);
+
 			}
 
 			//bCanFire = false;
