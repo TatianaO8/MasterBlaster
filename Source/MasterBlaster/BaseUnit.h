@@ -32,8 +32,9 @@ class MASTERBLASTER_API ABaseUnit : public APaperCharacter{
 private:
 	bool IsMoving;
 	FVector MoveDestination;
+	bool InWalkRange(FVector dest);
+	bool InSprintRange(FVector dest);
 	AMasterBlasterGameState *gameState;
-	
 public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Health")
@@ -53,6 +54,9 @@ public:
 	
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Movement")
 		float MoveSpeed;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Movement")
+		float MoveRange;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Location")
 		FVector UnitLocation;
@@ -105,6 +109,9 @@ public:
 
 	UFUNCTION(BlueprintPure, Category = "Health")
 		float GetHealth();
+
+	UFUNCTION(BlueprintCallable)
+		float GetHealthPercentage();
 
 	UFUNCTION(BlueprintPure, Category = "Health")
 		FText GetHealthIntText();
