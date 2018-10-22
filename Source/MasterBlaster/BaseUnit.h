@@ -31,9 +31,11 @@ class MASTERBLASTER_API ABaseUnit : public APaperCharacter{
 
 private:
 	bool IsMoving;
+	bool IsShooting;
 	FVector MoveDestination;
 	bool InWalkRange(FVector dest);
 	bool InSprintRange(FVector dest);
+	bool bAllowRaycast;
 	AMasterBlasterGameState *gameState;
 public:
 
@@ -134,7 +136,7 @@ public:
 
 	// Fire a shot in the specified direction 
 	UFUNCTION(BlueprintCallable)
-	void FireShot(FVector FireDirection);
+	void FireShot();
 
 	// Handler for the fire timer expiry 
 	void ShotTimerExpired();

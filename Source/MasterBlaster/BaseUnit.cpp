@@ -27,6 +27,7 @@ bool ABaseUnit::InSprintRange(FVector dest){
 // Sets default values
 ABaseUnit::ABaseUnit()
 {
+	bAllowRaycast = true;
 	IsMoving = false;
 	// Weapon
 	GunOffset = FVector(90.f, 0.f, 0.f);
@@ -171,18 +172,24 @@ void ABaseUnit::Tick(float DeltaTime)
 	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, UnitLocation.ToString());
 
 	// Create fire direction vector
-	const float FireRightValue = GetInputAxisValue(FireRightBinding);
-	const float FireForwardValue = GetInputAxisValue(FireForwardBinding);
-	const FVector FireDirection = FVector(FireRightValue, 0.f, FireForwardValue);
+	//const float FireRightValue = GetInputAxisValue(FireRightBinding);
+	//const float FireForwardValue = GetInputAxisValue(FireForwardBinding);
+	FVector FireDirection;
+	
+	gameState = GetWorld()->GetGameState<AMasterBlasterGameState>();
 
-	Raycast();
+	if (gameState->GetActiveUnit() == this)
+	{
+		Raycast();
+		//FireShot();
+	}
+	
 
 	if (IsMoving) {
 		Move(DeltaTime);
 	}
 
-	// Try and fire a shot
-	FireShot(FireDirection);
+	
 }
 
 // Called to bind functionality to input
@@ -191,35 +198,52 @@ void ABaseUnit::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 	check(PlayerInputComponent);
 
 	// Set up gameplay key bindings
-	PlayerInputComponent->BindAxis(FireRightBinding);
-	PlayerInputComponent->BindAxis(FireForwardBinding);
+	//PlayerInputComponent->BindAxis(FireRightBinding);
+	//PlayerInputComponent->BindAxis(FireForwardBinding);
 
 }
 
-void ABaseUnit::FireShot(FVector FireDirection)
+void ABaseUnit::FireShot()
 {
+
 	// If it's ok to fire again
 	if (bCanFire == true)
 	{
+		gameState = GetWorld()->GetGameState<AMasterBlasterGameState>();
+		UGameViewportClient *GameViewport = GEngine->GameViewport;
+		FVector2D MousePosition;
+		GameViewport->GetMousePosition(MousePosition);
+		FVector WorldPosition, WorldDirection;
+		FHitResult *HitResult = new FHitResult();
+		FVector StartTrace = gameState->GetActiveUnit()->UnitLocation;
+		GetWorld()->GetFirstPlayerController()->DeprojectMousePositionToWorld(WorldPosition, WorldDirection);
+		FVector FireDirection = FVector(WorldPosition.X, 0.f, WorldPosition.Y);
+		//GEngine->AddOnScreenDebugMessage(-1, 0.1f, FColor::Red, WorldPosition.ToString());
+
 		// If we are pressing fire stick in a direction
 		if (FireDirection.SizeSquared() > 0.0f)
 		{
 			const FRotator FireRotation = FireDirection.Rotation();
 			// Spawn projectile at an offset from this pawn
 			const FVector SpawnLocation = GetActorLocation() + FireRotation.RotateVector(GunOffset);
+			
+			
 
 			UWorld* const World = GetWorld();
 			if (World != NULL)
 			{
+				bAllowRaycast = false;
+
 				// spawn the projectile
 				World->SpawnActor<AProjectile>(SpawnLocation, FireRotation);
 			}
 
-			bCanFire = false;
+			//bCanFire = false;
 			World->GetTimerManager().SetTimer(TimerHandle_ShotTimerExpired, this, &ABaseUnit::ShotTimerExpired, FireRate);
 
-			bCanFire = false;
+			//bCanFire = false;
 		}
+
 	}
 }
 
@@ -239,12 +263,16 @@ void ABaseUnit::Raycast()
 	FVector StartTrace = gameState->GetActiveUnit()->UnitLocation;
 	GetWorld()->GetFirstPlayerController()->DeprojectMousePositionToWorld(WorldPosition, WorldDirection);
 	FVector ForwardVector = WorldPosition;
+	GEngine->AddOnScreenDebugMessage(-1, 0.1f, FColor::Red, WorldPosition.ToString());
 	FVector EndTrace = ForwardVector;
 	FCollisionQueryParams *TraceParams = new FCollisionQueryParams();
 
+	if (!bAllowRaycast)
+		return;
+
 	if (GetWorld()->LineTraceSingleByChannel(*HitResult, StartTrace, EndTrace, ECC_Visibility, *TraceParams))
 	{
-		DrawDebugLine(GetWorld(), StartTrace, EndTrace, FColor(255, 0, 0), true);
+		DrawDebugLine(GetWorld(), StartTrace, EndTrace, FColor(12, 12, 12), false, 0.f, 50.f);
 
 		//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("You hit: %s"), *HitResult->Actor->GetName()));
 	}
