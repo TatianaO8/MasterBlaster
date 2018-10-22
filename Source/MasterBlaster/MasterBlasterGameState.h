@@ -31,9 +31,15 @@ private:
 	UPROPERTY(BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	TArray<ABaseUnit*> PlayerTeam;
 
+	UPROPERTY(BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	TArray<ABaseUnit*> EnemyTeam;
+
 public:
+
 	//ctors
 	AMasterBlasterGameState();
+
+	virtual void Tick(float DeltaTime) override;
 
 	//public functions
 	void AddUnit(ABaseUnit* unit);
@@ -53,7 +59,17 @@ public:
 	int GetPlayerTeamSize();
 
 	UFUNCTION(BlueprintCallable)
-		int WhoseTurn();
+	bool GetIsPlayerTurn();
 
+	void BeginEnemyTurn();
+	void BeginPlayerTurn();
+
+	void PlayerTurnUpdate();
+	void EnemyTurnUpdate();
+
+	UFUNCTION(BlueprintCallable)
+	void UpdateGameState();
+
+	
 
 };

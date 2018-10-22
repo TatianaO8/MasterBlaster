@@ -92,7 +92,7 @@ void ABaseUnit::BeginMove(FVector dest){
 
 	if (InWalkRange(dest)) {
 		if (GEngine) {
-			GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Cyan, TEXT("Walking"));
+			//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Cyan, TEXT("Walking"));
 		}
 		IsMoving = true;
 		UseActionPoint();
@@ -100,7 +100,7 @@ void ABaseUnit::BeginMove(FVector dest){
 	}
 	else if (InSprintRange(dest) && ActionPoints > 1) {
 		if (GEngine) {
-			GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Cyan, TEXT("Running"));
+			//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Cyan, TEXT("Running"));
 		}
 		IsMoving = true;
 		EmptyActionPoints();
@@ -139,6 +139,14 @@ float ABaseUnit::TakeDamage(float DamageAmount, struct FDamageEvent const & Dama
 
 int ABaseUnit::GetActionPoints(){
 	return ActionPoints;
+}
+
+void ABaseUnit::BeginTurn(){
+	RefreshActionPoints();
+}
+
+bool ABaseUnit::GetIsMoving(){
+	return IsMoving;
 }
 
 void ABaseUnit::UseActionPoint(){

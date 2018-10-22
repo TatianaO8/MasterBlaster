@@ -123,6 +123,13 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 		int GetActionPoints();
+
+	UFUNCTION(BlueprintCallable)
+		void BeginTurn();
+
+	UFUNCTION(BlueprintCallable)
+		bool GetIsMoving();
+
 	// void ReceivePointDamage(float Damage, const UDamageType * DamageType, FVector HitLocation, FVector HitNormal, UPrimitiveComponent * Hit Component, FName BoneName, FVector ShotFromDirection, AController * InstigatedBy, AActor * DamageCauser, const FHitResult & HitInfo);
 
 
