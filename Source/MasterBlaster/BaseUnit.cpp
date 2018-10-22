@@ -61,6 +61,10 @@ float ABaseUnit::GetHealth()
 	return HealthPercentage;
 }
 
+float ABaseUnit::GetHealthPercentage(){
+	return Health / FullHealth;
+}
+
 FText ABaseUnit::GetHealthIntText()
 {
 	int32 hp = FMath::RoundHalfFromZero(HealthPercentage * 100);

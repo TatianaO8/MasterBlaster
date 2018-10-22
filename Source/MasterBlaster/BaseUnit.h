@@ -110,6 +110,9 @@ public:
 	UFUNCTION(BlueprintPure, Category = "Health")
 		float GetHealth();
 
+	UFUNCTION(BlueprintCallable)
+		float GetHealthPercentage();
+
 	UFUNCTION(BlueprintPure, Category = "Health")
 		FText GetHealthIntText();
 
