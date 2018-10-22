@@ -12,12 +12,12 @@ AMasterBlasterGameState::AMasterBlasterGameState() {
 	// turn = 0, player turn
 	// turn = 1, enemy turn
 	// turn = -1, game over OR next level...
-	turn = 0;
+	IsPlayerTurn = true;
 
 	//put on blueprint, make a gameOver menu
 	// gameOver = 0, game is NOT over
 	// gameOver = 1, game is over & display game over menu
-	//gameOver = 0;
+	GameOver = true;
 
 }
 

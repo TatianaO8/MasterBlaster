@@ -20,9 +20,14 @@ private:
 
 	//determine who's turn it is
 	UPROPERTY(BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
-		int turn;
+	bool IsPlayerTurn;
+
 	UPROPERTY(BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
-		int activeUnit;
+	bool GameOver;
+	
+	UPROPERTY(BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	int activeUnit;
+	
 	UPROPERTY(BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	TArray<ABaseUnit*> PlayerTeam;
 
