@@ -6,6 +6,7 @@
 #include "PaperCharacter.h"
 #include "PaperSpriteComponent.h"
 #include "PaperSprite.h"
+#include "MasterBlasterGameState.h"
 #include "BaseUnit.generated.h"
 
 /**
@@ -31,10 +32,9 @@ class MASTERBLASTER_API ABaseUnit : public APaperCharacter{
 private:
 	bool IsMoving;
 	FVector MoveDestination;
-
 	bool InWalkRange(FVector dest);
 	bool InSprintRange(FVector dest);
-	
+	AMasterBlasterGameState *gameState;
 public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Health")
@@ -69,8 +69,6 @@ public:
 	UPROPERTY(Category = Gameplay, EditAnywhere, BlueprintReadWrite)
 		float FireRate;
 
-
-
 	// Sets default values for this character's properties
 	ABaseUnit();
 
@@ -94,6 +92,8 @@ protected:
 	void Move(float DeltaTime);
 
 	void FinishMove();
+
+	void Raycast();
 
 	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const & DamageEvent, class AController * EventInstigator, AActor * DamageCauser);
 
