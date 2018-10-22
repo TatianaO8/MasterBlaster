@@ -112,9 +112,6 @@ void ABaseUnit::BeginMove(FVector dest){
 			GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, TEXT("That's too far pal"));
 		}
 	}
-
-
-	
 	
 	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Blue, UnitLocation.ToString());
 }
