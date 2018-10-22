@@ -19,8 +19,8 @@ class MASTERBLASTER_API AMasterBlasterGameState : public AGameStateBase
 private:
 
 	//determine who's turn it is
-	UPROPERTY(BlueprintReadWrite, EditAnywhere)
-		int true;
+	UPROPERTY(BlueprintReadWrite, VisibleAnywhere)
+		int turn;
 	UPROPERTY(BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 		int activeUnit;
 	UPROPERTY(BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
@@ -46,4 +46,9 @@ public:
 	int SearchForUnitIndex(ABaseUnit* unit);
 
 	int GetPlayerTeamSize();
+
+	UFUNCTION(BlueprintCallable)
+		int WhoseTurn();
+
+
 };

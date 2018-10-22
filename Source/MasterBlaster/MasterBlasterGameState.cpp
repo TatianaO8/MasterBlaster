@@ -3,6 +3,7 @@
 #include "MasterBlasterGameState.h"
 
 #include "BaseUnit.h"
+#include "BasicEnemyUnit.h"
 
 AMasterBlasterGameState::AMasterBlasterGameState() {
 	//index into the playerteam array
@@ -10,27 +11,33 @@ AMasterBlasterGameState::AMasterBlasterGameState() {
 	
 	// turn = 0, player turn
 	// turn = 1, enemy turn
+	// turn = -1, game over OR next level...
 	turn = 0;
 
-	//DO THIS ON A BLUEPRINT
+	//put on blueprint, make a gameOver menu
 	// gameOver = 0, game is NOT over
 	// gameOver = 1, game is over & display game over menu
-	gameOver = 0;
+	//gameOver = 0;
 
 }
 
-void AMasterBlasterGameState::PlayerTurn(int turn)
+//Game Over, Next level, player's turn, enemy's turn
+int AMasterBlasterGameState::WhoseTurn()
 {
 	// if there are no more units, game over
-	if (GetPlayerTeamSize() == 0) {
-		gameOver = 1;
+	if (PlayerTeam.Num() == 0) {
+		//gameOver = 1;
+		return -1;
 	}
 
 	//if none of the units have actions, enemy's turn
-	if (GetActionPoints() == 0) {
-		turn = 1;
-		//send signal to enemy AI controller
+	for(int i = 0; i < PlayerTeam.Num(); i++) {
+		if (PlayerTeam[i]->GetActionPoints() == 1) {
+			return 0;
+		}
 	}
+
+	return 1;
 }
 
 void AMasterBlasterGameState::AddUnit(ABaseUnit* unit) {
@@ -65,5 +72,4 @@ int AMasterBlasterGameState::SearchForUnitIndex(ABaseUnit * unit){
 int AMasterBlasterGameState::GetPlayerTeamSize(){
 	return PlayerTeam.Num();
 }
-
 
