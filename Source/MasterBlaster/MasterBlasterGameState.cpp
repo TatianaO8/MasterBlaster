@@ -68,12 +68,12 @@ bool AMasterBlasterGameState::GetIsPlayerTurn(){
 }
 
 void AMasterBlasterGameState::BeginEnemyTurn(){
-	//GEngine->AddOnScreenDebugMessage(-1, 10000.f, FColor::Red, FString::Printf(TEXT("Begin Enemy Turn")));
+	GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Red, FString::Printf(TEXT("Begin Enemy Turn")));
 	IsPlayerTurn = false;
 }
 
 void AMasterBlasterGameState::BeginPlayerTurn(){
-	//GEngine->AddOnScreenDebugMessage(-1, 10000.f, FColor::Cyan, FString::Printf(TEXT("Begin Player Turn")));
+	GEngine->AddOnScreenDebugMessage(-1, 100.f, FColor::Cyan, FString::Printf(TEXT("Begin Player Turn")));
 	for (auto x : PlayerTeam) {
 		x->BeginTurn();
 	}
@@ -111,6 +111,10 @@ void AMasterBlasterGameState::EnemyTurnUpdate(){
 //Game Over, Next level, player's turn, enemy's turn
 void AMasterBlasterGameState::UpdateGameState() {
 	// if there are no more units, game over
+	if (combatStarted == false) {
+		return;
+	}
+		
 	if (PlayerTeam.Num() == 0) {
 		//gameOver = 1;
 		GameOver = true;
@@ -122,5 +126,9 @@ void AMasterBlasterGameState::UpdateGameState() {
 	else {
 		EnemyTurnUpdate();
 	}
+}
+
+void AMasterBlasterGameState::StartCombat(){
+	combatStarted = true;
 }
 

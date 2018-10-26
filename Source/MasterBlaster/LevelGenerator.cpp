@@ -2,6 +2,7 @@
 
 #include "LevelGenerator.h"
 
+#include "MasterBlasterGameState.h"
 #include "Room.h"
 #include "CombatMap.h"
 #include "BaseUnit.h"
@@ -194,6 +195,9 @@ void ALevelGenerator::BeginPlay(){
 	}
 	
 	GenerateLevel();
+
+	gameState = GetWorld()->GetGameState<AMasterBlasterGameState>();
+	gameState->StartCombat();
 }
 
 ///Public Functions

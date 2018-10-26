@@ -6,6 +6,8 @@ class ARoom;
 class ACombatMap;
 class ABaseUnit;
 class APlayerUnit;
+class AMasterBlasterGameState;
+
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "LevelGenerator.generated.h"
@@ -42,6 +44,8 @@ public:
 
 	UPROPERTY(EditAnywhere, Category = Units)
 	TSubclassOf<ABaseUnit> PlayerUnitBP;
+
+	AMasterBlasterGameState *gameState;
 
 public: 	
 	// Sets default values for this actor's properties

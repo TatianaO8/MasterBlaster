@@ -34,6 +34,8 @@ private:
 	UPROPERTY(BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	TArray<ABaseUnit*> EnemyTeam;
 
+	bool combatStarted;
+
 public:
 
 	//ctors
@@ -70,6 +72,6 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void UpdateGameState();
 
-	
+	void StartCombat();
 
 };

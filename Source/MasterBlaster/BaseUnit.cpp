@@ -46,7 +46,7 @@ ABaseUnit::ABaseUnit()
 void ABaseUnit::BeginPlay()
 {
 	Super::BeginPlay();
-
+	gameState = GetWorld()->GetGameState<AMasterBlasterGameState>();
 	//Maybe this doesn't go here but testing because doesn't work
 	FullHealth = 100.0f;
 	Health = FullHealth;
@@ -183,7 +183,7 @@ void ABaseUnit::Tick(float DeltaTime)
 	//const float FireForwardValue = GetInputAxisValue(FireForwardBinding);
 	FVector FireDirection;
 	
-	gameState = GetWorld()->GetGameState<AMasterBlasterGameState>();
+	
 
 	if (gameState->GetActiveUnit() == this)
 	{
