@@ -216,56 +216,40 @@ void ABaseUnit::FireShot()
 	// If it's ok to fire again
 	if (bCanFire == true)
 	{
-		/*gameState = GetWorld()->GetGameState<AMasterBlasterGameState>();
-		UGameViewportClient *GameViewport = GEngine->GameViewport;
-		FVector2D MousePosition;
-		GameViewport->GetMousePosition(MousePosition);
-		FVector WorldPosition, WorldDirection;
-		FHitResult *HitResult = new FHitResult();
-		FVector StartTrace = gameState->GetActiveUnit()->UnitLocation;
-		GetWorld()->GetFirstPlayerController()->DeprojectMousePositionToWorld(WorldPosition, WorldDirection);
-		FVector FireDirection = FVector(WorldPosition.X, 0.f, WorldPosition.Y);
-		*///GEngine->AddOnScreenDebugMessage(-1, 0.1f, FColor::Red, WorldPosition.ToString());
 		
-		
-
-		// If we are pressing fire stick in a direction
-		if (true)
-		{
-			//const FRotator FireRotation = FireDirection.Rotation();
-			// Spawn projectile at an offset from this pawn
-			//const FVector SpawnLocation = GetActorLocation() + FireRotation.RotateVector(GunOffset);
-			
-			
-			FVector start = GetActorLocation();
-			start += GunOffset;
-
-			FHitResult result;
-			GetWorld()->GetFirstPlayerController()->GetHitResultUnderCursor(ECollisionChannel::ECC_Visibility, false, result);
-			FVector target = result.Location;
-
-
-			//GetWorld()->GetFirstPlayerController()->GetMousePosition(target.X, target.Z);
-
-			FRotator direction = UKismetMathLibrary::FindLookAtRotation(start, target);
-			
-
-			UWorld* const World = GetWorld();
-			if (World != NULL)
-			{
-				bAllowRaycast = false;
-
-				// spawn the projectile
-				AProjectile *proj = World->SpawnActor<AProjectile>(start, direction);
-
-			}
-
-			//bCanFire = false;
-			World->GetTimerManager().SetTimer(TimerHandle_ShotTimerExpired, this, &ABaseUnit::ShotTimerExpired, FireRate);
-
-			//bCanFire = false;
+		if (ActionPoints < 1) {
+			return;
 		}
 
+		EmptyActionPoints();
+
+		FVector start = GetActorLocation();
+		start += GunOffset;
+
+		FHitResult result;
+		GetWorld()->GetFirstPlayerController()->GetHitResultUnderCursor(ECollisionChannel::ECC_Visibility, false, result);
+		FVector target = result.Location;
+
+
+		//GetWorld()->GetFirstPlayerController()->GetMousePosition(target.X, target.Z);
+
+		FRotator direction = UKismetMathLibrary::FindLookAtRotation(start, target);
+			
+
+		UWorld* const World = GetWorld();
+		if (World != NULL)
+		{
+			bAllowRaycast = false;
+
+			// spawn the projectile
+			AProjectile *proj = World->SpawnActor<AProjectile>(start, direction);
+
+		}
+
+		//bCanFire = false;
+		World->GetTimerManager().SetTimer(TimerHandle_ShotTimerExpired, this, &ABaseUnit::ShotTimerExpired, FireRate);
+
+		//bCanFire = false;
 	}
 }
 
