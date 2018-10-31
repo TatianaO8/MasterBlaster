@@ -3,5 +3,10 @@
 #include "BasicEnemyUnit.h"
 
 
+void ABasicEnemyUnit::BeginPlay() {
+	Super::BeginPlay();
 
+	gameState = GetWorld()->GetGameState<AMasterBlasterGameState>();
+	gameState->RegisterEnemyUnit(this);
+}
 

@@ -7,7 +7,7 @@
 void APlayerUnit::BeginPlay() {
 	Super::BeginPlay();
 	gameState = GetWorld()->GetGameState<AMasterBlasterGameState>();
-	gameState->AddUnit(this);
+	gameState->RegisterPlayerUnit(this);
 	MyTeamIndex = gameState->GetPlayerTeamSize() - 1;
 
 }

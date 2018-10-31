@@ -31,7 +31,7 @@ class MASTERBLASTER_API ABaseUnit : public APaperCharacter{
 	//UPROPERTY(Category = Camera, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	//class USpringArmComponent* CameraBoom;
 
-private:
+protected:
 	bool IsMoving;
 	bool IsShooting;
 	FVector MoveDestination;

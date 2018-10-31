@@ -30,8 +30,12 @@ void AMasterBlasterGameState::Tick(float DeltaTime){
 	//UpdateGameState();
 }
 
-void AMasterBlasterGameState::AddUnit(ABaseUnit* unit) {
+void AMasterBlasterGameState::RegisterPlayerUnit(ABaseUnit* unit) {
 	PlayerTeam.Add(unit);
+}
+
+void AMasterBlasterGameState::RegisterEnemyUnit(ABaseUnit * unit){
+	EnemyTeam.Add(unit);
 }
 
 void AMasterBlasterGameState::SetActiveUnit(int index){

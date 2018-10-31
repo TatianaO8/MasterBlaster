@@ -220,6 +220,9 @@ void ABaseUnit::FireShot()
 		if (ActionPoints < 1) {
 			return;
 		}
+		if (IsMoving) {
+			return;
+		}
 
 		EmptyActionPoints();
 

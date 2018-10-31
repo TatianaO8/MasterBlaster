@@ -14,7 +14,8 @@ class MASTERBLASTER_API ABasicEnemyUnit : public ABaseUnit
 {
 	GENERATED_BODY()
 	
-	
-	
+protected:
+	// Called when the game starts or when spawned
+	void BeginPlay();
 	
 };
