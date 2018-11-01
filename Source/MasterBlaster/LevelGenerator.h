@@ -45,6 +45,10 @@ public:
 	UPROPERTY(EditAnywhere, Category = Units)
 	TSubclassOf<ABaseUnit> PlayerUnitBP;
 
+	UPROPERTY(EditAnywhere, Category = Units)
+	TSubclassOf<ABaseUnit> EnemyUnitBP;
+
+
 	AMasterBlasterGameState *gameState;
 
 public: 	
@@ -60,6 +64,7 @@ private:
 	void SpawnRoom(TSubclassOf<ARoom> room, int xPosition);
 	void PlaceRooms(ARoom* root);
 	void SpawnPlayerTeam();
+	void SpawnEnemyTeam();
 	void GenerateLevel();
 
 	bool ValidateEditorInput();

@@ -74,6 +74,16 @@ bool AMasterBlasterGameState::GetIsPlayerTurn(){
 void AMasterBlasterGameState::BeginEnemyTurn(){
 	GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Red, FString::Printf(TEXT("Begin Enemy Turn")));
 	IsPlayerTurn = false;
+	
+	//Refesh Team's AP
+	for (auto x : EnemyTeam) {
+		x->BeginTurn();
+	}
+
+	//perform actions
+	for (auto x : EnemyTeam) {
+		x->ActionPoints = 0;
+	}
 }
 
 void AMasterBlasterGameState::BeginPlayerTurn(){

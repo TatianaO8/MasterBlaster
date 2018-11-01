@@ -124,6 +124,10 @@ void ALevelGenerator::SpawnPlayerTeam(){
 	}
 }
 
+void ALevelGenerator::SpawnEnemyTeam(){
+	map->SpawnEnemies(EnemyUnitBP);
+}
+
 void ALevelGenerator::GenerateLevel() {
 	//Seed the random number generator
 	FGenericPlatformMath::SRandInit(seed);
@@ -138,7 +142,7 @@ void ALevelGenerator::GenerateLevel() {
 	SpawnPlayerTeam();
 
 	//Spawns Enemy Units in each room.
-	//SpawnEnemyTeam();
+	SpawnEnemyTeam();
 }
 
 bool ALevelGenerator::ValidateEditorInput(){
@@ -172,6 +176,14 @@ bool ALevelGenerator::ValidateEditorInput(){
 		else {
 			return false;
 		}
+	}
+
+	if (PlayerUnitBP == nullptr) {
+		return false;
+	}
+
+	if (EnemyUnitBP == nullptr) {
+		return false;
 	}
 
 	return true;

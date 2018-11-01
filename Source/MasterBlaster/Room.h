@@ -2,6 +2,8 @@
 
 #pragma once
 
+class ABaseUnit;
+
 #include "CoreMinimal.h"
 #include "PaperTileMapActor.h"
 #include "Room.generated.h"
@@ -46,13 +48,15 @@ private:
 	//Private Functions
 
 protected:
-	//Protected Variables
+	// Called when the game starts or when spawned
+	virtual void BeginPlay() override;
 
-	//Protected Functions
 
 public:
 	//Public Variables
 	void EnterRoom();
+
+	void SpawnEnemies(TSubclassOf<ABaseUnit> EnemyUnitBP);
 
 	//Public Functions
 	UFUNCTION(BlueprintCallable)

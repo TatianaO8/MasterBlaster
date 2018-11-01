@@ -36,6 +36,8 @@ public:
 	ARoom* GetLastRoom();
 	
 	void AddRoom(ARoom* room);
+
+	void SpawnEnemies(TSubclassOf<ABaseUnit> EnemyUnitBP);
 	
 	
 };

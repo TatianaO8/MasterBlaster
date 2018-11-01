@@ -1,6 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "CombatMap.h"
+#include "BaseUnit.h"
 
 #include "Room.h"
 
@@ -26,4 +27,10 @@ ARoom* ACombatMap::GetLastRoom(){
 //Public Functions
 void ACombatMap::AddRoom(ARoom* room) {
 	rooms.Add(room);
+}
+
+void ACombatMap::SpawnEnemies(TSubclassOf<ABaseUnit> EnemyUnitBP){
+	for (auto x : rooms) {
+		x->SpawnEnemies(EnemyUnitBP);
+	}
 }
