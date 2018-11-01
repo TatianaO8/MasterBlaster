@@ -49,7 +49,7 @@ void ARoom::SpawnEnemies(TSubclassOf<ABaseUnit> EnemyUnitBP){
 			
 			FName spawnFlag(TEXT("EnemySpawn"));
 			if (spawnFlag == tileData) {
-				GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Red, FString::Printf(TEXT("Spawn")));
+				//GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Red, FString::Printf(TEXT("Spawn")));
 				
 				FVector rootLocation = this->GetActorLocation();
 
