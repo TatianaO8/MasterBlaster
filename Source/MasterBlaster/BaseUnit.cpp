@@ -39,7 +39,7 @@ ABaseUnit::ABaseUnit()
 	MaxActionPoints = ActionPoints = 2;
 
 	MoveSpeed = 200;
-	MoveRange = 1280;
+	MoveRange = 2560;
 }
 
 // Called when the game starts or when spawned
