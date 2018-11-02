@@ -6,6 +6,7 @@ class ARoom;
 class ACombatMap;
 class ABaseUnit;
 class APlayerUnit;
+class ABasicEnemyUnit;
 class AMasterBlasterGameState;
 
 #include "CoreMinimal.h"
@@ -46,7 +47,7 @@ public:
 	TSubclassOf<ABaseUnit> PlayerUnitBP;
 
 	UPROPERTY(EditAnywhere, Category = Units)
-	TSubclassOf<ABaseUnit> EnemyUnitBP;
+	TSubclassOf<ABasicEnemyUnit> EnemyUnitBP;
 
 
 	AMasterBlasterGameState *gameState;

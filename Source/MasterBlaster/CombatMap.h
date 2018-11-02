@@ -3,6 +3,8 @@
 #pragma once
 class ARoom;
 class ABaseUnit;
+class ABasicEnemyUnit;
+
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "CombatMap.generated.h"
@@ -37,7 +39,7 @@ public:
 	
 	void AddRoom(ARoom* room);
 
-	void SpawnEnemies(TSubclassOf<ABaseUnit> EnemyUnitBP);
+	void SpawnEnemies(TSubclassOf<ABasicEnemyUnit> EnemyUnitBP);
 	
 	
 };

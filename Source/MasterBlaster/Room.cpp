@@ -2,6 +2,7 @@
 
 #include "Room.h"
 #include "BaseUnit.h"
+#include "BasicEnemyUnit.h"
 
 #include "PaperTileMapComponent.h"
 #include "PaperTileMap.h"
@@ -23,7 +24,7 @@ void ARoom::EnterRoom(){
 	return;
 }
 
-void ARoom::SpawnEnemies(TSubclassOf<ABaseUnit> EnemyUnitBP){
+void ARoom::SpawnEnemies(TSubclassOf<ABasicEnemyUnit> EnemyUnitBP){
 	//GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Red, FString::Printf(TEXT("Spawn Room Contents")));
 	auto TileMap = this->GetRenderComponent();
 
@@ -47,11 +48,16 @@ void ARoom::SpawnEnemies(TSubclassOf<ABaseUnit> EnemyUnitBP){
 
 			//GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Red, tileData.ToString());
 			
+			
+
 			FName spawnFlag(TEXT("EnemySpawn"));
 			if (spawnFlag == tileData) {
 				//GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Red, FString::Printf(TEXT("Spawn")));
 				
-				FVector rootLocation = this->GetActorLocation();
+				FTransform transform = this->GetActorTransform();
+
+				FVector rootLocation = transform.GetLocation();
+				
 
 				FVector location(rootLocation.X + x * 128, rootLocation.Y, rootLocation.Z - (128 * y));
 				FRotator rotation(0, 0, 0);

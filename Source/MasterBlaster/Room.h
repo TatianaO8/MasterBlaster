@@ -3,6 +3,7 @@
 #pragma once
 
 class ABaseUnit;
+class ABasicEnemyUnit;
 
 #include "CoreMinimal.h"
 #include "PaperTileMapActor.h"
@@ -56,7 +57,7 @@ public:
 	//Public Variables
 	void EnterRoom();
 
-	void SpawnEnemies(TSubclassOf<ABaseUnit> EnemyUnitBP);
+	void SpawnEnemies(TSubclassOf<ABasicEnemyUnit> EnemyUnitBP);
 
 	//Public Functions
 	UFUNCTION(BlueprintCallable)

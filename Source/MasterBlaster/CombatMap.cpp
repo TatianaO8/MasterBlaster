@@ -2,6 +2,8 @@
 
 #include "CombatMap.h"
 #include "BaseUnit.h"
+#include "BasicEnemyUnit.h"
+#include "BasicEnemyUnit.h"
 
 #include "Room.h"
 
@@ -29,7 +31,7 @@ void ACombatMap::AddRoom(ARoom* room) {
 	rooms.Add(room);
 }
 
-void ACombatMap::SpawnEnemies(TSubclassOf<ABaseUnit> EnemyUnitBP){
+void ACombatMap::SpawnEnemies(TSubclassOf<ABasicEnemyUnit> EnemyUnitBP){
 	for (auto x : rooms) {
 		x->SpawnEnemies(EnemyUnitBP);
 	}

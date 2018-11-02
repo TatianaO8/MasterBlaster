@@ -7,6 +7,7 @@
 #include "CombatMap.h"
 #include "BaseUnit.h"
 #include "PlayerUnit.h"
+#include "BasicEnemyUnit.h"
 
 #include "GenericPlatformMath.h"
 
@@ -147,10 +148,8 @@ void ALevelGenerator::GenerateLevel() {
 
 bool ALevelGenerator::ValidateEditorInput(){
 	//Validate Spawn Room
-	if (spawnRoomBP) {
-		;
-	}
-	else {
+	if (spawnRoomBP == nullptr) {
+		GEngine->AddOnScreenDebugMessage(-1, 10000.f, FColor::Red, FString::Printf(TEXT("No Valid Spawn Room")));
 		return false;
 	}
 
@@ -162,6 +161,7 @@ bool ALevelGenerator::ValidateEditorInput(){
 			continue;
 		} 
 		else {
+			GEngine->AddOnScreenDebugMessage(-1, 10000.f, FColor::Red, FString::Printf(TEXT("Invalid room in room library")));
 			return false;
 		}
 	}
@@ -170,19 +170,19 @@ bool ALevelGenerator::ValidateEditorInput(){
 
 	//Validate End rooms
 	for (TSubclassOf<ARoom> room : EndRoomLibrary) {
-		if (room) {
-			continue;
-		}
-		else {
+		if (room == nullptr){
+			GEngine->AddOnScreenDebugMessage(-1, 10000.f, FColor::Red, FString::Printf(TEXT("Invalid room in room end room library")));
 			return false;
 		}
 	}
 
 	if (PlayerUnitBP == nullptr) {
+		GEngine->AddOnScreenDebugMessage(-1, 10000.f, FColor::Red, FString::Printf(TEXT("Invalid PlayerUnitBP")));
 		return false;
 	}
 
 	if (EnemyUnitBP == nullptr) {
+		GEngine->AddOnScreenDebugMessage(-1, 10000.f, FColor::Red, FString::Printf(TEXT("Invalid EnemyUnitBP")));
 		return false;
 	}
 
