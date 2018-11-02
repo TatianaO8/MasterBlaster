@@ -87,7 +87,7 @@ void AMasterBlasterGameState::BeginEnemyTurn(){
 }
 
 void AMasterBlasterGameState::BeginPlayerTurn(){
-	GEngine->AddOnScreenDebugMessage(-1, 100.f, FColor::Cyan, FString::Printf(TEXT("Begin Player Turn")));
+	GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Cyan, FString::Printf(TEXT("Begin Player Turn")));
 	for (auto x : PlayerTeam) {
 		x->BeginTurn();
 	}
