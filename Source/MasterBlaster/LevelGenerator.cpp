@@ -8,6 +8,7 @@
 #include "BaseUnit.h"
 #include "PlayerUnit.h"
 #include "BasicEnemyUnit.h"
+#include "CoverBlock.h"
 
 #include "GenericPlatformMath.h"
 
@@ -125,10 +126,6 @@ void ALevelGenerator::SpawnPlayerTeam(){
 	}
 }
 
-void ALevelGenerator::SpawnEnemyTeam(){
-	map->SpawnEnemies(EnemyUnitBP);
-}
-
 void ALevelGenerator::GenerateLevel() {
 	//Seed the random number generator
 	FGenericPlatformMath::SRandInit(seed);
@@ -142,8 +139,8 @@ void ALevelGenerator::GenerateLevel() {
 	//Spawns player units in spawn room
 	SpawnPlayerTeam();
 
-	//Spawns Enemy Units in each room.
-	SpawnEnemyTeam();
+	//Spawns Enemy Units and Cover elements in each room.
+	map->SpawnDynamicElements(EnemyUnitBP, CoverBlockBP);
 }
 
 bool ALevelGenerator::ValidateEditorInput(){
@@ -183,6 +180,11 @@ bool ALevelGenerator::ValidateEditorInput(){
 
 	if (EnemyUnitBP == nullptr) {
 		GEngine->AddOnScreenDebugMessage(-1, 10000.f, FColor::Red, FString::Printf(TEXT("Invalid EnemyUnitBP")));
+		return false;
+	}
+
+	if (CoverBlockBP == nullptr) {
+		GEngine->AddOnScreenDebugMessage(-1, 10000.f, FColor::Red, FString::Printf(TEXT("Invalid CoverBlockBP")));
 		return false;
 	}
 

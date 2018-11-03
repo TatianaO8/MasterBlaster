@@ -7,6 +7,7 @@ class ACombatMap;
 class ABaseUnit;
 class APlayerUnit;
 class ABasicEnemyUnit;
+class ACoverBlock;
 class AMasterBlasterGameState;
 
 #include "CoreMinimal.h"
@@ -49,6 +50,8 @@ public:
 	UPROPERTY(EditAnywhere, Category = Units)
 	TSubclassOf<ABasicEnemyUnit> EnemyUnitBP;
 
+	UPROPERTY(EditAnywhere, Category = Units)
+	TSubclassOf<ACoverBlock> CoverBlockBP;
 
 	AMasterBlasterGameState *gameState;
 
@@ -65,7 +68,7 @@ private:
 	void SpawnRoom(TSubclassOf<ARoom> room, int xPosition);
 	void PlaceRooms(ARoom* root);
 	void SpawnPlayerTeam();
-	void SpawnEnemyTeam();
+
 	void GenerateLevel();
 
 	bool ValidateEditorInput();

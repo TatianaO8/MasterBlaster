@@ -3,7 +3,7 @@
 #include "CombatMap.h"
 #include "BaseUnit.h"
 #include "BasicEnemyUnit.h"
-#include "BasicEnemyUnit.h"
+#include "CoverBlock.h"
 
 #include "Room.h"
 
@@ -31,8 +31,8 @@ void ACombatMap::AddRoom(ARoom* room) {
 	rooms.Add(room);
 }
 
-void ACombatMap::SpawnEnemies(TSubclassOf<ABasicEnemyUnit> EnemyUnitBP){
-	for (auto x : rooms) {
-		x->SpawnEnemies(EnemyUnitBP);
+void ACombatMap::SpawnDynamicElements(TSubclassOf<ABasicEnemyUnit> EnemyUnitBP, TSubclassOf<ACoverBlock> CoverBlockBP){
+	for (auto room : rooms) {
+		room->Populate(EnemyUnitBP, CoverBlockBP);
 	}
 }

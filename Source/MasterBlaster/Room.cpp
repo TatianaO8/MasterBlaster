@@ -3,6 +3,7 @@
 #include "Room.h"
 #include "BaseUnit.h"
 #include "BasicEnemyUnit.h"
+#include "CoverBlock.h"
 
 #include "PaperTileMapComponent.h"
 #include "PaperTileMap.h"
@@ -24,8 +25,17 @@ void ARoom::EnterRoom(){
 	return;
 }
 
-void ARoom::SpawnEnemies(TSubclassOf<ABasicEnemyUnit> EnemyUnitBP){
-	//GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Red, FString::Printf(TEXT("Spawn Room Contents")));
+FTransform ARoom::GetSpawnLocation(int x, int y){
+	FTransform temp = this->GetActorTransform();
+	
+	FVector rootLocation = temp.GetLocation();
+	FVector location(rootLocation.X + x * 128, rootLocation.Y, rootLocation.Z - (128 * y));
+	temp.SetLocation(location);
+		
+	return temp;
+}
+
+void ARoom::Populate(TSubclassOf<ABasicEnemyUnit> EnemyUnitBP, TSubclassOf<ACoverBlock> CoverBlockBP){
 	auto TileMap = this->GetRenderComponent();
 
 	int rows, cols, layers;
@@ -42,31 +52,27 @@ void ARoom::SpawnEnemies(TSubclassOf<ABasicEnemyUnit> EnemyUnitBP){
 			auto tileIndex = tile.PackedTileIndex;
 			auto tileData = tile.TileSet->GetTileUserData(tileIndex);
 
-			/*if (tileIndex != -1) {
-				GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Blue, FString::Printf(TEXT("%d"), tileIndex));
-			}*/
-
-			//GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Red, tileData.ToString());
+			FName unitSpawnFlag(TEXT("EnemySpawn"));
+			FName coverSpawnFlag(TEXT("Cover"));
 			
-			
+			if (tileData == unitSpawnFlag) {
+				//GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Red, FString::Printf(TEXT("SpawnEnemy")));
+				FTransform transform = GetSpawnLocation(x, y);
+				auto enemyUnit = GetWorld()->SpawnActor<ABasicEnemyUnit>(EnemyUnitBP, transform);
+			}
 
-			FName spawnFlag(TEXT("EnemySpawn"));
-			if (spawnFlag == tileData) {
-				//GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Red, FString::Printf(TEXT("Spawn")));
-				
-				FTransform transform = this->GetActorTransform();
+			if (tileData == coverSpawnFlag) {
+				//GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Red, FString::Printf(TEXT("SpawnCover")));
 
-				FVector rootLocation = transform.GetLocation();
-				
-
-				FVector location(rootLocation.X + x * 128, rootLocation.Y, rootLocation.Z - (128 * y));
-				FRotator rotation(0, 0, 0);
-				ABaseUnit* unit = GetWorld()->SpawnActor<ABaseUnit>(EnemyUnitBP, location, rotation);
+				FTransform transform = GetSpawnLocation(x, y);
+				auto block = GetWorld()->SpawnActor<ACoverBlock>(CoverBlockBP, transform);
 
 			}
 		}
 	}
 }
+
+
 
 int ARoom::GetRoomWidthTiles() {
 	return GetRenderComponent()->TileMap->MapWidth;

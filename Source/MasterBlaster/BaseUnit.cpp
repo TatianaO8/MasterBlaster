@@ -40,6 +40,7 @@ ABaseUnit::ABaseUnit()
 
 	MoveSpeed = 200;
 	MoveRange = 2560;
+
 }
 
 // Called when the game starts or when spawned

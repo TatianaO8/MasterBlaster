@@ -4,6 +4,7 @@
 
 class ABaseUnit;
 class ABasicEnemyUnit;
+class ACoverBlock;
 
 #include "CoreMinimal.h"
 #include "PaperTileMapActor.h"
@@ -58,6 +59,12 @@ public:
 	void EnterRoom();
 
 	void SpawnEnemies(TSubclassOf<ABasicEnemyUnit> EnemyUnitBP);
+	void SpawnCoverElements(TSubclassOf<ACoverBlock> CoverBlockBP);
+	
+	FTransform GetSpawnLocation(int x, int y);
+	void Populate(TSubclassOf<ABasicEnemyUnit> EnemyUnitBP, TSubclassOf<ACoverBlock> CoverBlockBP);
+
+	
 
 	//Public Functions
 	UFUNCTION(BlueprintCallable)
