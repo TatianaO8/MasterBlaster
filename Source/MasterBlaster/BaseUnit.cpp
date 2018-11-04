@@ -28,7 +28,7 @@ ABaseUnit::ABaseUnit()
 	bAllowRaycast = true;
 	IsMoving = false;
 	// Weapon
-	GunOffset = FVector(90.f, 0.f, 0.f);
+	GunOffset = FVector(45.f, 0.f, 0.f);
 	FireRate = 0.1f;
 	bCanFire = true;
 
@@ -229,15 +229,20 @@ void ABaseUnit::FireShot()
 
 		FVector start = GetActorLocation();
 		start += GunOffset;
+		start.Y = 0.f;
+
+		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, start.ToString());
 
 		FHitResult result;
 		GetWorld()->GetFirstPlayerController()->GetHitResultUnderCursor(ECollisionChannel::ECC_Visibility, false, result);
 		FVector target = result.Location;
+		target.Y = 0.f;
 
 
 		//GetWorld()->GetFirstPlayerController()->GetMousePosition(target.X, target.Z);
 
 		FRotator direction = UKismetMathLibrary::FindLookAtRotation(start, target);
+		direction.Yaw = 0.f;
 			
 
 		UWorld* const World = GetWorld();
@@ -247,6 +252,7 @@ void ABaseUnit::FireShot()
 
 			// spawn the projectile
 			AProjectile *proj = World->SpawnActor<AProjectile>(start, direction);
+
 
 		}
 
