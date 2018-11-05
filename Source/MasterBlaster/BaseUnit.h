@@ -41,6 +41,9 @@ protected:
 	bool bRayCastActive;
 	bool bAllowRaycast;
 	AMasterBlasterGameState *gameState;
+	
+	UPROPERTY(BlueprintReadWrite, meta = (AllowPrivateAccess = true))
+	int teamIndex;
 public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Health")
@@ -64,8 +67,8 @@ public:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Movement")
 		float MoveRange;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Location")
-		FVector UnitLocation;
+	//UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Location")
+	//	FVector UnitLocation;
 
 	// Offset from the unit location to spawn projectiles 
 	UPROPERTY(Category = Gameplay, EditAnywhere, BlueprintReadWrite)
@@ -112,7 +115,7 @@ protected:
 public:
 
 
-	UFUNCTION(BlueprintPure, Category = "Health")
+	UFUNCTION(BlueprintCallable, Category = "Health")
 		float GetHealth();
 
 	UFUNCTION(BlueprintCallable)
@@ -152,11 +155,14 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void EnableRaycast();
 
+	UFUNCTION(BlueprintCallable)
+	void DisableRaycast();
+
 	// Handler for the fire timer expiry 
 	void ShotTimerExpired();
 
 	UFUNCTION()
-		void OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, FVector NormalImpulse, const FHitResult& Hit);
+	void OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, FVector NormalImpulse, const FHitResult& Hit);
 
-
+	virtual void Die();
 };

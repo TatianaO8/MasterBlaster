@@ -44,8 +44,10 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 	//public functions
-	void RegisterPlayerUnit(ABaseUnit* unit);
-	void RegisterEnemyUnit(ABaseUnit* unit);
+	int RegisterPlayerUnit(ABaseUnit* unit);
+	int RegisterEnemyUnit(ABaseUnit* unit);
+	void UnregisterPlayerUnit(int index);
+	void UnregisterEnemyUnit(int index);
 
 	UFUNCTION(BlueprintCallable)
 	void SetActiveUnit(int index);

@@ -7,8 +7,15 @@
 void APlayerUnit::BeginPlay() {
 	Super::BeginPlay();
 	gameState = GetWorld()->GetGameState<AMasterBlasterGameState>();
-	gameState->RegisterPlayerUnit(this);
-	MyTeamIndex = gameState->GetPlayerTeamSize() - 1;
+	
+	teamIndex = gameState->RegisterPlayerUnit(this);
 
+
+}
+
+void APlayerUnit::Die(){
+	Super::Die();
+	gameState->UnregisterPlayerUnit(teamIndex);
+	Destroy();
 }
 

@@ -26,12 +26,22 @@ void AMasterBlasterGameState::Tick(float DeltaTime){
 	//UpdateGameState();
 }
 
-void AMasterBlasterGameState::RegisterPlayerUnit(ABaseUnit* unit) {
+int AMasterBlasterGameState::RegisterPlayerUnit(ABaseUnit* unit) {
 	PlayerTeam.Add(unit);
+	return PlayerTeam.Num() - 1;
 }
 
-void AMasterBlasterGameState::RegisterEnemyUnit(ABaseUnit * unit){
+int AMasterBlasterGameState::RegisterEnemyUnit(ABaseUnit * unit){
 	EnemyTeam.Add(unit);
+	return EnemyTeam.Num() - 1;
+}
+
+void AMasterBlasterGameState::UnregisterPlayerUnit(int index){
+	PlayerTeam.RemoveAt(index, 1, true);
+}
+
+void AMasterBlasterGameState::UnregisterEnemyUnit(int index){
+	EnemyTeam.RemoveAt(index, 1, true);
 }
 
 void AMasterBlasterGameState::SetActiveUnit(int index){

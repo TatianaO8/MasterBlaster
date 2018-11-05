@@ -65,10 +65,10 @@ void AProjectile::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, U
 		if (OtherActor->bCanBeDamaged)
 		{
 			Destroy();
-			UGameplayStatics::ApplyPointDamage(UnitCharacter, 50.f, GetActorLocation(), Hit, nullptr, this, DamageType);
+			UGameplayStatics::ApplyDamage(UnitCharacter, 50.f, nullptr, this, DamageType);
 
-			if (GEngine)
-				GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Purple, FString::Printf(TEXT("HERE")));
+			//if (GEngine)
+				//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Purple, FString::Printf(TEXT("HERE")));
 		}
 			
 

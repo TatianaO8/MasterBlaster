@@ -67,7 +67,7 @@ void ABaseUnit::BeginPlay()
 
 float ABaseUnit::GetHealth()
 {
-	return HealthPercentage;
+	return Health;
 }
 
 float ABaseUnit::GetHealthPercentage(){
@@ -143,7 +143,7 @@ void ABaseUnit::FinishMove() {
 
 float ABaseUnit::TakeDamage(float DamageAmount, struct FDamageEvent const & DamageEvent, class AController * EventInstigator, AActor * DamageCauser)
 {
-	bCanBeDamaged = false;
+	//bCanBeDamaged = false;
 	UpdateHealth(-DamageAmount);
 	return DamageAmount;
 }
@@ -185,7 +185,7 @@ void ABaseUnit::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	UnitLocation = GetActorLocation();
+	//UnitLocation = GetActorLocation();
 	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, UnitLocation.ToString());
 
 	// Create fire direction vector
@@ -193,7 +193,9 @@ void ABaseUnit::Tick(float DeltaTime)
 	//const float FireForwardValue = GetInputAxisValue(FireForwardBinding);
 	FVector FireDirection;
 	
-	
+	if (Health <= 0) {
+		Die();
+	}
 
 	if (bAllowRaycast)
 	{
@@ -282,6 +284,11 @@ void ABaseUnit::EnableRaycast()
 	bAllowRaycast = true;
 }
 
+void ABaseUnit::DisableRaycast()
+{
+	bAllowRaycast = false;
+}
+
 void ABaseUnit::Raycast()
 {
 	FHitResult result;
@@ -291,7 +298,7 @@ void ABaseUnit::Raycast()
 	GameViewport->GetMousePosition(MousePosition);
 	FVector WorldPosition, WorldDirection;
 	FHitResult *HitResult = new FHitResult();
-	FVector StartTrace = gameState->GetActiveUnit()->UnitLocation;
+	FVector StartTrace = gameState->GetActiveUnit()->GetActorLocation();
 	StartTrace += GunOffset;
 	StartTrace.Y = 0.f;
 	//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, StartTrace.ToString());
@@ -376,6 +383,10 @@ void ABaseUnit::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPr
 		{
 
 		}*/
-
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Oh, the agony")));
 	}
+}
+
+void ABaseUnit::Die(){
+	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, TEXT("Oh the pain"));
 }

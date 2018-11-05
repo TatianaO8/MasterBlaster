@@ -20,11 +20,11 @@ class MASTERBLASTER_API APlayerUnit : public ABaseUnit
 private:
 	AMasterBlasterGameState *gameState;
 	
-	UPROPERTY(BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
-	int MyTeamIndex;
 protected:
 	// Called when the game starts or when spawned
 	void BeginPlay();
+
+	void Die() override;
 	
 	
 };

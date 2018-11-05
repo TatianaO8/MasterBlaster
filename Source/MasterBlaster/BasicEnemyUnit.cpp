@@ -14,7 +14,8 @@ void ABasicEnemyUnit::BeginPlay() {
 	Super::BeginPlay();
 
 	gameState = GetWorld()->GetGameState<AMasterBlasterGameState>();
-	gameState->RegisterEnemyUnit(this);
+	teamIndex = gameState->RegisterEnemyUnit(this);
+	
 }
 
 //override from BaseUnit
@@ -93,5 +94,11 @@ void ABasicEnemyUnit::FireShot()
 
 		//bCanFire = false;
 	}
+}
+
+void ABasicEnemyUnit::Die(){
+	Super::Die();
+	gameState->UnregisterEnemyUnit(teamIndex);
+	Destroy();
 }
 

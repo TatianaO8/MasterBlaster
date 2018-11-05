@@ -36,4 +36,6 @@ public:
 	//override
 	// Fire a shot in the specified direction 
 	void FireShot() override;
+
+	void Die() override;
 };
