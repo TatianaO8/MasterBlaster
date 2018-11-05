@@ -62,7 +62,7 @@ void AMasterBlasterGameState::CycleUnit(){
 
 ABaseUnit* AMasterBlasterGameState::GetActiveUnit() {
 	if (PlayerTeam.Num() <= activeUnit)
-		return PlayerTeam[0];
+		return nullptr;
 
 	return (PlayerTeam.Num() > 0) ? PlayerTeam[activeUnit] : nullptr;
 }
