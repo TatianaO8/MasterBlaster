@@ -53,7 +53,7 @@ void AProjectile::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, U
 	if ((OtherActor != NULL) && (OtherActor != this) && (OtherComponent != NULL))
 	{
 		NormalImpulse = GetVelocity() * 100;
-		
+
 		/*if (GEngine) {
 			GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("I Just Hit: %s"), *OtherActor->GetName()));
 		}
@@ -68,5 +68,6 @@ void AProjectile::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, U
 		{
 
 		}*/
+
 	}
 }
