@@ -54,8 +54,8 @@ void AProjectile::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, U
 {
 	if ((OtherActor != NULL) && (OtherActor != this) && (OtherComponent != NULL))
 	{
-		if (GEngine)
-				GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Purple, OtherActor->GetClass()->GetName());
+		//if (GEngine)
+				//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Purple, OtherActor->GetClass()->GetName());
 
 		UnitCharacter = Cast<AActor>(OtherActor);
 
