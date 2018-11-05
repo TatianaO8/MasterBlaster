@@ -65,10 +65,7 @@ void AProjectile::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, U
 				NormalImpulse = GetVelocity() * 100;
 			}
 
-		if (OtherActor->GetName().Compare("SpawnRoom_C_0") == 0)
-		{
-
-		}
+		
 
 	}
 }
