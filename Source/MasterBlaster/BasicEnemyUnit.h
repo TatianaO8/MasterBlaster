@@ -16,13 +16,16 @@ class MASTERBLASTER_API ABasicEnemyUnit : public ABaseUnit
 
 
 protected:
-	FVector target;
+	FVector dest;
+	FTimerHandle FireShotTimeHandler;
 
 private:
 	AMasterBlasterGameState *gameState;
 
 	UPROPERTY(BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 		TArray<ABaseUnit*> PlayerTeam;
+
+	int repeatingCallsRemaining;
 	
 protected:
 	// Called when the game starts or when spawned
@@ -36,4 +39,7 @@ public:
 	//override
 	// Fire a shot in the specified direction 
 	void FireShot() override;
+
+	UFUNCTION()
+	void OnFireShot();
 };

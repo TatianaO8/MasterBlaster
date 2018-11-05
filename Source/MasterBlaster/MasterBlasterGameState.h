@@ -35,6 +35,7 @@ private:
 	TArray<ABaseUnit*> EnemyTeam;
 
 	bool combatStarted;
+	int count;
 
 public:
 
