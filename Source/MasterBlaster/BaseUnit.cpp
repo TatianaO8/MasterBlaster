@@ -111,7 +111,7 @@ void ABaseUnit::BeginMove(FVector dest){
 	else {
 		if (GEngine) {
 			GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, TEXT("That's too far pal"));
-			GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, FString::Printf(TEXT("AP: %d"), ActionPoints));
+			//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, FString::Printf(TEXT("AP: %d"), ActionPoints));
 		}
 	}
 	
@@ -231,7 +231,7 @@ void ABaseUnit::FireShot()
 		start += GunOffset;
 		start.Y = 0.f;
 
-		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, start.ToString());
+		//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, start.ToString());
 
 		FHitResult result;
 		GetWorld()->GetFirstPlayerController()->GetHitResultUnderCursor(ECollisionChannel::ECC_Visibility, false, result);
