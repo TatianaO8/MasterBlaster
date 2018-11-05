@@ -131,7 +131,7 @@ public:
 		int GetActionPoints();
 
 	UFUNCTION(BlueprintCallable)
-		void BeginTurn();
+		virtual void BeginTurn();
 
 	UFUNCTION(BlueprintCallable)
 		bool GetIsMoving();
@@ -147,7 +147,7 @@ public:
 
 	// Fire a shot in the specified direction 
 	UFUNCTION(BlueprintCallable)
-	void FireShot();
+	virtual void FireShot();
 
 	UFUNCTION(BlueprintCallable)
 	void EnableRaycast();

@@ -52,20 +52,22 @@ void AProjectile::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, U
 {
 	if ((OtherActor != NULL) && (OtherActor != this) && (OtherComponent != NULL))
 	{
-		if (GEngine)
+		NormalImpulse = GetVelocity() * 100;
+
+		/*if (GEngine) {
 			GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("I Just Hit: %s"), *OtherActor->GetName()));
-
-			if (OtherActor->GetName().Compare("SpawnRoom_C_0") == 0)
+		}
+		if (OtherActor->GetName().Compare("SpawnRoom_C_0") == 0)
+		{
+			if (GEngine)
 			{
-				if (GEngine)
-				{
-					GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Green, GetActorLocation().ToString());
-				}
-
-				NormalImpulse = GetVelocity() * 100;
+				GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Green, GetActorLocation().ToString());
 			}
+		}
+		if (OtherActor->GetName().Compare("SpawnRoom_C_0") == 0)
+		{
 
-		
+		}*/
 
 	}
 }

@@ -51,6 +51,7 @@ void ABaseUnit::BeginPlay()
 {
 	Super::BeginPlay();
 	gameState = GetWorld()->GetGameState<AMasterBlasterGameState>();
+
 	//Maybe this doesn't go here but testing because doesn't work
 	FullHealth = 100.0f;
 	Health = FullHealth;
@@ -114,7 +115,7 @@ void ABaseUnit::BeginMove(FVector dest){
 	else {
 		if (GEngine) {
 			GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, TEXT("That's too far pal"));
-			GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, FString::Printf(TEXT("AP: %d"), ActionPoints));
+			//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, FString::Printf(TEXT("AP: %d"), ActionPoints));
 		}
 	}
 	
@@ -149,6 +150,7 @@ int ABaseUnit::GetActionPoints(){
 
 void ABaseUnit::BeginTurn(){
 	RefreshActionPoints();
+
 }
 
 bool ABaseUnit::GetIsMoving(){
@@ -234,7 +236,7 @@ void ABaseUnit::FireShot()
 		start += GunOffset;
 		start.Y = 0.f;
 
-		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, start.ToString());
+		//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, start.ToString());
 
 		FHitResult result;
 		GetWorld()->GetFirstPlayerController()->GetHitResultUnderCursor(ECollisionChannel::ECC_Visibility, false, result);

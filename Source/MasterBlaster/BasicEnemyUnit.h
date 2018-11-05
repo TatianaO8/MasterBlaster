@@ -13,9 +13,27 @@ UCLASS()
 class MASTERBLASTER_API ABasicEnemyUnit : public ABaseUnit
 {
 	GENERATED_BODY()
+
+
+protected:
+	FVector target;
+
+private:
+	AMasterBlasterGameState *gameState;
+
+	UPROPERTY(BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+		TArray<ABaseUnit*> PlayerTeam;
 	
 protected:
 	// Called when the game starts or when spawned
 	void BeginPlay();
+
+public:
 	
+	//override
+	void BeginTurn() override;
+	
+	//override
+	// Fire a shot in the specified direction 
+	void FireShot() override;
 };
