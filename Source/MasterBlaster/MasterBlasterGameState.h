@@ -64,6 +64,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 	bool GetIsPlayerTurn();
 
+	UFUNCTION(BlueprintCallable)
+	TArray<ABaseUnit*> GetPlayerTeam();
+
 	void BeginEnemyTurn();
 	void BeginPlayerTurn();
 

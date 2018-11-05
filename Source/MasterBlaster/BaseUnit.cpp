@@ -48,6 +48,7 @@ void ABaseUnit::BeginPlay()
 {
 	Super::BeginPlay();
 	gameState = GetWorld()->GetGameState<AMasterBlasterGameState>();
+
 	//Maybe this doesn't go here but testing because doesn't work
 	FullHealth = 100.0f;
 	Health = FullHealth;
@@ -146,6 +147,7 @@ int ABaseUnit::GetActionPoints(){
 
 void ABaseUnit::BeginTurn(){
 	RefreshActionPoints();
+
 }
 
 bool ABaseUnit::GetIsMoving(){
