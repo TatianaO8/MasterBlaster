@@ -97,7 +97,7 @@ void AMasterBlasterGameState::BeginPlayerTurn(){
 void AMasterBlasterGameState::PlayerTurnUpdate(){
 	bool turnOverFlag = true;
 	for (auto x : PlayerTeam) {
-		if (x->GetActionPoints() > 0) {
+		if (x->GetActionPoints() > 0 || x->GetIsMoving()) {
 			turnOverFlag = false;
 			break;
 		}
