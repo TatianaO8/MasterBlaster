@@ -26,25 +26,25 @@ void ABasicEnemyUnit::BeginTurn()
 
 	//if there is any players within range, shoot at it
 	//if not, skip turn for now
-	PlayerTeam = gameState->GetPlayerTeam();
-	
-	if(gameState->GetPlayerTeamSize() > 0)
-		GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Cyan, FString::Printf(TEXT("There are players on the team")));
+	//PlayerTeam = gameState->GetPlayerTeam();
+	//
+	//if(gameState->GetPlayerTeamSize() > 0)
+	//	GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Cyan, FString::Printf(TEXT("There are players on the team")));
 
-	for (auto x : PlayerTeam)
-	{
-		//check if the player is within range
-		if (InSprintRange(x->GetActorLocation()))
-		{
-			//if there's enough action points or the player hasn't died yet
-			while (GetActionPoints() > 0 || x->GetHealth() != 0)
-			{
-				target = x->GetActorLocation();
-				FireShot();
-			}
-		}
+	//for (auto x : PlayerTeam)
+	//{
+	//	//check if the player is within range
+	//	if (InSprintRange(x->GetActorLocation()))
+	//	{
+	//		//if there's enough action points or the player hasn't died yet
+	//		while (GetActionPoints() > 0 || x->GetHealth() != 0)
+	//		{
+	//			target = x->GetActorLocation();
+	//			FireShot();
+	//		}
+	//	}
 
-	}
+	//}
 
 }
 

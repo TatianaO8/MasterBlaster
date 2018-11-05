@@ -31,9 +31,9 @@ protected:
 public:
 	
 	//override
-	void BeginTurn();
+	void BeginTurn() override;
 	
 	//override
 	// Fire a shot in the specified direction 
-	void FireShot();
+	void FireShot() override;
 };
