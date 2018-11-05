@@ -5,6 +5,8 @@
 
 AMasterBlasterGameModeBase::AMasterBlasterGameModeBase()
 {
+
+
 	// set default pawn class to our character class
 	//DefaultPawnClass = ABaseUnit::StaticClass();
 }

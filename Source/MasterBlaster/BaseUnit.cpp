@@ -6,6 +6,8 @@
 #include "Engine/Public/CollisionQueryParams.h"
 #include "Engine/World.h"
 #include "Engine.h"
+#include "Engine/Classes/Kismet/GameplayStatics.h"
+#include "string.h"
 
 const FName ABaseUnit::FireRightBinding("FireRight");
 const FName ABaseUnit::FireForwardBinding("FireForward");
@@ -25,7 +27,12 @@ bool ABaseUnit::InSprintRange(FVector dest){
 // Sets default values
 ABaseUnit::ABaseUnit()
 {
-	bAllowRaycast = true;
+
+	//static ConstructorHelpers::FObjectFinder<UPaperSprite> UnitSpriteAsset(TEXT("/Game/Sprites/UnitPlaceholderSprite.UnitPlaceholderSprite"));
+
+	bRayCastActive = false;
+	bAllowRaycast = false;
+	bCanMove = true;
 	IsMoving = false;
 	// Weapon
 	GunOffset = FVector(45.f, 0.f, 0.f);
@@ -60,7 +67,7 @@ void ABaseUnit::BeginPlay()
 
 float ABaseUnit::GetHealth()
 {
-	return HealthPercentage;
+	return Health;
 }
 
 float ABaseUnit::GetHealthPercentage(){
@@ -82,7 +89,7 @@ void ABaseUnit::SetDamageState()
 }
 
 void ABaseUnit::BeginMove(FVector dest){
-	if (IsMoving) {
+	if (IsMoving || !bCanMove) {
 		//One movement at a time, please
 		return;
 	}
@@ -136,7 +143,7 @@ void ABaseUnit::FinishMove() {
 
 float ABaseUnit::TakeDamage(float DamageAmount, struct FDamageEvent const & DamageEvent, class AController * EventInstigator, AActor * DamageCauser)
 {
-	bCanBeDamaged = false;
+	//bCanBeDamaged = false;
 	UpdateHealth(-DamageAmount);
 	return DamageAmount;
 }
@@ -178,7 +185,7 @@ void ABaseUnit::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	UnitLocation = GetActorLocation();
+	//UnitLocation = GetActorLocation();
 	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, UnitLocation.ToString());
 
 	// Create fire direction vector
@@ -186,9 +193,11 @@ void ABaseUnit::Tick(float DeltaTime)
 	//const float FireForwardValue = GetInputAxisValue(FireForwardBinding);
 	FVector FireDirection;
 	
-	
+	if (Health <= 0) {
+		Die();
+	}
 
-	if (gameState->GetActiveUnit() == this)
+	if (bAllowRaycast)
 	{
 		Raycast();
 		//FireShot();
@@ -270,28 +279,114 @@ void ABaseUnit::ShotTimerExpired()
 	bCanFire = true;
 }
 
+void ABaseUnit::EnableRaycast()
+{
+	bAllowRaycast = true;
+}
+
+void ABaseUnit::DisableRaycast()
+{
+	bAllowRaycast = false;
+}
+
 void ABaseUnit::Raycast()
 {
+	FHitResult result;
 	gameState = GetWorld()->GetGameState<AMasterBlasterGameState>();
 	UGameViewportClient *GameViewport = GEngine->GameViewport;
 	FVector2D MousePosition;
 	GameViewport->GetMousePosition(MousePosition);
 	FVector WorldPosition, WorldDirection;
 	FHitResult *HitResult = new FHitResult();
-	FVector StartTrace = gameState->GetActiveUnit()->UnitLocation;
-	GetWorld()->GetFirstPlayerController()->DeprojectMousePositionToWorld(WorldPosition, WorldDirection);
-	FVector ForwardVector = WorldPosition;
-	//GEngine->AddOnScreenDebugMessage(-1, 0.1f, FColor::Red, WorldPosition.ToString());
+	FVector StartTrace = gameState->GetActiveUnit()->GetActorLocation();
+	StartTrace += GunOffset;
+	StartTrace.Y = 0.f;
+	//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, StartTrace.ToString());
+
+	//GetWorld()->GetFirstPlayerController()->DeprojectMousePositionToWorld(WorldPosition, WorldDirection);
+	GetWorld()->GetFirstPlayerController()->GetHitResultUnderCursor(ECollisionChannel::ECC_Visibility, false, result);
+	FVector ForwardVector = result.Location;
+	ForwardVector.Y = 0.f;
+	//GEngine->AddOnScreenDebugMessage(-1, 0.1f, FColor::Orange, ForwardVector.ToString());
 	FVector EndTrace = ForwardVector;
+	
 	FCollisionQueryParams *TraceParams = new FCollisionQueryParams();
+	FPredictProjectilePathParams *ProjParams = new FPredictProjectilePathParams();
+	FPredictProjectilePathParams *ProjParams2 = new FPredictProjectilePathParams();
+	FPredictProjectilePathResult PathResult;
+	FPredictProjectilePathResult PathResult2;
+	UGameplayStatics *GameplayStatics;
+
+	ProjParams->bTraceWithChannel = true;
+	ProjParams->bTraceWithCollision = true;
+	ProjParams->bTraceComplex = true;
+	ProjParams->StartLocation = StartTrace;
+	ProjParams->LaunchVelocity = ForwardVector;
+	ProjParams->DrawDebugTime = .05f;
+	ProjParams->DrawDebugType = EDrawDebugTrace::Type::ForDuration;
+	ProjParams->SimFrequency = 15;
+	ProjParams->MaxSimTime = 2;
+	ProjParams->OverrideGravityZ = 1.f;
+	ProjParams->ProjectileRadius = 5;
+	ProjParams->ActorsToIgnore = { gameState->GetPlayerTeam()[0],  gameState->GetPlayerTeam()[1], gameState->GetPlayerTeam()[2] };
 
 	if (!bAllowRaycast)
 		return;
 
-	if (GetWorld()->LineTraceSingleByChannel(*HitResult, StartTrace, EndTrace, ECC_Visibility, *TraceParams))
-	{
-		DrawDebugLine(GetWorld(), StartTrace, EndTrace, FColor(12, 12, 12), false, 0.f, 50.f);
+	GameplayStatics->PredictProjectilePath(GetWorld(),  *ProjParams, PathResult);
 
-		//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("You hit: %s"), *HitResult->Actor->GetName()));
+	*HitResult = PathResult.HitResult;
+
+	ProjParams2->bTraceWithChannel = true;
+	ProjParams2->bTraceWithCollision = true;
+	ProjParams2->bTraceComplex = true;
+	ProjParams2->StartLocation = HitResult->ImpactPoint + HitResult->Normal;
+	ProjParams2->LaunchVelocity = HitResult->Normal;
+	ProjParams2->DrawDebugTime = .01f;
+	ProjParams2->DrawDebugType = EDrawDebugTrace::Type::ForDuration;
+	ProjParams2->SimFrequency = 15;
+	ProjParams2->MaxSimTime = 2;
+	ProjParams2->OverrideGravityZ = 1.f;
+	ProjParams2->ProjectileRadius = 5;
+	ProjParams2->ActorsToIgnore = { gameState->GetPlayerTeam()[0],  gameState->GetPlayerTeam()[1], gameState->GetPlayerTeam()[2] };
+
+	GameplayStatics->PredictProjectilePath(GetWorld(), *ProjParams2, PathResult2);
+
+
+	//DrawDebugLine(GetWorld(), StartTrace, EndTrace, FColor(12, 12, 12), false, 0.f, 50.f);
+
+	//if(GEngine)
+		//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, FString::Printf(TEXT("You hit: %s"), *HitResult->Actor->GetName()));
+	
+	
+}
+
+void ABaseUnit::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, FVector NormalImpulse, const FHitResult& Hit)
+{
+	if ((OtherActor != NULL) && (OtherActor != this) && (OtherComponent != NULL))
+	{
+		//if (GEngine)
+			//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("I Just Hit: %s"), *OtherActor->GetName()));
+		
+
+		/*if (GEngine) {
+			GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("I Just Hit: %s"), *OtherActor->GetName()));
+		}
+		if (OtherActor->GetName().Compare("SpawnRoom_C_0") == 0)
+		{
+			if (GEngine)
+			{
+				GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Green, GetActorLocation().ToString());
+			}
+		}
+		if (OtherActor->GetName().Compare("SpawnRoom_C_0") == 0)
+		{
+
+		}*/
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Oh, the agony")));
 	}
+}
+
+void ABaseUnit::Die(){
+	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, TEXT("Oh the pain"));
 }

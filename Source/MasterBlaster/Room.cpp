@@ -11,7 +11,7 @@
 
 
 void ARoom::BeginPlay() {
-
+	bCanBeDamaged = false;
 }
 
 void ARoom::EnterRoom(){

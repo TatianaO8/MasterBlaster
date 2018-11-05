@@ -2,6 +2,17 @@
 
 #include "CoverBlock.h"
 
-ACoverBlock::ACoverBlock(){
-	Health = 10;
+void ACoverBlock::Die(){
+	Destroy();
 }
+
+ACoverBlock::ACoverBlock(){
+	Health = 100;
+}
+
+void ACoverBlock::Tick(float DeltaTime){
+	if (Health <= 0) {
+		Die();
+	}
+}
+

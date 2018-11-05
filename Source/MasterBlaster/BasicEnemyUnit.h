@@ -42,4 +42,6 @@ public:
 
 	UFUNCTION()
 	void OnFireShot();
+	
+	void Die() override;
 };

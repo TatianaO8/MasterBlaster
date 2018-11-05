@@ -86,6 +86,7 @@ void ALevelGenerator::SpawnRoom(TSubclassOf<ARoom> room, int xPosition) {
 
 	//Spawn Room
 	ARoom* newRoom = GetWorld()->SpawnActor<ARoom>(room, location, rotation, spawnInfo);
+	newRoom->bCanBeDamaged = false;
 	map->AddRoom(newRoom);
 }
 

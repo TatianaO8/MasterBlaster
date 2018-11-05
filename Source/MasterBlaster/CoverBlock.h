@@ -16,7 +16,11 @@ class MASTERBLASTER_API ACoverBlock : public APaperSpriteActor
 	
 private:
 	int Health;
+	void Die();
 	
 public:
 	ACoverBlock();
+
+	// Called every frame
+	virtual void Tick(float DeltaTime) override;
 };
