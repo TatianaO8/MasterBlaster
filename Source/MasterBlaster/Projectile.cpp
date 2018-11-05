@@ -3,6 +3,8 @@
 #include "Projectile.h"
 #include "Engine.h"
 #include "Engine/World.h"
+#include "Kismet/GameplayStatics.h"
+#include "Particles/ParticleSystemComponent.h"
 
 
 // Sets default values
@@ -52,11 +54,34 @@ void AProjectile::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, U
 {
 	if ((OtherActor != NULL) && (OtherActor != this) && (OtherComponent != NULL))
 	{
+		if (GEngine)
+				GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Purple, OtherActor->GetClass()->GetName());
+
+		UnitCharacter = Cast<AActor>(OtherActor);
+
+		//Destroy();
+		//Destroy(OtherActor);
+
+		if (OtherActor->bCanBeDamaged)
+		{
+			Destroy();
+			UGameplayStatics::ApplyPointDamage(UnitCharacter, 50.f, GetActorLocation(), Hit, nullptr, this, DamageType);
+
+			if (GEngine)
+				GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Purple, FString::Printf(TEXT("HERE")));
+		}
+			
+
+		
+
 		NormalImpulse = GetVelocity() * 100;
+
+
 
 		/*if (GEngine) {
 			GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("I Just Hit: %s"), *OtherActor->GetName()));
 		}
+		
 		if (OtherActor->GetName().Compare("SpawnRoom_C_0") == 0)
 		{
 			if (GEngine)

@@ -7,7 +7,9 @@
 #include "GameFramework/ProjectileMovementComponent.h"
 #include "PaperSpriteComponent.h"
 #include "PaperSprite.h"
+#include "BaseUnit.h"
 #include "Projectile.generated.h"
+
 
 UCLASS(config=Game)
 class MASTERBLASTER_API AProjectile : public AActor
@@ -30,6 +32,12 @@ public:
 
 	// Returns ProjectileMovement subobject
 	FORCEINLINE UProjectileMovementComponent* GetProjectileMovement() const { return ProjectileMovement; }
+
+	UPROPERTY(EditAnywhere)
+		TSubclassOf<UDamageType> DamageType;
+
+	UPROPERTY(EditAnywhere)
+		AActor* UnitCharacter;
 
 	virtual void Tick(float DeltaTime) override;
 

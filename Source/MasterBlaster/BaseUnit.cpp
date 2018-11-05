@@ -7,6 +7,7 @@
 #include "Engine/World.h"
 #include "Engine.h"
 #include "Engine/Classes/Kismet/GameplayStatics.h"
+#include "string.h"
 
 const FName ABaseUnit::FireRightBinding("FireRight");
 const FName ABaseUnit::FireForwardBinding("FireForward");
@@ -26,6 +27,9 @@ bool ABaseUnit::InSprintRange(FVector dest){
 // Sets default values
 ABaseUnit::ABaseUnit()
 {
+
+	//static ConstructorHelpers::FObjectFinder<UPaperSprite> UnitSpriteAsset(TEXT("/Game/Sprites/UnitPlaceholderSprite.UnitPlaceholderSprite"));
+
 	bRayCastActive = false;
 	bAllowRaycast = false;
 	bCanMove = true;
@@ -290,13 +294,13 @@ void ABaseUnit::Raycast()
 	FVector StartTrace = gameState->GetActiveUnit()->UnitLocation;
 	StartTrace += GunOffset;
 	StartTrace.Y = 0.f;
-	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, StartTrace.ToString());
+	//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, StartTrace.ToString());
 
 	//GetWorld()->GetFirstPlayerController()->DeprojectMousePositionToWorld(WorldPosition, WorldDirection);
 	GetWorld()->GetFirstPlayerController()->GetHitResultUnderCursor(ECollisionChannel::ECC_Visibility, false, result);
 	FVector ForwardVector = result.Location;
 	ForwardVector.Y = 0.f;
-	GEngine->AddOnScreenDebugMessage(-1, 0.1f, FColor::Orange, ForwardVector.ToString());
+	//GEngine->AddOnScreenDebugMessage(-1, 0.1f, FColor::Orange, ForwardVector.ToString());
 	FVector EndTrace = ForwardVector;
 	
 	FCollisionQueryParams *TraceParams = new FCollisionQueryParams();
@@ -324,14 +328,14 @@ void ABaseUnit::Raycast()
 
 	GameplayStatics->PredictProjectilePath(GetWorld(),  *ProjParams, PathResult);
 
-	FHitResult hitResult = PathResult.HitResult;
+	*HitResult = PathResult.HitResult;
 
 	ProjParams2->bTraceWithChannel = true;
 	ProjParams2->bTraceWithCollision = true;
 	ProjParams2->bTraceComplex = true;
-	ProjParams2->StartLocation = hitResult.ImpactPoint + hitResult.Normal;
-	ProjParams2->LaunchVelocity = hitResult.Normal;
-	ProjParams2->DrawDebugTime = .05f;
+	ProjParams2->StartLocation = HitResult->ImpactPoint + HitResult->Normal;
+	ProjParams2->LaunchVelocity = HitResult->Normal;
+	ProjParams2->DrawDebugTime = .01f;
 	ProjParams2->DrawDebugType = EDrawDebugTrace::Type::ForDuration;
 	ProjParams2->SimFrequency = 15;
 	ProjParams2->MaxSimTime = 2;
@@ -341,13 +345,37 @@ void ABaseUnit::Raycast()
 
 	GameplayStatics->PredictProjectilePath(GetWorld(), *ProjParams2, PathResult2);
 
-	
-	/*if (GetWorld()->LineTraceSingleByChannel(*HitResult, StartTrace, EndTrace, ECC_Visibility, *TraceParams))
-	{
-		DrawDebugLine(GetWorld(), StartTrace, EndTrace, FColor(12, 12, 12), false, 0.f, 50.f);
 
-		if(GEngine)
-			GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, FString::Printf(TEXT("You hit: %s"), *HitResult->Actor->GetName()));
+	//DrawDebugLine(GetWorld(), StartTrace, EndTrace, FColor(12, 12, 12), false, 0.f, 50.f);
+
+	//if(GEngine)
+		//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, FString::Printf(TEXT("You hit: %s"), *HitResult->Actor->GetName()));
+	
+	
+}
+
+void ABaseUnit::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, FVector NormalImpulse, const FHitResult& Hit)
+{
+	if ((OtherActor != NULL) && (OtherActor != this) && (OtherComponent != NULL))
+	{
+		//if (GEngine)
+			//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("I Just Hit: %s"), *OtherActor->GetName()));
+		
+
+		/*if (GEngine) {
+			GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("I Just Hit: %s"), *OtherActor->GetName()));
+		}
+		if (OtherActor->GetName().Compare("SpawnRoom_C_0") == 0)
+		{
+			if (GEngine)
+			{
+				GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Green, GetActorLocation().ToString());
+			}
+		}
+		if (OtherActor->GetName().Compare("SpawnRoom_C_0") == 0)
+		{
+
+		}*/
+
 	}
-	*/
 }
