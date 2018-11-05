@@ -61,7 +61,9 @@ void AMasterBlasterGameState::CycleUnit(){
 }
 
 ABaseUnit* AMasterBlasterGameState::GetActiveUnit() {
-	
+	if (PlayerTeam.Num() <= activeUnit)
+		return PlayerTeam[0];
+
 	return (PlayerTeam.Num() > 0) ? PlayerTeam[activeUnit] : nullptr;
 }
 
@@ -94,6 +96,9 @@ void AMasterBlasterGameState::BeginEnemyTurn(){
 	
 	//Refesh Team's AP
 	for (auto x : EnemyTeam) {
+		if (x == nullptr) 
+			continue;
+		
 		count++;
 		if(count<3)
 			GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Red, FString::Printf(TEXT("Enemy: %d"), count));
@@ -112,6 +117,8 @@ void AMasterBlasterGameState::BeginPlayerTurn(){
 void AMasterBlasterGameState::PlayerTurnUpdate(){
 	bool turnOverFlag = true;
 	for (auto x : PlayerTeam) {
+		if (x == nullptr) continue;
+
 		if (x->GetActionPoints() > 0 || x->GetIsMoving()) {
 			turnOverFlag = false;
 			break;
@@ -126,6 +133,8 @@ void AMasterBlasterGameState::PlayerTurnUpdate(){
 void AMasterBlasterGameState::EnemyTurnUpdate(){
 	bool turnOverFlag = true;
 	for (auto x : EnemyTeam) {
+		if (x == nullptr) continue;
+
 		if (x->GetActionPoints() > 0) {
 			turnOverFlag = false;
 			break;
