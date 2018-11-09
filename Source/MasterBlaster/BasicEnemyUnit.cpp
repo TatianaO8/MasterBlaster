@@ -84,8 +84,7 @@ void ABasicEnemyUnit::OnFireShot()
 		GetWorldTimerManager().ClearTimer(FireShotTimeHandler);
 }
 
-void ABasicEnemyUnit::FireShot()
-{
+void ABasicEnemyUnit::FireShot(){
 
 	// If it's ok to fire again
 	if (bCanFire == true)
@@ -132,7 +131,9 @@ void ABasicEnemyUnit::FireShot()
 		World->GetTimerManager().SetTimer(TimerHandle_ShotTimerExpired, this, &ABaseUnit::ShotTimerExpired, FireRate);
 
 		//bCanFire = false;
+		return;
 	}
+	return;
 }
 
 void ABasicEnemyUnit::Die(){

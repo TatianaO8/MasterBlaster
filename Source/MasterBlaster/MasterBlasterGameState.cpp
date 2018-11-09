@@ -17,15 +17,6 @@ AMasterBlasterGameState::AMasterBlasterGameState() {
 
 }
 
-void AMasterBlasterGameState::Tick(float DeltaTime){
-	Super::Tick(DeltaTime);
-	
-	//This tick function doesn't seem to work.
-	
-	//GEngine->AddOnScreenDebugMessage(-1, 10000.f, FColor::Red, FString::Printf(TEXT("Tick")));
-	//UpdateGameState();
-}
-
 int AMasterBlasterGameState::RegisterPlayerUnit(ABaseUnit* unit) {
 	PlayerTeam.Add(unit);
 	return PlayerTeam.Num() - 1;
@@ -38,6 +29,9 @@ int AMasterBlasterGameState::RegisterEnemyUnit(ABaseUnit * unit){
 
 void AMasterBlasterGameState::UnregisterPlayerUnit(int index){
 	PlayerTeam.RemoveAt(index, 1, true);
+
+	//To deselect current unit, cycle to the next
+	CycleUnit();
 }
 
 void AMasterBlasterGameState::UnregisterEnemyUnit(int index){

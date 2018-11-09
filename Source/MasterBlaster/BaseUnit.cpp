@@ -222,56 +222,57 @@ void ABaseUnit::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 
 }
 
-void ABaseUnit::FireShot()
-{
+bool ABaseUnit::CanFireShot(){
+	if (ActionPoints < 1) {
+		return false;
+	}
+	if (IsMoving) {
+		return false;
+	}
+	return true;
+}
 
-	// If it's ok to fire again
-	if (bCanFire == true)
-	{
+void ABaseUnit::FireShot(){
 		
-		if (ActionPoints < 1) {
-			return;
-		}
-		if (IsMoving) {
-			return;
-		}
+	if(!CanFireShot()) return;
+		
 
-		EmptyActionPoints();
+	EmptyActionPoints();
 
-		FVector start = GetActorLocation();
-		start += GunOffset;
-		start.Y = 0.f;
+	FVector start = GetActorLocation();
+	start += GunOffset;
+	start.Y = 0.f;
 
-		//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, start.ToString());
+	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, start.ToString());
 
-		FHitResult result;
-		GetWorld()->GetFirstPlayerController()->GetHitResultUnderCursor(ECollisionChannel::ECC_Visibility, false, result);
-		FVector target = result.Location;
-		target.Y = 0.f;
+	FHitResult result;
+	GetWorld()->GetFirstPlayerController()->GetHitResultUnderCursor(ECollisionChannel::ECC_Visibility, false, result);
+	FVector target = result.Location;
+	target.Y = 0.f;
 
 
-		//GetWorld()->GetFirstPlayerController()->GetMousePosition(target.X, target.Z);
+	//GetWorld()->GetFirstPlayerController()->GetMousePosition(target.X, target.Z);
 
-		FRotator direction = UKismetMathLibrary::FindLookAtRotation(start, target);
-		direction.Yaw = 0.f;
+	FRotator direction = UKismetMathLibrary::FindLookAtRotation(start, target);
+	direction.Yaw = 0.f;
 			
 
-		UWorld* const World = GetWorld();
-		if (World != NULL)
-		{
-			bAllowRaycast = false;
+	UWorld* const World = GetWorld();
+	if (World != NULL)
+	{
+		bAllowRaycast = false;
 
-			// spawn the projectile
-			AProjectile *proj = World->SpawnActor<AProjectile>(start, direction);
+		// spawn the projectile
+		AProjectile *proj = World->SpawnActor<AProjectile>(start, direction);
 
 
-		}
-
-		//bCanFire = false;
-		World->GetTimerManager().SetTimer(TimerHandle_ShotTimerExpired, this, &ABaseUnit::ShotTimerExpired, FireRate);
-
-		//bCanFire = false;
 	}
+
+	//bCanFire = false;
+	World->GetTimerManager().SetTimer(TimerHandle_ShotTimerExpired, this, &ABaseUnit::ShotTimerExpired, FireRate);
+
+	//bCanFire = false;
+
 }
 
 void ABaseUnit::ShotTimerExpired()

@@ -150,6 +150,9 @@ public:
 
 	// Fire a shot in the specified direction 
 	UFUNCTION(BlueprintCallable)
+	bool CanFireShot();
+
+	UFUNCTION(BlueprintCallable)
 	virtual void FireShot();
 
 	UFUNCTION(BlueprintCallable)

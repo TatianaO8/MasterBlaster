@@ -212,7 +212,7 @@ void ALevelGenerator::BeginPlay(){
 	GenerateLevel();
 
 	gameState = GetWorld()->GetGameState<AMasterBlasterGameState>();
-	gameState->StartCombat();
+	//gameState->StartCombat();
 }
 
 ///Public Functions

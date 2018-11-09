@@ -42,8 +42,6 @@ public:
 	//ctors
 	AMasterBlasterGameState();
 
-	virtual void Tick(float DeltaTime) override;
-
 	//public functions
 	int RegisterPlayerUnit(ABaseUnit* unit);
 	int RegisterEnemyUnit(ABaseUnit* unit);
@@ -79,6 +77,7 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void UpdateGameState();
 
+	UFUNCTION(BlueprintCallable)
 	void StartCombat();
 
 };

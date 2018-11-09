@@ -17,5 +17,6 @@ void APlayerUnit::Die(){
 	Super::Die();
 	gameState->UnregisterPlayerUnit(teamIndex);
 	Destroy();
+	//GEngine->AddOnScreenDebugMessage(-1, 150.0f, FColor::Red, TEXT("Player Unit Dead"));
 }
 
