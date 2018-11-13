@@ -164,3 +164,7 @@ void AMasterBlasterGameState::StartCombat(){
 	combatStarted = true;
 }
 
+bool AMasterBlasterGameState::GetCombatStarted(){
+	return combatStarted;
+}
+

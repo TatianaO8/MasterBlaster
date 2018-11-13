@@ -33,8 +33,10 @@ private:
 
 	UPROPERTY(BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	TArray<ABaseUnit*> EnemyTeam;
-
+	
+	UPROPERTY(BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	bool combatStarted;
+	
 	int count;
 
 public:
@@ -79,5 +81,8 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void StartCombat();
+
+	UFUNCTION(BlueprintCallable)
+	bool GetCombatStarted();
 
 };
