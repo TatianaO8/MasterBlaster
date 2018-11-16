@@ -35,6 +35,30 @@ FTransform ARoom::GetSpawnLocation(int x, int y){
 	return temp;
 }
 
+void ARoom::SpawnEnemyUnit(int x, int y, TSubclassOf<ABasicEnemyUnit> &EnemyUnitBP){
+	FTransform transform = GetSpawnLocation(x, y);
+	FVector location = transform.GetLocation();
+	FRotator rotation = transform.GetRotation().Rotator();
+	
+	//Modify spawn location to prevent units falling through world.
+	location.Z += 128;
+
+	//Flip Facing Direction
+	rotation.Yaw += 180;
+
+	//Update transform
+	transform.SetLocation(location);
+	transform.SetRotation(FQuat(rotation));
+
+	//Spawn
+	auto enemyUnit = GetWorld()->SpawnActor<ABasicEnemyUnit>(EnemyUnitBP, transform);
+}
+
+void ARoom::SpawnCoverBlock(int x, int y, TSubclassOf<ACoverBlock> &CoverBlockBP){
+	FTransform transform = GetSpawnLocation(x, y);
+	auto block = GetWorld()->SpawnActor<ACoverBlock>(CoverBlockBP, transform);
+}
+
 void ARoom::Populate(TSubclassOf<ABasicEnemyUnit> EnemyUnitBP, TSubclassOf<ACoverBlock> CoverBlockBP){
 	auto TileMap = this->GetRenderComponent();
 
@@ -57,15 +81,12 @@ void ARoom::Populate(TSubclassOf<ABasicEnemyUnit> EnemyUnitBP, TSubclassOf<ACove
 			
 			if (tileData == unitSpawnFlag) {
 				//GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Red, FString::Printf(TEXT("SpawnEnemy")));
-				FTransform transform = GetSpawnLocation(x, y);
-				auto enemyUnit = GetWorld()->SpawnActor<ABasicEnemyUnit>(EnemyUnitBP, transform);
+				SpawnEnemyUnit(x, y, EnemyUnitBP);
 			}
 
 			if (tileData == coverSpawnFlag) {
 				//GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Red, FString::Printf(TEXT("SpawnCover")));
-
-				FTransform transform = GetSpawnLocation(x, y);
-				auto block = GetWorld()->SpawnActor<ACoverBlock>(CoverBlockBP, transform);
+				SpawnCoverBlock(x, y, CoverBlockBP);
 
 			}
 		}

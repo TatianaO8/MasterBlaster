@@ -62,6 +62,8 @@ public:
 	void SpawnCoverElements(TSubclassOf<ACoverBlock> CoverBlockBP);
 	
 	FTransform GetSpawnLocation(int x, int y);
+	void SpawnEnemyUnit(int x, int y, TSubclassOf<ABasicEnemyUnit> &EnemyUnitBP);
+	void SpawnCoverBlock(int x, int y, TSubclassOf<ACoverBlock> &CoverBlockBP);
 	void Populate(TSubclassOf<ABasicEnemyUnit> EnemyUnitBP, TSubclassOf<ACoverBlock> CoverBlockBP);
 
 	
