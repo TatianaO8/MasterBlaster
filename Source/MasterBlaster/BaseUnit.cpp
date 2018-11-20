@@ -330,7 +330,7 @@ void ABaseUnit::Raycast()
 	ProjParams->MaxSimTime = 2;
 	ProjParams->OverrideGravityZ = 1.f;
 	ProjParams->ProjectileRadius = 10;
-	ProjParams->ActorsToIgnore = { gameState->GetPlayerTeam()[0],  gameState->GetPlayerTeam()[1], gameState->GetPlayerTeam()[2] };
+	//ProjParams->ActorsToIgnore = { gameState->GetPlayerTeam()[0],  gameState->GetPlayerTeam()[1], gameState->GetPlayerTeam()[2] };
 
 	GameplayStatics->PredictProjectilePath(GetWorld(),  *ProjParams, PathResult);
 
