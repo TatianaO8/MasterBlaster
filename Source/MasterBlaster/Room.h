@@ -65,7 +65,7 @@ public:
 	FTransform GetSpawnLocation(int x, int y);
 	void SpawnEnemyUnit(int x, int y, TSubclassOf<ABasicEnemyUnit> &EnemyUnitBP);
 	void SpawnCoverBlock(int x, int y, TSubclassOf<ACoverBlock> &CoverBlockBP);
-	void SpawnDynamicElement(TArray<TSubclassOf<ADynamicLevelElement>> Elements);
+	void SpawnDynamicElement(int x, int y, FName tileData, TArray<TSubclassOf<ADynamicLevelElement>> Elements);
 	void Populate(TSubclassOf<ABasicEnemyUnit> EnemyUnitBP, TSubclassOf<ACoverBlock> CoverBlockBP, TArray<TSubclassOf<ADynamicLevelElement>> DynamicLevelElements);
 
 	

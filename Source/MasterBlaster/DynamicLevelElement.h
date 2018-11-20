@@ -17,6 +17,8 @@ class MASTERBLASTER_API ADynamicLevelElement : public AActor, public IDynamicLev
 public:	
 	// Sets default values for this actor's properties
 	ADynamicLevelElement();
+	
+	UPROPERTY(EditAnywhere, BlueprintReadwrite)
 	FName ElementID;
 protected:
 	// Called when the game starts or when spawned
