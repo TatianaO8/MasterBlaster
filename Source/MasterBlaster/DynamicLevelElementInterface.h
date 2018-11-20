@@ -21,5 +21,5 @@ class  IDynamicLevelElementInterface{
 	GENERATED_BODY()
 
 public:
-	virtual FName FSetElementId() = 0;
+	virtual FName FGetElementId() = 0;
 };
