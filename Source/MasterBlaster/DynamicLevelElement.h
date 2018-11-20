@@ -10,7 +10,7 @@
 #include "DynamicLevelElement.generated.h"
 
 UCLASS()
-class MASTERBLASTER_API ADynamicLevelElement : public AActor, public IDynamicLevelElementInterface
+class MASTERBLASTER_API ADynamicLevelElement : public APawn, public IDynamicLevelElementInterface
 {
 	GENERATED_BODY()
 	
