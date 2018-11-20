@@ -26,6 +26,6 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	FName FGetElementId() override;
+	FName GetElementId() override;
 	
 };

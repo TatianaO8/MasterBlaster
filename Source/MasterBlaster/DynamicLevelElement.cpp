@@ -25,7 +25,7 @@ void ADynamicLevelElement::Tick(float DeltaTime)
 
 }
 
-FName ADynamicLevelElement::FGetElementId(){
+FName ADynamicLevelElement::GetElementId(){
 	return ElementID;
 }
 
