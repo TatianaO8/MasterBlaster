@@ -330,7 +330,7 @@ void ABaseUnit::Raycast()
 	ProjParams->MaxSimTime = 2;
 	ProjParams->OverrideGravityZ = 1.f;
 	ProjParams->ProjectileRadius = 10;
-	ProjParams->ActorsToIgnore = { gameState->GetPlayerTeam()[0],  gameState->GetPlayerTeam()[1], gameState->GetPlayerTeam()[2] };
+	ProjParams->ActorsToIgnore = (TArray<AActor*>)gameState->GetPlayerTeam(); //{ gameState->GetPlayerTeam()[0],  gameState->GetPlayerTeam()[1], gameState->GetPlayerTeam()[2] };
 
 	GameplayStatics->PredictProjectilePath(GetWorld(),  *ProjParams, PathResult);
 
@@ -359,7 +359,7 @@ void ABaseUnit::Raycast()
 	ProjParams2->MaxSimTime = 2;
 	ProjParams2->OverrideGravityZ = 1.f;
 	ProjParams2->ProjectileRadius = 7;
-	ProjParams2->ActorsToIgnore = { gameState->GetPlayerTeam()[0],  gameState->GetPlayerTeam()[1], gameState->GetPlayerTeam()[2] };
+	ProjParams2->ActorsToIgnore = (TArray<AActor*>)gameState->GetPlayerTeam(); //{ gameState->GetPlayerTeam()[0],  gameState->GetPlayerTeam()[1], gameState->GetPlayerTeam()[2] };
 	if (GEngine)
 		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Blue, ProjParams2->StartLocation.ToString());
 	if (GEngine)
