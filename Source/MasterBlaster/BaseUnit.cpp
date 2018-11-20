@@ -45,7 +45,7 @@ ABaseUnit::ABaseUnit()
 
 	MaxActionPoints = ActionPoints = 2;
 
-	MoveSpeed = 200;
+	MoveSpeed = 300;
 	MoveRange = 2560;
 
 }
@@ -294,7 +294,7 @@ void ABaseUnit::Raycast()
 {
 	FHitResult result;
 	FVector NewVelocity;
-	gameState = GetWorld()->GetGameState<AMasterBlasterGameState>();
+	//gameState = GetWorld()->GetGameState<AMasterBlasterGameState>();
 	UGameViewportClient *GameViewport = GEngine->GameViewport;
 	FVector2D MousePosition;
 	GameViewport->GetMousePosition(MousePosition);
@@ -336,13 +336,13 @@ void ABaseUnit::Raycast()
 
 	*HitResult = PathResult.HitResult;
 
-	if (GEngine)
+	/*if (GEngine)
 		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, HitResult->ImpactPoint.ToString());
 	if (GEngine)
 		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Orange, UKismetMathLibrary::MirrorVectorByNormal(ForwardVector, HitResult->ImpactNormal).ToString());
 
 	if (GEngine)
-		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Purple, ForwardVector.ToString());
+		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Purple, ForwardVector.ToString());*/
 
 	
 
