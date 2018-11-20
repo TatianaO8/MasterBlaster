@@ -5,6 +5,7 @@
 class ABaseUnit;
 class ABasicEnemyUnit;
 class ACoverBlock;
+class ADynamicLevelElement;
 
 #include "CoreMinimal.h"
 #include "PaperTileMapActor.h"
@@ -64,7 +65,8 @@ public:
 	FTransform GetSpawnLocation(int x, int y);
 	void SpawnEnemyUnit(int x, int y, TSubclassOf<ABasicEnemyUnit> &EnemyUnitBP);
 	void SpawnCoverBlock(int x, int y, TSubclassOf<ACoverBlock> &CoverBlockBP);
-	void Populate(TSubclassOf<ABasicEnemyUnit> EnemyUnitBP, TSubclassOf<ACoverBlock> CoverBlockBP);
+	void SpawnDynamicElement(TArray<TSubclassOf<ADynamicLevelElement>> Elements);
+	void Populate(TSubclassOf<ABasicEnemyUnit> EnemyUnitBP, TSubclassOf<ACoverBlock> CoverBlockBP, TArray<TSubclassOf<ADynamicLevelElement>> DynamicLevelElements);
 
 	
 

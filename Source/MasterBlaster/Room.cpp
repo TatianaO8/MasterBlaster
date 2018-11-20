@@ -4,6 +4,7 @@
 #include "BaseUnit.h"
 #include "BasicEnemyUnit.h"
 #include "CoverBlock.h"
+#include "DynamicLevelElement.h"
 
 #include "PaperTileMapComponent.h"
 #include "PaperTileMap.h"
@@ -59,7 +60,11 @@ void ARoom::SpawnCoverBlock(int x, int y, TSubclassOf<ACoverBlock> &CoverBlockBP
 	auto block = GetWorld()->SpawnActor<ACoverBlock>(CoverBlockBP, transform);
 }
 
-void ARoom::Populate(TSubclassOf<ABasicEnemyUnit> EnemyUnitBP, TSubclassOf<ACoverBlock> CoverBlockBP){
+void ARoom::SpawnDynamicElement(TArray<TSubclassOf<ADynamicLevelElement>> Elements){
+	//TODO
+}
+
+void ARoom::Populate(TSubclassOf<ABasicEnemyUnit> EnemyUnitBP, TSubclassOf<ACoverBlock> CoverBlockBP, TArray<TSubclassOf<ADynamicLevelElement>> DynamicLevelElements){
 	auto TileMap = this->GetRenderComponent();
 
 	int rows, cols, layers;
@@ -79,16 +84,23 @@ void ARoom::Populate(TSubclassOf<ABasicEnemyUnit> EnemyUnitBP, TSubclassOf<ACove
 			FName unitSpawnFlag(TEXT("EnemySpawn"));
 			FName coverSpawnFlag(TEXT("Cover"));
 			
+			if (tileData == "") {
+				continue;
+			}
+
 			if (tileData == unitSpawnFlag) {
 				//GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Red, FString::Printf(TEXT("SpawnEnemy")));
 				SpawnEnemyUnit(x, y, EnemyUnitBP);
 			}
-
-			if (tileData == coverSpawnFlag) {
+			else if (tileData == coverSpawnFlag) {
 				//GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Red, FString::Printf(TEXT("SpawnCover")));
 				SpawnCoverBlock(x, y, CoverBlockBP);
-
 			}
+			else {
+				SpawnDynamicElement(DynamicLevelElements);
+			}
+			
+
 		}
 	}
 }

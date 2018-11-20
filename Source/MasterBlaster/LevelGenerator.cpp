@@ -9,6 +9,7 @@
 #include "PlayerUnit.h"
 #include "BasicEnemyUnit.h"
 #include "CoverBlock.h"
+#include "DynamicLevelElement.h"
 
 #include "GenericPlatformMath.h"
 
@@ -23,7 +24,7 @@ ALevelGenerator::ALevelGenerator(){
 	seed = -1;
 	//seed = FGenericPlatformMath::Rand();
 
-	DefaulPlayerTeamSize = 3;
+	DefaultPlayerTeamSize = 3;
 
 	return;
 }
@@ -119,7 +120,7 @@ void ALevelGenerator::PlaceRooms(ARoom* root){
 
 void ALevelGenerator::SpawnPlayerTeam(){
 	int x = 0;
-	for (int i = 0; i < DefaulPlayerTeamSize; i++) {
+	for (int i = 0; i < DefaultPlayerTeamSize; i++) {
 		FVector location(128 + i*128, 0, 500);
 		FRotator rotation(0, 0, 0);
 		APlayerUnit* unit = GetWorld()->SpawnActor<APlayerUnit>(PlayerUnitBP, location, rotation);
@@ -141,7 +142,7 @@ void ALevelGenerator::GenerateLevel() {
 	SpawnPlayerTeam();
 
 	//Spawns Enemy Units and Cover elements in each room.
-	map->SpawnDynamicElements(EnemyUnitBP, CoverBlockBP);
+	map->SpawnDynamicElements(EnemyUnitBP, CoverBlockBP, DynamicLevelElements);
 }
 
 bool ALevelGenerator::ValidateEditorInput(){

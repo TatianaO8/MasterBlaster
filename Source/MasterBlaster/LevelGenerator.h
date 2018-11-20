@@ -8,6 +8,7 @@ class ABaseUnit;
 class APlayerUnit;
 class ABasicEnemyUnit;
 class ACoverBlock;
+class ADynamicLevelElement;
 class AMasterBlasterGameState;
 
 #include "CoreMinimal.h"
@@ -42,7 +43,10 @@ public:
 	int numRooms;
 
 	UPROPERTY(EditAnywhere, Category = Units)
-	int DefaulPlayerTeamSize;
+	int DefaultPlayerTeamSize;
+
+	UPROPERTY(EditAnywhere, Category = DynamicLevelElements)
+	TArray<TSubclassOf<ADynamicLevelElement>> DynamicLevelElements;
 
 	UPROPERTY(EditAnywhere, Category = Units)
 	TSubclassOf<ABaseUnit> PlayerUnitBP;

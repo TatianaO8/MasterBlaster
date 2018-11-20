@@ -4,6 +4,7 @@
 #include "BaseUnit.h"
 #include "BasicEnemyUnit.h"
 #include "CoverBlock.h"
+#include "DynamicLevelElement.h"
 
 #include "Room.h"
 
@@ -31,8 +32,8 @@ void ACombatMap::AddRoom(ARoom* room) {
 	rooms.Add(room);
 }
 
-void ACombatMap::SpawnDynamicElements(TSubclassOf<ABasicEnemyUnit> EnemyUnitBP, TSubclassOf<ACoverBlock> CoverBlockBP){
+void ACombatMap::SpawnDynamicElements(TSubclassOf<ABasicEnemyUnit> EnemyUnitBP, TSubclassOf<ACoverBlock> CoverBlockBP, TArray<TSubclassOf<ADynamicLevelElement>> DynamicLevelElements){
 	for (auto room : rooms) {
-		room->Populate(EnemyUnitBP, CoverBlockBP);
+		room->Populate(EnemyUnitBP, CoverBlockBP, DynamicLevelElements);
 	}
 }
