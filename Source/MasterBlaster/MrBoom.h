@@ -15,7 +15,14 @@ UCLASS()
 class MASTERBLASTER_API AMrBoom : public ADynamicLevelElement
 {
 	GENERATED_BODY()
-	
+
+private:
+	//UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Health")
+	float FullHealth;
+
+	//UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Health")
+	float Health;
+
 public:
 	AMasterBlasterGameState* GameState;
 	
@@ -24,7 +31,6 @@ public:
 
 	UPROPERTY(BlueprintReadWrite)
 	float visionRange;
-
 	
 	AMrBoom();
 

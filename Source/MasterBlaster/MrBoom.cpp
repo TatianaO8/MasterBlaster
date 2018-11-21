@@ -7,6 +7,9 @@
 AMrBoom::AMrBoom(){
 	hasFired = false;
 	visionRange = 2560;
+
+	FullHealth = 150.0f;
+	Health = FullHealth;
 }
 
 void AMrBoom::BeginPlay() {
