@@ -94,7 +94,7 @@ void AMasterBlasterGameState::BeginEnemyTurn(){
 			continue;
 		
 		count++;
-		if(count<3)
+		if(count<2)
 			GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Red, FString::Printf(TEXT("Enemy: %d"), count));
 		x->BeginTurn();		
 	}

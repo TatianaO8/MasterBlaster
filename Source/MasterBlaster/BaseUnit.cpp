@@ -249,12 +249,18 @@ void ABaseUnit::FireShot(){
 	GetWorld()->GetFirstPlayerController()->GetHitResultUnderCursor(ECollisionChannel::ECC_Visibility, false, result);
 	FVector target = result.Location;
 	target.Y = 0.f;
+	GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Red, FString::Printf(TEXT("Target: %f, %f"), target.X, target.Y));
+	GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Red, FString::Printf(TEXT("Start: %f, %f"), start.X, start.Y));
+
 
 
 	//GetWorld()->GetFirstPlayerController()->GetMousePosition(target.X, target.Z);
 
 	FRotator direction = UKismetMathLibrary::FindLookAtRotation(start, target);
 	direction.Yaw = 0.f;
+	GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Red, FString::Printf(TEXT("Dir: %f, %f, %f"), direction.Pitch, direction.Roll, direction.Yaw));
+
+
 			
 
 	UWorld* const World = GetWorld();

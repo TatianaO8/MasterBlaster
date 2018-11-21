@@ -47,13 +47,15 @@ void ABasicEnemyUnit::BeginTurn()
 			break;
 		}
 
-		FVector dest = PlayerTeam[x]->GetActorLocation();
+		dest = PlayerTeam[x]->GetActorLocation();
 		if (InWalkRange(dest)) {
-			GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Cyan, FString::Printf(TEXT("Player within range")));
-			GetWorldTimerManager().SetTimer(FireShotTimeHandler, this, &ABasicEnemyUnit::OnFireShot, 5.f, false);
+			GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Cyan, FString::Printf(TEXT("Player %d within range"), x));
+			//GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Red, FString::Printf(TEXT("P pos: %f, %f"), dest.X, dest.Y));
+			//GetWorld()->GetTimerManager().SetTimer(FireShotTimeHandler, this, &ABasicEnemyUnit::OnFireShot, 5.f, false);
 			FireShot();
 			repeatingCallsRemaining = 2;
-			GetWorldTimerManager().SetTimer(FireShotTimeHandler, this, &ABasicEnemyUnit::OnFireShot, 5.f, false);
+			//GetWorldTimerManager().SetTimer(FireShotTimeHandler, this, &ABasicEnemyUnit::OnFireShot, 5.f, false);
+			GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Cyan, FString::Printf(TEXT("Done firing shot")));
 		}
 
 
@@ -91,57 +93,50 @@ void ABasicEnemyUnit::OnFireShot()
 
 void ABasicEnemyUnit::FireShot(){
 
-	// If it's ok to fire again
-	if (bCanFire == true)
+	if (!CanFireShot()) return;
+
+
+	EmptyActionPoints();
+
+	FVector start = GetActorLocation();
+	start += GunOffset;
+	start.Y = 0.f;
+
+	//FRotator enemyRot = GetActorRotation();
+
+	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, start.ToString());
+
+	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, start.ToString());
+
+	//has to be a way to do this
+
+	FVector target = dest;
+	target.Y = 0.f;
+	GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Red, FString::Printf(TEXT("Target: %f, %f"), target.X, target.Y));
+	GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Red, FString::Printf(TEXT("Start: %f, %f"), start.X, start.Y));
+
+
+	//GetWorld()->GetFirstPlayerController()->GetMousePosition(target.X, target.Z);
+
+	FRotator direction = UKismetMathLibrary::FindLookAtRotation(start, target);
+	direction.Yaw = 0.f;
+	GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Red, FString::Printf(TEXT("Dir: %f, %f, %f"), direction.Pitch, direction.Roll, direction.Yaw));
+
+
+	UWorld* const World = GetWorld();
+	if (World != NULL)
 	{
+		bAllowRaycast = false;
 
-		if (ActionPoints < 1) {
-			return;
-		}
-		if (IsMoving) {
-			return;
-		}
-
-		UseActionPoint();
-
-		FVector start = GetActorLocation();
-		start += GunOffset;
-		start.Y = 0.f;
-
-		//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, start.ToString());
-
-		//has to be a way to do this
-		dest.X += 5.0;
-		FVector target = dest;
-		target.Y = 0.f;
+		// spawn the projectile
+		AProjectile *proj = World->SpawnActor<AProjectile>(start, direction);
 
 
-		//GetWorld()->GetFirstPlayerController()->GetMousePosition(target.X, target.Z);
-
-		FRotator direction = UKismetMathLibrary::FindLookAtRotation(start, target);
-		direction.Yaw = 0.f;
-
-
-		UWorld* const World = GetWorld();
-		if (World != NULL)
-		{
-			bAllowRaycast = false;
-
-			// spawn the projectile
-			AProjectile *proj = World->SpawnActor<AProjectile>(start, direction);
-
-
-		}
-
-		//bCanFire = false;
-		World->GetTimerManager().SetTimer(TimerHandle_ShotTimerExpired, this, &ABaseUnit::ShotTimerExpired, FireRate);
-
-		GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Cyan, FString::Printf(TEXT("Fire shot")));
-
-		//bCanFire = false;
-		return;
 	}
-	return;
+
+	//bCanFire = false;
+	World->GetTimerManager().SetTimer(TimerHandle_ShotTimerExpired, this, &ABaseUnit::ShotTimerExpired, 5.0f);
+	GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Cyan, FString::Printf(TEXT("Fire shot")));
 }
 
 void ABasicEnemyUnit::Die(){

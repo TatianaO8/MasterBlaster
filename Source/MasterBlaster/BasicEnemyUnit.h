@@ -14,10 +14,6 @@ class MASTERBLASTER_API ABasicEnemyUnit : public ABaseUnit
 {
 	GENERATED_BODY()
 
-
-protected:
-	FVector dest;
-
 private:
 	AMasterBlasterGameState *gameState;
 
@@ -25,7 +21,6 @@ private:
 		TArray<ABaseUnit*> PlayerTeam;
 
 	int repeatingCallsRemaining;
-
 	FTimerHandle FireShotTimeHandler;
 	
 protected:
@@ -33,7 +28,9 @@ protected:
 	void BeginPlay();
 
 public:
-	
+
+	FVector dest;
+
 	//override
 	void BeginTurn() override;
 	
