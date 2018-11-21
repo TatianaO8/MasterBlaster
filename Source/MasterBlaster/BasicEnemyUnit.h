@@ -17,7 +17,6 @@ class MASTERBLASTER_API ABasicEnemyUnit : public ABaseUnit
 
 protected:
 	FVector dest;
-	FTimerHandle FireShotTimeHandler;
 
 private:
 	AMasterBlasterGameState *gameState;
@@ -26,6 +25,8 @@ private:
 		TArray<ABaseUnit*> PlayerTeam;
 
 	int repeatingCallsRemaining;
+
+	FTimerHandle FireShotTimeHandler;
 	
 protected:
 	// Called when the game starts or when spawned

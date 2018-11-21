@@ -384,10 +384,10 @@ void ABaseUnit::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPr
 		{
 
 		}*/
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Oh, the agony")));
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Oh, the pain")));
 	}
 }
 
 void ABaseUnit::Die(){
-	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, TEXT("Oh the pain"));
+	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, TEXT("Oh death"));
 }

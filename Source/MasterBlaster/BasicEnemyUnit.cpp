@@ -30,7 +30,9 @@ void ABasicEnemyUnit::BeginTurn()
 	//if there is any players within range, shoot at it
 	//if not, skip turn for now
 	PlayerTeam = gameState->GetPlayerTeam();
-	//
+	//or move positions...come back to later
+
+
 	
 	//if(gameState->GetPlayerTeamSize() > 0)
 		//GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Cyan, FString::Printf(TEXT("There are players on the team")));
@@ -38,20 +40,20 @@ void ABasicEnemyUnit::BeginTurn()
 
 	for (int x = 0; x < PlayerTeam.Num(); x++)
 	{
-		//GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Cyan, FString::Printf(TEXT("In the for loop")));
 
 		if (ActionPoints == 0)
 		{
-			//GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Cyan, FString::Printf(TEXT("Out of action points")));
+			GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Cyan, FString::Printf(TEXT("Out of action points")));
 			break;
 		}
 
 		FVector dest = PlayerTeam[x]->GetActorLocation();
 		if (InWalkRange(dest)) {
-			//GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Cyan, FString::Printf(TEXT("Player within range")));
-			GetWorldTimerManager().SetTimer(FireShotTimeHandler, this, &ABasicEnemyUnit::OnFireShot, 1.f, false, 5.0f);
+			GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Cyan, FString::Printf(TEXT("Player within range")));
+			GetWorldTimerManager().SetTimer(FireShotTimeHandler, this, &ABasicEnemyUnit::OnFireShot, 5.f, false);
 			FireShot();
-			GetWorldTimerManager().SetTimer(FireShotTimeHandler, this, &ABasicEnemyUnit::OnFireShot, 1.f, false, 5.0f);
+			repeatingCallsRemaining = 2;
+			GetWorldTimerManager().SetTimer(FireShotTimeHandler, this, &ABasicEnemyUnit::OnFireShot, 5.f, false);
 		}
 
 
@@ -80,8 +82,11 @@ void ABasicEnemyUnit::BeginTurn()
 
 void ABasicEnemyUnit::OnFireShot()
 {
-	if(--repeatingCallsRemaining <= 0)
+	GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Cyan, FString::Printf(TEXT("We need some time")));
+	if (--repeatingCallsRemaining <= 0)
 		GetWorldTimerManager().ClearTimer(FireShotTimeHandler);
+	else
+		OnFireShot();
 }
 
 void ABasicEnemyUnit::FireShot(){
@@ -106,6 +111,7 @@ void ABasicEnemyUnit::FireShot(){
 		//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, start.ToString());
 
 		//has to be a way to do this
+		dest.X += 5.0;
 		FVector target = dest;
 		target.Y = 0.f;
 
@@ -129,6 +135,8 @@ void ABasicEnemyUnit::FireShot(){
 
 		//bCanFire = false;
 		World->GetTimerManager().SetTimer(TimerHandle_ShotTimerExpired, this, &ABaseUnit::ShotTimerExpired, FireRate);
+
+		GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Cyan, FString::Printf(TEXT("Fire shot")));
 
 		//bCanFire = false;
 		return;
