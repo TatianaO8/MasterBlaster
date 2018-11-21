@@ -5,6 +5,7 @@
 #include "Engine/World.h"
 #include "Engine.h"
 #include "BaseUnit.h"
+#include "MrBoom.h"
 #include "BasicEnemyUnit.h"
 
 AMasterBlasterGameState::AMasterBlasterGameState() {
@@ -22,10 +23,16 @@ int AMasterBlasterGameState::RegisterPlayerUnit(ABaseUnit* unit) {
 	return PlayerTeam.Num() - 1;
 }
 
-int AMasterBlasterGameState::RegisterEnemyUnit(ABaseUnit * unit){
+int AMasterBlasterGameState::RegisterEnemyUnit(ABaseUnit* unit){
 	EnemyTeam.Add(unit);
 	return EnemyTeam.Num() - 1;
 }
+
+void AMasterBlasterGameState::RegisterMrBoom(AMrBoom* MrBoom){
+	MrBooms.Add(MrBoom);
+}
+
+
 
 void AMasterBlasterGameState::UnregisterPlayerUnit(int index){
 	PlayerTeam.RemoveAt(index, 1, true);
@@ -46,7 +53,8 @@ void AMasterBlasterGameState::CycleUnit(){
 	for (int i = 0; i < PlayerTeam.Num(); i++) {
 		activeUnit++;
 		activeUnit %= PlayerTeam.Num();
-		if (PlayerTeam[activeUnit]->ActionPoints > 0) {
+		
+		if (PlayerTeam[activeUnit] != nullptr && PlayerTeam[activeUnit]->ActionPoints > 0) {
 			return;
 		}
 	}
@@ -98,9 +106,16 @@ void AMasterBlasterGameState::BeginEnemyTurn(){
 void AMasterBlasterGameState::BeginPlayerTurn(){
 	GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Cyan, FString::Printf(TEXT("Begin Player Turn")));
 	for (auto x : PlayerTeam) {
+		if (x == nullptr) continue;
 		x->BeginTurn();
 	}
 	IsPlayerTurn = true;
+}
+
+void AMasterBlasterGameState::ReloadBooms(){
+	for (auto MrB : MrBooms) {
+		MrB->hasFired = false;
+	}
 }
 
 bool AMasterBlasterGameState::PlayerTurnUpdate(){
