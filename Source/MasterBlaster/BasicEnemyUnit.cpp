@@ -22,9 +22,7 @@ void ABasicEnemyUnit::BeginPlay() {
 
 //override from BaseUnit
 void ABasicEnemyUnit::BeginTurn() {
-	if (!Activated) {
-		EmptyActionPoints();
-	}
+	EmptyActionPoints();
 }
 
 

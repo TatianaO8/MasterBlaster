@@ -29,7 +29,7 @@ protected:
 public:
 
 	UPROPERTY(BlueprintReadWrite)
-		bool Activated;
+	bool Activated;
 
 	//override
 	void BeginTurn() override;
