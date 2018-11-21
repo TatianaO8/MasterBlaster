@@ -61,8 +61,7 @@ ABaseUnit* AMasterBlasterGameState::GetActiveUnit() {
 	return (PlayerTeam.Num() > 0) ? PlayerTeam[activeUnit] : nullptr;
 }
 
-TArray<ABaseUnit*> AMasterBlasterGameState::GetPlayerTeam()
-{
+TArray<ABaseUnit*> AMasterBlasterGameState::GetPlayerTeam(){
 	return PlayerTeam;
 }
 
@@ -94,8 +93,8 @@ void AMasterBlasterGameState::BeginEnemyTurn(){
 			continue;
 		
 		count++;
-		if(count<3)
-			GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Red, FString::Printf(TEXT("Enemy: %d"), count));
+		//if(count<3)
+			//GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Red, FString::Printf(TEXT("Enemy: %d"), count));
 		x->BeginTurn();		
 	}
 }

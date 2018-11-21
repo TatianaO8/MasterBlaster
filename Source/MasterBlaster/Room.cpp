@@ -61,18 +61,18 @@ void ARoom::SpawnCoverBlock(int x, int y, TSubclassOf<ACoverBlock> &CoverBlockBP
 }
 
 void ARoom::SpawnDynamicElement(int x, int y, FName tileData, TArray<TSubclassOf<ADynamicLevelElement>> Elements){
-	GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Red, FString::Printf(TEXT("Spawn dynamic elements")));
+	//GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Red, FString::Printf(TEXT("Spawn dynamic elements")));
 	FVector tempLoc(0, -1000, 0);
 	FRotator tempRot(0, 0, 0);
 
 	for (auto element : Elements) {
 		auto temp = GetWorld()->SpawnActor<ADynamicLevelElement>(element, tempLoc, tempRot);
 		if (temp->GetElementId() == tileData) {
-			GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Cyan, FString::Printf(TEXT("Pass")));
+			//GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Cyan, FString::Printf(TEXT("Pass")));
 			temp->SetActorTransform(GetSpawnLocation(x, y));
 			break;
 		}
-		GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Red, FString::Printf(TEXT("Fail")));
+		//GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Red, FString::Printf(TEXT("Fail")));
 		temp->Destroy();
 	}
 
