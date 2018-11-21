@@ -39,9 +39,6 @@ public:
 	//override
 	// Fire a shot in the specified direction 
 	void FireShot() override;
-
-	UFUNCTION()
-	void OnFireShot();
 	
 	void Die() override;
 };
