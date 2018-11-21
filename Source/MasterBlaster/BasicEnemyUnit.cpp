@@ -15,11 +15,16 @@ void ABasicEnemyUnit::BeginPlay() {
 
 	gameState = GetWorld()->GetGameState<AMasterBlasterGameState>();
 	teamIndex = gameState->RegisterEnemyUnit(this);
+
+	Activated = false;
+
 }
 
 //override from BaseUnit
 void ABasicEnemyUnit::BeginTurn() {
-	EmptyActionPoints();
+	if (!Activated) {
+		EmptyActionPoints();
+	}
 }
 
 

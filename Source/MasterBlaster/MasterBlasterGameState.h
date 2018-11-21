@@ -70,11 +70,17 @@ public:
 	UFUNCTION(BlueprintCallable)
 	TArray<ABaseUnit*> GetPlayerTeam();
 
+	UFUNCTION(BlueprintCallable)
 	void BeginEnemyTurn();
+	
+	UFUNCTION(BlueprintCallable)
 	void BeginPlayerTurn();
 
-	void PlayerTurnUpdate();
-	void EnemyTurnUpdate();
+	UFUNCTION(BlueprintCallable)
+	bool PlayerTurnUpdate();
+
+	UFUNCTION(BlueprintCallable)
+	bool EnemyTurnUpdate();
 
 	UFUNCTION(BlueprintCallable)
 	void UpdateGameState();

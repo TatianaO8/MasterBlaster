@@ -22,17 +22,15 @@ protected:
 private:
 	AMasterBlasterGameState *gameState;
 
-	UPROPERTY(BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
-		TArray<ABaseUnit*> PlayerTeam;
-
-	int repeatingCallsRemaining;
-	
 protected:
 	// Called when the game starts or when spawned
 	void BeginPlay();
 
 public:
-	
+
+	UPROPERTY(BlueprintReadWrite)
+		bool Activated;
+
 	//override
 	void BeginTurn() override;
 	

@@ -89,12 +89,8 @@ void AMasterBlasterGameState::BeginEnemyTurn(){
 	
 	//Refesh Team's AP
 	for (auto x : EnemyTeam) {
-		if (x == nullptr) 
-			continue;
-		
-		count++;
-		//if(count<3)
-			//GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Red, FString::Printf(TEXT("Enemy: %d"), count));
+		if (x == nullptr) continue;
+
 		x->BeginTurn();		
 	}
 }
@@ -107,7 +103,7 @@ void AMasterBlasterGameState::BeginPlayerTurn(){
 	IsPlayerTurn = true;
 }
 
-void AMasterBlasterGameState::PlayerTurnUpdate(){
+bool AMasterBlasterGameState::PlayerTurnUpdate(){
 	bool turnOverFlag = true;
 	for (auto x : PlayerTeam) {
 		if (x == nullptr) continue;
@@ -118,12 +114,10 @@ void AMasterBlasterGameState::PlayerTurnUpdate(){
 		}
 	}
 
-	if (turnOverFlag) {
-		BeginEnemyTurn();
-	}
+	return turnOverFlag;
 }
 
-void AMasterBlasterGameState::EnemyTurnUpdate(){
+bool AMasterBlasterGameState::EnemyTurnUpdate(){
 	bool turnOverFlag = true;
 	for (auto x : EnemyTeam) {
 		if (x == nullptr) continue;
@@ -134,9 +128,7 @@ void AMasterBlasterGameState::EnemyTurnUpdate(){
 		}
 	}
 
-	if (turnOverFlag) {
-		BeginPlayerTurn();
-	}
+	return turnOverFlag;
 }
 
 //Game Over, Next level, player's turn, enemy's turn
