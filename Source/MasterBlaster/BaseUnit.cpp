@@ -45,7 +45,7 @@ ABaseUnit::ABaseUnit()
 
 	MaxActionPoints = ActionPoints = 2;
 
-	MoveSpeed = 200;
+	MoveSpeed = 300;
 	MoveRange = 2560;
 
 }
@@ -293,7 +293,8 @@ void ABaseUnit::DisableRaycast()
 void ABaseUnit::Raycast()
 {
 	FHitResult result;
-	gameState = GetWorld()->GetGameState<AMasterBlasterGameState>();
+	FVector NewVelocity;
+	//gameState = GetWorld()->GetGameState<AMasterBlasterGameState>();
 	UGameViewportClient *GameViewport = GEngine->GameViewport;
 	FVector2D MousePosition;
 	GameViewport->GetMousePosition(MousePosition);
@@ -325,34 +326,48 @@ void ABaseUnit::Raycast()
 	ProjParams->LaunchVelocity = ForwardVector;
 	ProjParams->DrawDebugTime = .05f;
 	ProjParams->DrawDebugType = EDrawDebugTrace::Type::ForDuration;
-	ProjParams->SimFrequency = 15;
+	ProjParams->SimFrequency = 5;
 	ProjParams->MaxSimTime = 2;
 	ProjParams->OverrideGravityZ = 1.f;
-	ProjParams->ProjectileRadius = 5;
-	ProjParams->ActorsToIgnore = { gameState->GetPlayerTeam()[0],  gameState->GetPlayerTeam()[1], gameState->GetPlayerTeam()[2] };
-
-	if (!bAllowRaycast)
-		return;
+	ProjParams->ProjectileRadius = 10;
+	ProjParams->ActorsToIgnore = (TArray<AActor*>)gameState->GetPlayerTeam(); //{ gameState->GetPlayerTeam()[0],  gameState->GetPlayerTeam()[1], gameState->GetPlayerTeam()[2] };
 
 	GameplayStatics->PredictProjectilePath(GetWorld(),  *ProjParams, PathResult);
 
 	*HitResult = PathResult.HitResult;
 
+	/*if (GEngine)
+		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, HitResult->ImpactPoint.ToString());
+	if (GEngine)
+		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Orange, UKismetMathLibrary::MirrorVectorByNormal(ForwardVector, HitResult->ImpactNormal).ToString());
+
+	if (GEngine)
+		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Purple, ForwardVector.ToString());*/
+
+	
+
+	UGameplayStatics::SuggestProjectileVelocity(GetWorld(), NewVelocity, HitResult->ImpactPoint + HitResult->Normal, UKismetMathLibrary::MirrorVectorByNormal(ForwardVector, HitResult->ImpactNormal) + HitResult->ImpactPoint, 1000.f);
+	
 	ProjParams2->bTraceWithChannel = true;
 	ProjParams2->bTraceWithCollision = true;
 	ProjParams2->bTraceComplex = true;
-	ProjParams2->StartLocation = HitResult->ImpactPoint + HitResult->Normal;
-	ProjParams2->LaunchVelocity = HitResult->Normal;
-	ProjParams2->DrawDebugTime = .01f;
+	ProjParams2->StartLocation = HitResult->ImpactPoint + (HitResult->Normal * 8);
+	ProjParams2->LaunchVelocity = NewVelocity;
+	ProjParams2->DrawDebugTime = .05f;
 	ProjParams2->DrawDebugType = EDrawDebugTrace::Type::ForDuration;
-	ProjParams2->SimFrequency = 15;
+	ProjParams2->SimFrequency = 5;
 	ProjParams2->MaxSimTime = 2;
 	ProjParams2->OverrideGravityZ = 1.f;
-	ProjParams2->ProjectileRadius = 5;
-	ProjParams2->ActorsToIgnore = { gameState->GetPlayerTeam()[0],  gameState->GetPlayerTeam()[1], gameState->GetPlayerTeam()[2] };
-
+	ProjParams2->ProjectileRadius = 7;
+	ProjParams2->ActorsToIgnore = (TArray<AActor*>)gameState->GetPlayerTeam(); //{ gameState->GetPlayerTeam()[0],  gameState->GetPlayerTeam()[1], gameState->GetPlayerTeam()[2] };
+	if (GEngine)
+		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Blue, ProjParams2->StartLocation.ToString());
+	if (GEngine)
+		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, ProjParams2->LaunchVelocity.ToString());
 	GameplayStatics->PredictProjectilePath(GetWorld(), *ProjParams2, PathResult2);
 
+	if (!bAllowRaycast)
+		return;
 
 	//DrawDebugLine(GetWorld(), StartTrace, EndTrace, FColor(12, 12, 12), false, 0.f, 50.f);
 
