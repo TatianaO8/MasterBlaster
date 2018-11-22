@@ -14,23 +14,23 @@ class MASTERBLASTER_API ABasicEnemyUnit : public ABaseUnit
 {
 	GENERATED_BODY()
 
-
-protected:
-	FVector dest;
-	FTimerHandle FireShotTimeHandler;
-
 private:
 	AMasterBlasterGameState *gameState;
 
+	UPROPERTY(BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+		TArray<ABaseUnit*> PlayerTeam;
+
+	int repeatingCallsRemaining;
+	FTimerHandle FireShotTimeHandler;
+	
 protected:
 	// Called when the game starts or when spawned
 	void BeginPlay();
 
 public:
-
 	UPROPERTY(BlueprintReadWrite)
-	bool Activated;
-
+		bool Activated;
+	FVector dest;
 	//override
 	void BeginTurn() override;
 	

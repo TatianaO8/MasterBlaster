@@ -97,8 +97,12 @@ void AMasterBlasterGameState::BeginEnemyTurn(){
 	
 	//Refesh Team's AP
 	for (auto x : EnemyTeam) {
-		if (x == nullptr) continue;
+		if (x == nullptr)
+			continue;
 
+		count++;
+		if (count < 2)
+			GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Red, FString::Printf(TEXT("Enemy: %d"), count));
 		x->BeginTurn();		
 	}
 }
