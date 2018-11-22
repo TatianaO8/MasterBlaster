@@ -17,7 +17,7 @@ void ABasicEnemyUnit::BeginPlay() {
 	teamIndex = gameState->RegisterEnemyUnit(this);
 
 	Activated = false;
-
+}
 //override from BaseUnit
 void ABasicEnemyUnit::BeginTurn() 
 {
