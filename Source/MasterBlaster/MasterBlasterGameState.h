@@ -3,6 +3,7 @@
 #pragma once
 
 class ABaseUnit;
+class AMrBoom;
 
 #include "CoreMinimal.h"
 #include "GameFramework/GameStateBase.h"
@@ -33,6 +34,9 @@ private:
 
 	UPROPERTY(BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	TArray<ABaseUnit*> EnemyTeam;
+
+	UPROPERTY(BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	TArray<AMrBoom*> MrBooms;
 	
 	UPROPERTY(BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	bool combatStarted;
@@ -47,6 +51,7 @@ public:
 	//public functions
 	int RegisterPlayerUnit(ABaseUnit* unit);
 	int RegisterEnemyUnit(ABaseUnit* unit);
+	void RegisterMrBoom(AMrBoom* MrBoom);
 	void UnregisterPlayerUnit(int index);
 	void UnregisterEnemyUnit(int index);
 
@@ -70,11 +75,20 @@ public:
 	UFUNCTION(BlueprintCallable)
 	TArray<ABaseUnit*> GetPlayerTeam();
 
+	UFUNCTION(BlueprintCallable)
 	void BeginEnemyTurn();
+	
+	UFUNCTION(BlueprintCallable)
 	void BeginPlayerTurn();
 
-	void PlayerTurnUpdate();
-	void EnemyTurnUpdate();
+	UFUNCTION(BlueprintCallable)
+	void ReloadBooms();
+
+	UFUNCTION(BlueprintCallable)
+	bool PlayerTurnUpdate();
+
+	UFUNCTION(BlueprintCallable)
+	bool EnemyTurnUpdate();
 
 	UFUNCTION(BlueprintCallable)
 	void UpdateGameState();

@@ -28,18 +28,15 @@ protected:
 	void BeginPlay();
 
 public:
-
+	UPROPERTY(BlueprintReadWrite)
+		bool Activated;
 	FVector dest;
-
 	//override
 	void BeginTurn() override;
 	
 	//override
 	// Fire a shot in the specified direction 
 	void FireShot() override;
-
-	UFUNCTION()
-	void OnFireShot();
 	
 	void Die() override;
 };

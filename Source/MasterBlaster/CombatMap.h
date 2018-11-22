@@ -5,6 +5,7 @@ class ARoom;
 class ABaseUnit;
 class ABasicEnemyUnit;
 class ACoverBlock;
+class ADynamicLevelElement;
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
@@ -40,6 +41,6 @@ public:
 	
 	void AddRoom(ARoom* room);
 
-	void SpawnDynamicElements(TSubclassOf<ABasicEnemyUnit> EnemyUnitBP, TSubclassOf<ACoverBlock> CoverBlockBP);
+	void SpawnDynamicElements(TSubclassOf<ABasicEnemyUnit> EnemyUnitBP, TSubclassOf<ACoverBlock> CoverBlockBP, TArray<TSubclassOf<ADynamicLevelElement>> DynamicLevelElements);
 	
 };
