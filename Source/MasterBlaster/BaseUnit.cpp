@@ -139,6 +139,7 @@ void ABaseUnit::Move(float DeltaTime){
 
 void ABaseUnit::FinishMove() {
 	IsMoving = false;
+	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Blue, GetActorLocation().ToString());
 }
 
 float ABaseUnit::TakeDamage(float DamageAmount, struct FDamageEvent const & DamageEvent, class AController * EventInstigator, AActor * DamageCauser)
@@ -249,8 +250,8 @@ void ABaseUnit::FireShot(){
 	GetWorld()->GetFirstPlayerController()->GetHitResultUnderCursor(ECollisionChannel::ECC_Visibility, false, result);
 	FVector target = result.Location;
 	target.Y = 0.f;
-	GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Red, FString::Printf(TEXT("Target: %f, %f"), target.X, target.Y));
-	GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Red, FString::Printf(TEXT("Start: %f, %f"), start.X, start.Y));
+	//GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Red, FString::Printf(TEXT("Target: %f, %f"), target.X, target.Y));
+	//GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Red, FString::Printf(TEXT("Start: %f, %f"), start.X, start.Y));
 
 
 
@@ -258,7 +259,7 @@ void ABaseUnit::FireShot(){
 
 	FRotator direction = UKismetMathLibrary::FindLookAtRotation(start, target);
 	direction.Yaw = 0.f;
-	GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Red, FString::Printf(TEXT("Dir: %f, %f, %f"), direction.Pitch, direction.Roll, direction.Yaw));
+	//GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Red, FString::Printf(TEXT("Dir: %f, %f, %f"), direction.Pitch, direction.Roll, direction.Yaw));
 
 
 			
@@ -366,10 +367,10 @@ void ABaseUnit::Raycast()
 	ProjParams2->OverrideGravityZ = 1.f;
 	ProjParams2->ProjectileRadius = 7;
 	ProjParams2->ActorsToIgnore = (TArray<AActor*>)gameState->GetPlayerTeam(); //{ gameState->GetPlayerTeam()[0],  gameState->GetPlayerTeam()[1], gameState->GetPlayerTeam()[2] };
-	if (GEngine)
-		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Blue, ProjParams2->StartLocation.ToString());
-	if (GEngine)
-		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, ProjParams2->LaunchVelocity.ToString());
+	//if (GEngine)
+		//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Blue, ProjParams2->StartLocation.ToString());
+	//if (GEngine)
+		//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, ProjParams2->LaunchVelocity.ToString());
 	GameplayStatics->PredictProjectilePath(GetWorld(), *ProjParams2, PathResult2);
 
 	if (!bAllowRaycast)

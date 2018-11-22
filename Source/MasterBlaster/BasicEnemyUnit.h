@@ -38,7 +38,7 @@ public:
 	// Fire a shot in the specified direction 
 
 	void OnFireShot();
-	void FireShot() override;
+	void FireShot(FVector dest);
 	
 	void Die() override;
 };

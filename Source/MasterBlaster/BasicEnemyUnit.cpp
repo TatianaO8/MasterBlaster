@@ -47,10 +47,11 @@ void ABasicEnemyUnit::BeginTurn()
 		}
 
 		FVector dest = PlayerTeam[x]->GetActorLocation();
+		
 		if (InWalkRange(dest)) {
 			//GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Cyan, FString::Printf(TEXT("Player within range")));
 			GetWorldTimerManager().SetTimer(FireShotTimeHandler, this, &ABasicEnemyUnit::OnFireShot, 1.f, false, 5.0f);
-			FireShot();
+			FireShot(dest);
 			GetWorldTimerManager().SetTimer(FireShotTimeHandler, this, &ABasicEnemyUnit::OnFireShot, 1.f, false, 5.0f);
 		}
 
@@ -83,7 +84,7 @@ void ABasicEnemyUnit::OnFireShot()
 		GetWorldTimerManager().ClearTimer(FireShotTimeHandler);
 }
 
-void ABasicEnemyUnit::FireShot(){
+void ABasicEnemyUnit::FireShot(FVector dest){
 
 	// If it's ok to fire again
 	if (bCanFire == true)
@@ -107,8 +108,8 @@ void ABasicEnemyUnit::FireShot(){
 		//has to be a way to do this
 		FVector target = dest;
 		target.Y = 0.f;
-
-
+		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, target.ToString());
+		
 		//GetWorld()->GetFirstPlayerController()->GetMousePosition(target.X, target.Z);
 
 		FRotator direction = UKismetMathLibrary::FindLookAtRotation(start, target);
