@@ -108,13 +108,14 @@ void ABasicEnemyUnit::FireShot(FVector dest){
 		//has to be a way to do this
 		FVector target = dest;
 		target.Y = 0.f;
-		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, target.ToString());
+		
+		//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, target.ToString());
 		
 		//GetWorld()->GetFirstPlayerController()->GetMousePosition(target.X, target.Z);
 
 		FRotator direction = UKismetMathLibrary::FindLookAtRotation(start, target);
-		direction.Yaw = 0.f;
 
+		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, direction.ToString());
 
 		UWorld* const World = GetWorld();
 		if (World != NULL)
@@ -123,7 +124,6 @@ void ABasicEnemyUnit::FireShot(FVector dest){
 
 			// spawn the projectile
 			AProjectile *proj = World->SpawnActor<AProjectile>(start, direction);
-
 
 		}
 

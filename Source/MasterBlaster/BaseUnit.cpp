@@ -258,7 +258,6 @@ void ABaseUnit::FireShot(){
 	//GetWorld()->GetFirstPlayerController()->GetMousePosition(target.X, target.Z);
 
 	FRotator direction = UKismetMathLibrary::FindLookAtRotation(start, target);
-	direction.Yaw = 0.f;
 	//GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Red, FString::Printf(TEXT("Dir: %f, %f, %f"), direction.Pitch, direction.Roll, direction.Yaw));
 
 
