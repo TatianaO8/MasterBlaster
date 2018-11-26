@@ -3,8 +3,10 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "PlayerUnit.h"
 #include "BaseUnit.h"
 #include "BasicEnemyUnit.generated.h"
+
 
 /**
  * 
@@ -30,6 +32,17 @@ protected:
 public:
 	UPROPERTY(BlueprintReadWrite)
 		bool Activated;
+
+	UFUNCTION(BlueprintCallable)
+		APlayerUnit* AquireTarget();
+
+	UFUNCTION(BlueprintCallable)
+		bool PlayerWithinRangeOfEnemy();
+
+	UFUNCTION(BlueprintCallable)
+		bool IsActivated();
+
+
 	FVector dest;
 	//override
 	void BeginTurn() override;
@@ -38,7 +51,9 @@ public:
 	// Fire a shot in the specified direction 
 
 	void OnFireShot();
-	void FireShot(FVector dest);
+
+	UFUNCTION(BlueprintCallable)
+		virtual void FireShot2(FVector dest);
 	
 	void Die() override;
 };

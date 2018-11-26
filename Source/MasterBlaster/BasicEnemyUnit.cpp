@@ -8,6 +8,7 @@
 #include "Engine/Public/CollisionQueryParams.h"
 #include "Engine/World.h"
 #include "Engine.h"
+#include "PlayerUnit.h"
 
 
 void ABasicEnemyUnit::BeginPlay() {
@@ -21,6 +22,8 @@ void ABasicEnemyUnit::BeginPlay() {
 //override from BaseUnit
 void ABasicEnemyUnit::BeginTurn() 
 {
+	GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Cyan, FString::Printf(TEXT("Am I ever in here?")));
+
 	Super::BeginTurn();
 
 	repeatingCallsRemaining = 2;
@@ -43,39 +46,71 @@ void ABasicEnemyUnit::BeginTurn()
 		if (ActionPoints == 0)
 		{
 			//GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Cyan, FString::Printf(TEXT("Out of action points")));
+			Activated = false;
 			break;
 		}
 
 		FVector dest = PlayerTeam[x]->GetActorLocation();
 		
 		if (InWalkRange(dest)) {
+			Activated = true;
 			//GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Cyan, FString::Printf(TEXT("Player within range")));
 			GetWorldTimerManager().SetTimer(FireShotTimeHandler, this, &ABasicEnemyUnit::OnFireShot, 1.f, false, 5.0f);
-			FireShot(dest);
+			FireShot2(dest);
 			GetWorldTimerManager().SetTimer(FireShotTimeHandler, this, &ABasicEnemyUnit::OnFireShot, 1.f, false, 5.0f);
 		}
-
-
-		/*
-		//else
-			//GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Cyan, FString::Printf(TEXT("Player not within range")));
-		//check if the player is within range
-		if (InSprintRange(PlayerTeam[x]->GetActorLocation()))
-		{
-			ActionPoints--;
-			GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Cyan, FString::Printf(TEXT("Player is within range")));
-
-			//if there's enough action points or the player hasn't died yet
-			while (GetActionPoints() > 0 || PlayerTeam[x]->GetHealth() != 0)
-			{
-				target = PlayerTeam[x]->GetActorLocation();
-				GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Cyan, FString::Printf(TEXT("Enemy has ability to shoot")));
-			}
-		} */
-	   	//GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Cyan, FString::Printf(TEXT("Enemy is done with turn")));
 	}
 
 	EmptyActionPoints();
+}
+
+APlayerUnit* ABasicEnemyUnit::AquireTarget() {
+
+	float minDistance = 2560;
+	APlayerUnit* closestUnit = nullptr;
+
+	for (auto playerUnit : gameState->GetPlayerTeam()) {
+
+		if (playerUnit == nullptr)
+			continue;
+
+		auto unitLocation = playerUnit->GetActorLocation();
+		auto distance = (this->GetActorLocation() - unitLocation).Size();
+
+		if (distance <= minDistance) {
+			minDistance = distance;
+			closestUnit = Cast<APlayerUnit>(playerUnit);
+		}
+
+	}
+
+	return closestUnit;
+}
+
+bool ABasicEnemyUnit::IsActivated()
+{
+	return Activated;
+
+}
+
+bool ABasicEnemyUnit::PlayerWithinRangeOfEnemy()
+{
+	PlayerTeam = gameState->GetPlayerTeam();
+	for (int x = 0; x < PlayerTeam.Num(); x++)
+	{
+		if (PlayerTeam[x] == nullptr)
+			continue;
+
+		FVector dest = PlayerTeam[x]->GetActorLocation();
+
+		if (InWalkRange(dest))
+		{
+			Activated = true;
+			return true;
+		}
+	}
+
+	return false;
 }
 
 void ABasicEnemyUnit::OnFireShot()
@@ -84,7 +119,7 @@ void ABasicEnemyUnit::OnFireShot()
 		GetWorldTimerManager().ClearTimer(FireShotTimeHandler);
 }
 
-void ABasicEnemyUnit::FireShot(FVector dest){
+void ABasicEnemyUnit::FireShot2(FVector dest){
 
 	// If it's ok to fire again
 	if (bCanFire == true)
