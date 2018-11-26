@@ -23,9 +23,10 @@ void ABasicEnemyUnit::BeginPlay() {
 //override from BaseUnit
 void ABasicEnemyUnit::BeginTurn() 
 {
-
 	Super::BeginTurn();
+	RefreshActionPoints();
 
+	/*
 
 	//This is not doing anything delete it after
 	repeatingCallsRemaining = 2;
@@ -52,9 +53,9 @@ void ABasicEnemyUnit::BeginTurn()
 			FireShot2(dest);
 			GetWorldTimerManager().SetTimer(FireShotTimeHandler, this, &ABasicEnemyUnit::OnFireShot, 1.f, false, 5.0f);
 		}
-	}
+	} */
 
-	EmptyActionPoints();
+	//EmptyActionPoints();
 }
 
 APlayerUnit* ABasicEnemyUnit::AquireTarget() {
