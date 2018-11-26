@@ -13,6 +13,7 @@
 
 void ABasicEnemyUnit::BeginPlay() {
 	Super::BeginPlay();
+	GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Cyan, FString::Printf(TEXT("BeginPlay")));
 
 	gameState = GetWorld()->GetGameState<AMasterBlasterGameState>();
 	teamIndex = gameState->RegisterEnemyUnit(this);
@@ -22,30 +23,23 @@ void ABasicEnemyUnit::BeginPlay() {
 //override from BaseUnit
 void ABasicEnemyUnit::BeginTurn() 
 {
-	GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Cyan, FString::Printf(TEXT("Am I ever in here?")));
 
 	Super::BeginTurn();
 
-	repeatingCallsRemaining = 2;
 
-	//GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Cyan, FString::Printf(TEXT("BasicEnemyUnit turn")));
+	//This is not doing anything delete it after
+	repeatingCallsRemaining = 2;
 
 	//if there is any players within range, shoot at it
 	//if not, skip turn for now
 	PlayerTeam = gameState->GetPlayerTeam();
-	//
-	
-	//if(gameState->GetPlayerTeamSize() > 0)
-		//GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Cyan, FString::Printf(TEXT("There are players on the team")));
 
 
 	for (int x = 0; x < PlayerTeam.Num(); x++)
 	{
-		//GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Cyan, FString::Printf(TEXT("In the for loop")));
 
 		if (ActionPoints == 0)
 		{
-			//GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Cyan, FString::Printf(TEXT("Out of action points")));
 			Activated = false;
 			break;
 		}
@@ -54,7 +48,6 @@ void ABasicEnemyUnit::BeginTurn()
 		
 		if (InWalkRange(dest)) {
 			Activated = true;
-			//GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Cyan, FString::Printf(TEXT("Player within range")));
 			GetWorldTimerManager().SetTimer(FireShotTimeHandler, this, &ABasicEnemyUnit::OnFireShot, 1.f, false, 5.0f);
 			FireShot2(dest);
 			GetWorldTimerManager().SetTimer(FireShotTimeHandler, this, &ABasicEnemyUnit::OnFireShot, 1.f, false, 5.0f);
