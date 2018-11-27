@@ -154,8 +154,9 @@ int ABaseUnit::GetActionPoints(){
 }
 
 void ABaseUnit::BeginTurn(){
+	bCanBeDamaged = false;
 	RefreshActionPoints();
-
+	bCanBeDamaged = true;
 }
 
 bool ABaseUnit::GetIsMoving(){

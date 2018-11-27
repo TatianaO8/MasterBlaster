@@ -3,7 +3,7 @@
 #include "BasicEnemyUnit.h"
 #include "GenericPlatformMath.h"
 #include "Kismet/KismetMathLibrary.h"
-#include "Projectile.h"
+#include "ProjectileEvil.h"
 #include "GameFramework/PlayerController.h"
 #include "Engine/Public/CollisionQueryParams.h"
 #include "Engine/World.h"
@@ -21,8 +21,9 @@ void ABasicEnemyUnit::BeginPlay() {
 //override from BaseUnit
 void ABasicEnemyUnit::BeginTurn() 
 {
-	Super::BeginTurn();
 
+	bCanBeDamaged = false;
+	Super::BeginTurn();
 	repeatingCallsRemaining = 2;
 
 	//GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Cyan, FString::Printf(TEXT("BasicEnemyUnit turn")));
@@ -76,6 +77,7 @@ void ABasicEnemyUnit::BeginTurn()
 	}
 
 	EmptyActionPoints();
+	bCanBeDamaged = true;
 }
 
 void ABasicEnemyUnit::OnFireShot()
@@ -124,7 +126,7 @@ void ABasicEnemyUnit::FireShot(FVector dest){
 			bAllowRaycast = false;
 
 			// spawn the projectile
-			AProjectile *proj = World->SpawnActor<AProjectile>(start, direction);
+			AProjectile *proj = World->SpawnActor<AProjectileEvil>(start, direction);
 
 		}
 
