@@ -86,6 +86,7 @@ void ABasicEnemyUnit::OnFireShot()
 
 void ABasicEnemyUnit::FireShot(FVector dest){
 
+	bCanBeDamaged = false;
 	// If it's ok to fire again
 	if (bCanFire == true)
 	{
