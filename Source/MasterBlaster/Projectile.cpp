@@ -11,7 +11,7 @@
 AProjectile::AProjectile()
 {
 	// Static reference to the mesh to use for the projectile
-	static ConstructorHelpers::FObjectFinder<UPaperSprite> ProjectileSpriteAsset(TEXT("/Game/Sprites/Projectile2Sprite.Projectile2Sprite"));
+	static ConstructorHelpers::FObjectFinder<UPaperSprite> ProjectileSpriteAsset(TEXT("/Game/Sprites/ProjectileGoodSprite.ProjectileGoodSprite"));
 
 	// Create mesh component for the projectile sphere
 	ProjectileSprite = CreateDefaultSubobject<UPaperSpriteComponent>(TEXT("ProjectileMesh0"));

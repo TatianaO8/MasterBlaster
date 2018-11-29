@@ -3,7 +3,7 @@
 #include "BasicEnemyUnit.h"
 #include "GenericPlatformMath.h"
 #include "Kismet/KismetMathLibrary.h"
-#include "Projectile.h"
+#include "ProjectileEvil.h"
 #include "GameFramework/PlayerController.h"
 #include "Engine/Public/CollisionQueryParams.h"
 #include "Engine/World.h"
@@ -24,37 +24,7 @@ void ABasicEnemyUnit::BeginTurn()
 {
 	Super::BeginTurn();
 	RefreshActionPoints();
-
-	/*
-
-	//This is not doing anything delete it after
-	repeatingCallsRemaining = 2;
-
-	//if there is any players within range, shoot at it
-	//if not, skip turn for now
-	PlayerTeam = gameState->GetPlayerTeam();
-
-
-	for (int x = 0; x < PlayerTeam.Num(); x++)
-	{
-
-		if (ActionPoints == 0)
-		{
-			Activated = false;
-			break;
-		}
-
-		FVector dest = PlayerTeam[x]->GetActorLocation();
-		
-		if (InWalkRange(dest)) {
-			Activated = true;
-			GetWorldTimerManager().SetTimer(FireShotTimeHandler, this, &ABasicEnemyUnit::OnFireShot, 1.f, false, 5.0f);
-			FireShot2(dest);
-			GetWorldTimerManager().SetTimer(FireShotTimeHandler, this, &ABasicEnemyUnit::OnFireShot, 1.f, false, 5.0f);
-		}
-	} */
-
-	//EmptyActionPoints();
+	bCanBeDamaged = false;
 }
 
 APlayerUnit* ABasicEnemyUnit::AquireTarget() {
@@ -103,7 +73,12 @@ bool ABasicEnemyUnit::PlayerWithinRangeOfEnemy()
 		}
 	}
 
+<<<<<<< HEAD
 	return false;
+=======
+	EmptyActionPoints();
+	bCanBeDamaged = true;
+>>>>>>> master
 }
 
 void ABasicEnemyUnit::OnFireShot()
@@ -114,6 +89,7 @@ void ABasicEnemyUnit::OnFireShot()
 
 void ABasicEnemyUnit::FireShot2(FVector dest){
 
+	bCanBeDamaged = false;
 	// If it's ok to fire again
 	if (bCanFire == true)
 	{
@@ -151,7 +127,7 @@ void ABasicEnemyUnit::FireShot2(FVector dest){
 			bAllowRaycast = false;
 
 			// spawn the projectile
-			AProjectile *proj = World->SpawnActor<AProjectile>(start, direction);
+			AProjectile *proj = World->SpawnActor<AProjectileEvil>(start, direction);
 
 		}
 
