@@ -52,7 +52,7 @@ public:
 	int RegisterPlayerUnit(ABaseUnit* unit);
 	int RegisterEnemyUnit(ABaseUnit* unit);
 	void RegisterMrBoom(AMrBoom* MrBoom);
-	void UnregisterPlayerUnit(int index);
+	void UnregisterPlayerUnit(ABaseUnit* unit);
 	void UnregisterEnemyUnit(int index);
 
 	UFUNCTION(BlueprintCallable)

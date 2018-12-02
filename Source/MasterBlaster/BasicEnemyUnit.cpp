@@ -25,7 +25,7 @@ void ABasicEnemyUnit::BeginTurn()
 {
 	Super::BeginTurn();
 	RefreshActionPoints();
-
+	EmptyActionPoints();
 	/*
 
 	//This is not doing anything delete it after

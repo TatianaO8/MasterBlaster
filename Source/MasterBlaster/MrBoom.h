@@ -40,6 +40,6 @@ public:
 	APlayerUnit* AquireTarget();
 
 	UFUNCTION(BlueprintCallable)
-	bool IsActivated(APlayerUnit* target);
+	bool IsActivated();
 	
 };

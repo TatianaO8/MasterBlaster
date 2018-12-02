@@ -33,11 +33,11 @@ void AMasterBlasterGameState::RegisterMrBoom(AMrBoom* MrBoom){
 }
 
 
-void AMasterBlasterGameState::UnregisterPlayerUnit(int index){
-	PlayerTeam.RemoveAt(index, 1, true);
+void AMasterBlasterGameState::UnregisterPlayerUnit(ABaseUnit* unit){
+	PlayerTeam.Remove(unit);
 
 	//To deselect current unit, cycle to the next
-	CycleUnit();
+	//CycleUnit();
 }
 
 void AMasterBlasterGameState::UnregisterEnemyUnit(int index){
@@ -68,6 +68,10 @@ void AMasterBlasterGameState::CycleUnit(){
 ABaseUnit* AMasterBlasterGameState::GetActiveUnit() {
 	if (PlayerTeam.Num() <= activeUnit)
 		return nullptr;
+
+	if (activeUnit < 0 || activeUnit > PlayerTeam.Num()) {
+		return nullptr;
+	}
 
 	return (PlayerTeam.Num() > 0) ? PlayerTeam[activeUnit] : nullptr;
 }
@@ -113,6 +117,7 @@ void AMasterBlasterGameState::BeginEnemyTurn(){
 
 void AMasterBlasterGameState::BeginPlayerTurn(){
 	GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Cyan, FString::Printf(TEXT("Begin Player Turn")));
+	activeUnit = -1;
 	for (auto x : PlayerTeam) {
 		if (x->IsPendingKill()) {
 			continue;
@@ -136,7 +141,9 @@ bool AMasterBlasterGameState::PlayerTurnUpdate(){
 			PlayerTeam.RemoveAt(i, 1);
 		}
 	}
+
 	//GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Cyan, FString::Printf(TEXT("%d"), PlayerTeam.Num()));
+
 	if (PlayerTeam.Num() == 0) {
 		GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Cyan, FString::Printf(TEXT("Player Team defeated.")));
 		GameOver = true;
