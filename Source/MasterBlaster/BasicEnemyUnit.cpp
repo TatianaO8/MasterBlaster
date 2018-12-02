@@ -40,7 +40,9 @@ void ABasicEnemyUnit::BeginTurn()
 	for (int x = 0; x < PlayerTeam.Num(); x++)
 	{
 		//GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Cyan, FString::Printf(TEXT("In the for loop")));
-
+		if (PlayerTeam[x] == nullptr) {
+			return;
+		}
 		if (ActionPoints == 0)
 		{
 			//GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Cyan, FString::Printf(TEXT("Out of action points")));
@@ -141,7 +143,7 @@ void ABasicEnemyUnit::FireShot(FVector dest){
 
 void ABasicEnemyUnit::Die(){
 	Super::Die();
-	gameState->UnregisterEnemyUnit(teamIndex);
+	//gameState->UnregisterEnemyUnit(teamIndex);
 	Destroy();
 }
 
