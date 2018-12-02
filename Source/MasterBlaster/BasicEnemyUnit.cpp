@@ -3,15 +3,17 @@
 #include "BasicEnemyUnit.h"
 #include "GenericPlatformMath.h"
 #include "Kismet/KismetMathLibrary.h"
-#include "ProjectileEvil.h"
+#include "Projectile.h"
 #include "GameFramework/PlayerController.h"
 #include "Engine/Public/CollisionQueryParams.h"
 #include "Engine/World.h"
 #include "Engine.h"
+#include "PlayerUnit.h"
 
 
 void ABasicEnemyUnit::BeginPlay() {
 	Super::BeginPlay();
+	GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Cyan, FString::Printf(TEXT("BeginPlay")));
 
 	gameState = GetWorld()->GetGameState<AMasterBlasterGameState>();
 	teamIndex = gameState->RegisterEnemyUnit(this);
@@ -21,65 +23,88 @@ void ABasicEnemyUnit::BeginPlay() {
 //override from BaseUnit
 void ABasicEnemyUnit::BeginTurn() 
 {
-
-	bCanBeDamaged = false;
 	Super::BeginTurn();
-	repeatingCallsRemaining = 2;
+	RefreshActionPoints();
 
-	//GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Cyan, FString::Printf(TEXT("BasicEnemyUnit turn")));
+	/*
+
+	//This is not doing anything delete it after
+	repeatingCallsRemaining = 2;
 
 	//if there is any players within range, shoot at it
 	//if not, skip turn for now
 	PlayerTeam = gameState->GetPlayerTeam();
-	//
-	
-	//if(gameState->GetPlayerTeamSize() > 0)
-		//GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Cyan, FString::Printf(TEXT("There are players on the team")));
 
 
 	for (int x = 0; x < PlayerTeam.Num(); x++)
 	{
-		//GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Cyan, FString::Printf(TEXT("In the for loop")));
-		if (PlayerTeam[x] == nullptr) {
-			return;
-		}
+
 		if (ActionPoints == 0)
 		{
-			//GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Cyan, FString::Printf(TEXT("Out of action points")));
+			Activated = false;
 			break;
 		}
 
 		FVector dest = PlayerTeam[x]->GetActorLocation();
 		
 		if (InWalkRange(dest)) {
-			//GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Cyan, FString::Printf(TEXT("Player within range")));
+			Activated = true;
 			GetWorldTimerManager().SetTimer(FireShotTimeHandler, this, &ABasicEnemyUnit::OnFireShot, 1.f, false, 5.0f);
-			FireShot(dest);
+			FireShot2(dest);
 			GetWorldTimerManager().SetTimer(FireShotTimeHandler, this, &ABasicEnemyUnit::OnFireShot, 1.f, false, 5.0f);
 		}
+	} */
 
+	//EmptyActionPoints();
+}
 
-		/*
-		//else
-			//GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Cyan, FString::Printf(TEXT("Player not within range")));
-		//check if the player is within range
-		if (InSprintRange(PlayerTeam[x]->GetActorLocation()))
-		{
-			ActionPoints--;
-			GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Cyan, FString::Printf(TEXT("Player is within range")));
+APlayerUnit* ABasicEnemyUnit::AquireTarget() {
 
-			//if there's enough action points or the player hasn't died yet
-			while (GetActionPoints() > 0 || PlayerTeam[x]->GetHealth() != 0)
-			{
-				target = PlayerTeam[x]->GetActorLocation();
-				GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Cyan, FString::Printf(TEXT("Enemy has ability to shoot")));
-			}
-		} */
-	   	//GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Cyan, FString::Printf(TEXT("Enemy is done with turn")));
+	float minDistance = 2560;
+	APlayerUnit* closestUnit = nullptr;
+
+	for (auto playerUnit : gameState->GetPlayerTeam()) {
+
+		if (playerUnit == nullptr)
+			continue;
+
+		auto unitLocation = playerUnit->GetActorLocation();
+		auto distance = (this->GetActorLocation() - unitLocation).Size();
+
+		if (distance <= minDistance) {
+			minDistance = distance;
+			closestUnit = Cast<APlayerUnit>(playerUnit);
+		}
+
 	}
 
-	EmptyActionPoints();
-	bCanBeDamaged = true;
+	return closestUnit;
+}
+
+bool ABasicEnemyUnit::IsActivated()
+{
+	return Activated;
+
+}
+
+bool ABasicEnemyUnit::PlayerWithinRangeOfEnemy()
+{
+	PlayerTeam = gameState->GetPlayerTeam();
+	for (int x = 0; x < PlayerTeam.Num(); x++)
+	{
+		if (PlayerTeam[x] == nullptr)
+			continue;
+
+		FVector dest = PlayerTeam[x]->GetActorLocation();
+
+		if (InWalkRange(dest))
+		{
+			Activated = true;
+			return true;
+		}
+	}
+
+	return false;
 }
 
 void ABasicEnemyUnit::OnFireShot()
@@ -88,9 +113,8 @@ void ABasicEnemyUnit::OnFireShot()
 		GetWorldTimerManager().ClearTimer(FireShotTimeHandler);
 }
 
-void ABasicEnemyUnit::FireShot(FVector dest){
+void ABasicEnemyUnit::FireShot2(FVector dest){
 
-	bCanBeDamaged = false;
 	// If it's ok to fire again
 	if (bCanFire == true)
 	{
@@ -128,7 +152,7 @@ void ABasicEnemyUnit::FireShot(FVector dest){
 			bAllowRaycast = false;
 
 			// spawn the projectile
-			AProjectile *proj = World->SpawnActor<AProjectileEvil>(start, direction);
+			AProjectile *proj = World->SpawnActor<AProjectile>(start, direction);
 
 		}
 
@@ -143,7 +167,7 @@ void ABasicEnemyUnit::FireShot(FVector dest){
 
 void ABasicEnemyUnit::Die(){
 	Super::Die();
-	//gameState->UnregisterEnemyUnit(teamIndex);
+	gameState->UnregisterEnemyUnit(teamIndex);
 	Destroy();
 }
 
