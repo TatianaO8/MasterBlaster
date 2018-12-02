@@ -131,7 +131,12 @@ void AMasterBlasterGameState::ReloadBooms(){
 
 bool AMasterBlasterGameState::PlayerTurnUpdate(){
 	bool turnOverFlag = true;
-
+	for (int i = PlayerTeam.Num() - 1; i >= 0; i--) {
+		if (PlayerTeam[i] == nullptr) {
+			PlayerTeam.RemoveAt(i, 1);
+		}
+	}
+	//GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Cyan, FString::Printf(TEXT("%d"), PlayerTeam.Num()));
 	if (PlayerTeam.Num() == 0) {
 		GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Cyan, FString::Printf(TEXT("Player Team defeated.")));
 		GameOver = true;
