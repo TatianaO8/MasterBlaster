@@ -104,10 +104,7 @@ bool ABasicEnemyUnit::PlayerWithinRangeOfEnemy()
 			return true;
 		}
 	}
-<<<<<<< HEAD
-=======
 
->>>>>>> CrashFixing
 	return false;
 }
 
