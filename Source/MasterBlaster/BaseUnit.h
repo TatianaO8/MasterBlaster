@@ -44,7 +44,12 @@ protected:
 	
 	UPROPERTY(BlueprintReadWrite, meta = (AllowPrivateAccess = true))
 	int teamIndex;
+
+	
+
 public:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		bool isActive;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Health")
 		float FullHealth;

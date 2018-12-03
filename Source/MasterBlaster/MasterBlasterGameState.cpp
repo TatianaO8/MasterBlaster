@@ -33,23 +33,26 @@ void AMasterBlasterGameState::RegisterMrBoom(AMrBoom* MrBoom){
 }
 
 
-
-void AMasterBlasterGameState::UnregisterPlayerUnit(int index){
-	PlayerTeam.RemoveAt(index, 1, true);
+void AMasterBlasterGameState::UnregisterPlayerUnit(ABaseUnit* unit){
+	PlayerTeam.Remove(unit);
 
 	//To deselect current unit, cycle to the next
-	CycleUnit();
+	//CycleUnit();
 }
 
 void AMasterBlasterGameState::UnregisterEnemyUnit(int index){
 	EnemyTeam.RemoveAt(index, 1, true);
 }
 
+
 void AMasterBlasterGameState::SetActiveUnit(int index){
 	activeUnit = index;
 }
 
 void AMasterBlasterGameState::CycleUnit(){
+	if (PlayerTeam.Num() < 1) {
+		return;
+	}
 	for (int i = 0; i < PlayerTeam.Num(); i++) {
 		activeUnit++;
 		activeUnit %= PlayerTeam.Num();
@@ -65,6 +68,10 @@ void AMasterBlasterGameState::CycleUnit(){
 ABaseUnit* AMasterBlasterGameState::GetActiveUnit() {
 	if (PlayerTeam.Num() <= activeUnit)
 		return nullptr;
+
+	if (activeUnit < 0 || activeUnit > PlayerTeam.Num()) {
+		return nullptr;
+	}
 
 	return (PlayerTeam.Num() > 0) ? PlayerTeam[activeUnit] : nullptr;
 }
@@ -110,8 +117,12 @@ void AMasterBlasterGameState::BeginEnemyTurn(){
 
 void AMasterBlasterGameState::BeginPlayerTurn(){
 	GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Cyan, FString::Printf(TEXT("Begin Player Turn")));
+	activeUnit = -1;
 	for (auto x : PlayerTeam) {
-		if (x == nullptr) continue;
+		if (x->IsPendingKill()) {
+			continue;
+		}
+
 		x->BeginTurn();
 	}
 	IsPlayerTurn = true;
@@ -125,8 +136,30 @@ void AMasterBlasterGameState::ReloadBooms(){
 
 bool AMasterBlasterGameState::PlayerTurnUpdate(){
 	bool turnOverFlag = true;
+	for (int i = PlayerTeam.Num() - 1; i >= 0; i--) {
+		if (PlayerTeam[i] == nullptr) {
+			PlayerTeam.RemoveAt(i, 1);
+		}
+	}
+
+	//GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Cyan, FString::Printf(TEXT("%d"), PlayerTeam.Num()));
+
+	if (PlayerTeam.Num() == 0) {
+		GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Cyan, FString::Printf(TEXT("Player Team defeated.")));
+		GameOver = true;
+		return false;
+	}
+
 	for (auto x : PlayerTeam) {
-		if (x == nullptr) continue;
+		if (x == nullptr) {
+			GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Cyan, FString::Printf(TEXT("Player Unit is null.")));
+			continue;
+		}
+		if (x->IsPendingKill()) {
+			GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Cyan, FString::Printf(TEXT("Player Unit is pending kill.")));
+			continue;
+		}
+		
 
 		if (x->GetActionPoints() > 0 || x->GetIsMoving()) {
 			turnOverFlag = false;
@@ -140,7 +173,14 @@ bool AMasterBlasterGameState::PlayerTurnUpdate(){
 bool AMasterBlasterGameState::EnemyTurnUpdate(){
 	bool turnOverFlag = true;
 	for (auto x : EnemyTeam) {
-		if (x == nullptr) continue;
+		if (x == nullptr) {
+			GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Cyan, FString::Printf(TEXT("ENEMY IS NULL.")));
+			continue;
+		}
+		if (x->IsPendingKill()) {
+			GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Cyan, FString::Printf(TEXT("Enemy Unit is pending kill.")));
+			continue;
+		}
 
 		if (x->GetActionPoints() > 0) {
 			turnOverFlag = false;

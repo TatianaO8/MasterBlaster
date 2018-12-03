@@ -36,9 +36,17 @@ APlayerUnit* AMrBoom::AquireTarget(){
 	return closestUnit;
 }
 
-bool AMrBoom::IsActivated(APlayerUnit* target){
-	auto distance = (this->GetActorLocation() - target->GetActorLocation()).Size();
-	
-	return (distance <= visionRange);
+bool AMrBoom::IsActivated(){
+	//auto distance = (this->GetActorLocation() - target->GetActorLocation()).Size();
+	float minDistance = 10000000;
+
+	for (auto unit : GameState->GetPlayerTeam()) {
+		auto distance = (this->GetActorLocation() - unit->GetActorLocation()).Size();
+		if ( distance < minDistance) {
+			minDistance = distance;
+		}
+	}
+
+	return (minDistance <= visionRange);
 }
 
