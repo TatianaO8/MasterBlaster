@@ -143,11 +143,11 @@ void ABaseUnit::FinishMove() {
 	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Blue, GetActorLocation().ToString());
 }
 
-void ABaseUnit::TakeDamage(float DamageAmount, struct FDamageEvent const & DamageEvent, class AController * EventInstigator, AActor * DamageCauser)
+float ABaseUnit::TakeDamage(float DamageAmount, struct FDamageEvent const & DamageEvent, class AController * EventInstigator, AActor * DamageCauser)
 {
 	//bCanBeDamaged = false;
 	UpdateHealth(-DamageAmount);
-	//return DamageAmount;
+	return DamageAmount;
 }
 
 int ABaseUnit::GetActionPoints(){

@@ -104,7 +104,7 @@ protected:
 
 	void Raycast();
 
-	virtual void TakeDamage(float DamageAmount, struct FDamageEvent const & DamageEvent, class AController * EventInstigator, AActor * DamageCauser);
+	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const & DamageEvent, class AController * EventInstigator, AActor * DamageCauser);
 
 	
 	
@@ -118,7 +118,7 @@ public:
 	/*UFUNCTION(BlueprintCallable, Category = "Health")
 		float GetHealth(); */
 
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintPure, Category = "Health")
 		float GetHealthPercentage();
 
 	UFUNCTION(BlueprintPure, Category = "Health")
