@@ -72,13 +72,7 @@ bool ABasicEnemyUnit::PlayerWithinRangeOfEnemy()
 			return true;
 		}
 	}
-
-<<<<<<< HEAD
 	return false;
-=======
-	EmptyActionPoints();
-	bCanBeDamaged = true;
->>>>>>> master
 }
 
 void ABasicEnemyUnit::OnFireShot()

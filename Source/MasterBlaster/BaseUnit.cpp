@@ -65,13 +65,13 @@ void ABaseUnit::BeginPlay()
 
 }
 
-float ABaseUnit::GetHealth()
+/*float ABaseUnit::GetHealth()
 {
 	return Health;
-}
+} */
 
 float ABaseUnit::GetHealthPercentage(){
-	return Health / FullHealth;
+	return HealthPercentage;
 }
 
 FText ABaseUnit::GetHealthIntText()
@@ -82,6 +82,7 @@ FText ABaseUnit::GetHealthIntText()
 	FText hpText = FText::FromString(healthHUD);
 	return hpText;
 }
+
 
 void ABaseUnit::SetDamageState()
 {
@@ -142,11 +143,11 @@ void ABaseUnit::FinishMove() {
 	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Blue, GetActorLocation().ToString());
 }
 
-float ABaseUnit::TakeDamage(float DamageAmount, struct FDamageEvent const & DamageEvent, class AController * EventInstigator, AActor * DamageCauser)
+void ABaseUnit::TakeDamage(float DamageAmount, struct FDamageEvent const & DamageEvent, class AController * EventInstigator, AActor * DamageCauser)
 {
 	//bCanBeDamaged = false;
 	UpdateHealth(-DamageAmount);
-	return DamageAmount;
+	//return DamageAmount;
 }
 
 int ABaseUnit::GetActionPoints(){
@@ -406,7 +407,8 @@ void ABaseUnit::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPr
 		{
 
 		}*/
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Oh, the pain")));
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("I was just hit")));
+		//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Oh, the pain")));
 	}
 }
 
