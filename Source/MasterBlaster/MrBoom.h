@@ -20,10 +20,13 @@ private:
 	//UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Health")
 	float FullHealth;
 
-	//UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Health")
+public:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Health")
 	float Health;
 
-public:
+	UFUNCTION(BlueprintCallable, Category = "Health")
+	float GetHealth();
+
 	AMasterBlasterGameState* GameState;
 	
 	UPROPERTY(BlueprintReadWrite)

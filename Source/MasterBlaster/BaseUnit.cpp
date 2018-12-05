@@ -67,10 +67,10 @@ void ABaseUnit::BeginPlay()
 
 }
 
-/*float ABaseUnit::GetHealth()
+float ABaseUnit::GetHealth()
 {
 	return Health;
-} */
+} 
 
 float ABaseUnit::GetHealthPercentage(){
 	return HealthPercentage;
