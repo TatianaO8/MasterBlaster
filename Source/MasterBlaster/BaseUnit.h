@@ -160,7 +160,7 @@ public:
 	bool CanFireShot();
 
 	UFUNCTION(BlueprintCallable)
-	virtual void FireShot();
+	virtual void FireShot(TSubclassOf<AProjectile> projectile);
 
 	UFUNCTION(BlueprintCallable)
 	void EnableRaycast();

@@ -38,8 +38,8 @@ void ABasicEnemyUnit::BeginTurn()
 {
 	Super::BeginTurn();
 	RefreshActionPoints();
-	bCanBeDamaged = false;
-	EmptyActionPoints();
+	//bCanBeDamaged = false;
+	//EmptyActionPoints();
 
 }
 
@@ -49,14 +49,22 @@ bool ABasicEnemyUnit::ShouldMove(){
 
 FVector ABasicEnemyUnit::PickMoveDestination(){
 	auto rand = FGenericPlatformMath::SRand();
-	FVector MoveDestination = GetActorLocation() + rand * FVector(-MoveRange, 0, 0);
 
+	auto closestUnit = AquireTarget();
+	FVector MoveDestination;
+
+	if (closestUnit->GetActorLocation().X < this->GetActorLocation().X) {
+		MoveDestination = GetActorLocation() + rand * FVector(-MoveRange, 0, 0);
+	}
+	else {
+		MoveDestination = GetActorLocation() + rand * FVector(MoveRange, 0, 0);
+	}
 
 	return MoveDestination;
 }
 
 APlayerUnit* ABasicEnemyUnit::AquireTarget() {
-	float minDistance = 2560;
+	float minDistance = 1000000;
 	APlayerUnit* closestUnit = nullptr;
 
 	for (auto playerUnit : gameState->GetPlayerTeam()) {
