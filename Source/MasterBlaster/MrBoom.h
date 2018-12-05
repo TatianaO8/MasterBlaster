@@ -17,14 +17,21 @@ class MASTERBLASTER_API AMrBoom : public ADynamicLevelElement
 	GENERATED_BODY()
 
 private:
-	//UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Health")
-	float FullHealth;
-
-	//UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Health")
-	float Health;
+	void Die();
+	
+	
 
 public:
 	AMasterBlasterGameState* GameState;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Health")
+	float FullHealth;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Health")
+	float Health;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Health")
+	float HealthPercentage;
 	
 	UPROPERTY(BlueprintReadWrite)
 	bool hasFired;
@@ -41,5 +48,18 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	bool IsActivated();
+
+	// Called every frame
+	virtual void Tick(float DeltaTime) override;
 	
+	UFUNCTION(BlueprintCallable)
+		float GetHealthPercentage();
+
+	UFUNCTION(BlueprintPure, Category = "Health")
+		FText GetHealthIntText();
+
+	UFUNCTION(BlueprintCallable, Category = "Health")
+		void UpdateHealth(float HealthChange);
+
+	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const & DamageEvent, class AController * EventInstigator, AActor * DamageCauser);
 };

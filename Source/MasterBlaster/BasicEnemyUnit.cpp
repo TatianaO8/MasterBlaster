@@ -25,6 +25,7 @@ void ABasicEnemyUnit::BeginTurn()
 	Super::BeginTurn();
 	RefreshActionPoints();
 	bCanBeDamaged = false;
+	EmptyActionPoints();
 
 	/*
 

@@ -8,6 +8,8 @@ AMrBoom::AMrBoom(){
 	hasFired = false;
 	visionRange = 2560;
 
+	HealthPercentage = 1.0f;
+	PrimaryActorTick.bCanEverTick = true;
 	FullHealth = 150.0f;
 	Health = FullHealth;
 }
@@ -50,3 +52,42 @@ bool AMrBoom::IsActivated(){
 	return (minDistance <= visionRange);
 }
 
+float AMrBoom::GetHealthPercentage(){
+	return HealthPercentage;
+}
+
+FText AMrBoom::GetHealthIntText()
+{
+	int32 hp = FMath::RoundHalfFromZero(HealthPercentage * 100);
+	FString hps = FString::FromInt(hp);
+	FString healthHUD = hps + FString(TEXT("%"));
+	FText hpText = FText::FromString(healthHUD);
+	return hpText;
+}
+
+void AMrBoom::UpdateHealth(float HealthChange)
+{ 
+	Health += HealthChange;
+	Health = FMath::Clamp(Health, 0.0f, FullHealth);
+	HealthPercentage = Health / FullHealth;
+}
+
+float AMrBoom::TakeDamage(float DamageAmount, struct FDamageEvent const & DamageEvent, class AController * EventInstigator, AActor * DamageCauser)
+{
+	//bCanBeDamaged = false;
+	UpdateHealth(-DamageAmount);
+	return DamageAmount;
+}
+
+void AMrBoom::Tick(float DeltaTime){
+	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, TEXT("Oh death"));
+	Super::Tick(DeltaTime);
+
+	if (Health <= 0) {
+		Die();
+	}
+}
+
+void AMrBoom::Die(){
+	GetWorld()->DestroyActor(this);
+}
