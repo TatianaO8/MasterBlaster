@@ -32,8 +32,8 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	UFUNCTION(BlueprintCallable, Category = "Health")
-		float GetHealth();
+	// UFUNCTION(BlueprintCallable, Category = "Health")
+	// 	float GetHealth();
 
 	UFUNCTION(BlueprintCallable)
 		float GetHealthPercentage();
