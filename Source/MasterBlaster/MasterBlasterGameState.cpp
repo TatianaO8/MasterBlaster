@@ -40,8 +40,8 @@ void AMasterBlasterGameState::UnregisterPlayerUnit(ABaseUnit* unit){
 	//CycleUnit();
 }
 
-void AMasterBlasterGameState::UnregisterEnemyUnit(int index){
-	EnemyTeam.RemoveAt(index, 1, true);
+void AMasterBlasterGameState::UnregisterEnemyUnit(ABaseUnit* unit){
+	EnemyTeam.Remove(unit);
 }
 
 
@@ -191,7 +191,7 @@ bool AMasterBlasterGameState::EnemyTurnUpdate(){
 			continue;
 		}
 
-		if (x->GetActionPoints() > 0) {
+		if (x->GetActionPoints() > 0 || x->GetIsMoving()) {
 			turnOverFlag = false;
 			break;
 		}

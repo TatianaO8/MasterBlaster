@@ -114,14 +114,16 @@ protected:
 	
 	
 	void UseActionPoint();
-	void EmptyActionPoints();
+	
 	void RefreshActionPoints();
 
 public:
 
+	UFUNCTION(BlueprintCallable)
+	void EmptyActionPoints();
 
-	/*UFUNCTION(BlueprintCallable, Category = "Health")
-		float GetHealth(); */
+	UFUNCTION(BlueprintCallable, Category = "Health")
+		float GetHealth(); 
 
 	UFUNCTION(BlueprintPure, Category = "Health")
 		float GetHealthPercentage();

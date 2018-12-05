@@ -14,6 +14,10 @@ AMrBoom::AMrBoom(){
 	Health = FullHealth;
 }
 
+float AMrBoom::GetHealth() {
+	return Health;
+}
+
 void AMrBoom::BeginPlay() {
 	GameState = GetWorld()->GetGameState<AMasterBlasterGameState>();
 
