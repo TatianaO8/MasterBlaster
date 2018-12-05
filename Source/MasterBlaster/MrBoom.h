@@ -36,9 +36,6 @@ public:
 	float FullHealth;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Health")
-	float Health;
-	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Health")
 	float HealthPercentage;
 	
 	UPROPERTY(BlueprintReadWrite)
