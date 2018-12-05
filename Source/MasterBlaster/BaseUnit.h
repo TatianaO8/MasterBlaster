@@ -120,8 +120,8 @@ protected:
 public:
 
 
-	/*UFUNCTION(BlueprintCallable, Category = "Health")
-		float GetHealth(); */
+	UFUNCTION(BlueprintCallable, Category = "Health")
+		float GetHealth(); 
 
 	UFUNCTION(BlueprintPure, Category = "Health")
 		float GetHealthPercentage();
