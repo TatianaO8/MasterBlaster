@@ -184,6 +184,11 @@ bool AMasterBlasterGameState::PlayerTurnUpdate(){
 }
 
 bool AMasterBlasterGameState::EnemyTurnUpdate(){
+	if (EnemyTeam.Num() == 0) {
+		GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Red, FString::Printf(TEXT("Enemy Team defeated.")));
+		GameOver = true;
+		return false;
+	}
 	bool turnOverFlag = true;
 	for (auto x : EnemyTeam) {
 		if (x == nullptr) {
