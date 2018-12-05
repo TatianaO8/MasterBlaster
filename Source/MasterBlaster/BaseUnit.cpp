@@ -237,7 +237,7 @@ bool ABaseUnit::CanFireShot(){
 	return true;
 }
 
-void ABaseUnit::FireShot(){
+void ABaseUnit::FireShot(TSubclassOf<AProjectile> projectile){
 		
 	if(!CanFireShot()) return;
 		
@@ -273,7 +273,7 @@ void ABaseUnit::FireShot(){
 		bAllowRaycast = false;
 
 		// spawn the projectile
-		AProjectile *proj = World->SpawnActor<AProjectile>(start, direction);
+		AProjectile *proj = World->SpawnActor<AProjectile>(projectile, start, direction);
 
 
 	}
