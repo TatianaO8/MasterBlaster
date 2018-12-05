@@ -41,6 +41,8 @@ float ACoverBlock::TakeDamage(float DamageAmount, struct FDamageEvent const & Da
 void ACoverBlock::Tick(float DeltaTime){
 	Super::Tick(DeltaTime);
 
+	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Cyan, TEXT("Okay this one is working what the heck"));
+
 	if (Health <= 0) {
 		Die();
 	}

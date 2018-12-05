@@ -19,7 +19,10 @@ float AMrBoom::GetHealth() {
 }
 
 void AMrBoom::BeginPlay() {
+	Super::BeginPlay();
 	GameState = GetWorld()->GetGameState<AMasterBlasterGameState>();
+
+	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Cyan, TEXT("MrBoom called"));
 
 	GameState->RegisterMrBoom(this);
 }
