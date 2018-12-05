@@ -101,7 +101,9 @@ void AMasterBlasterGameState::BeginEnemyTurn(){
 	GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Red, FString::Printf(TEXT("Begin Enemy Turn")));
 	IsPlayerTurn = false;
 	
-
+	for (auto x : PlayerTeam) {
+		x->SetDamageState();		
+	}
 	
 	//Refesh Team's AP
 	for (auto x : EnemyTeam) {
@@ -113,6 +115,8 @@ void AMasterBlasterGameState::BeginEnemyTurn(){
 			//GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Red, FString::Printf(TEXT("Enemy: %d"), count));
 		x->BeginTurn();		
 	}
+
+	
 }
 
 void AMasterBlasterGameState::BeginPlayerTurn(){
@@ -125,6 +129,11 @@ void AMasterBlasterGameState::BeginPlayerTurn(){
 
 		x->BeginTurn();
 	}
+
+	for (auto x : EnemyTeam) {
+		x->SetDamageState();
+	}
+
 	IsPlayerTurn = true;
 }
 
