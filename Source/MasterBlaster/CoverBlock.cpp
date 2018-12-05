@@ -8,6 +8,7 @@ ACoverBlock::ACoverBlock(){
 	Health = 100.f;
 	FullHealth = 100.f;
 	HealthPercentage = 1.0f;
+	PrimaryActorTick.bCanEverTick = true;
 }
 
 float ACoverBlock::GetHealthPercentage(){
@@ -38,6 +39,8 @@ float ACoverBlock::TakeDamage(float DamageAmount, struct FDamageEvent const & Da
 }
 
 void ACoverBlock::Tick(float DeltaTime){
+	Super::Tick(DeltaTime);
+
 	if (Health <= 0) {
 		Die();
 	}
