@@ -114,11 +114,13 @@ protected:
 	
 	
 	void UseActionPoint();
-	void EmptyActionPoints();
+	
 	void RefreshActionPoints();
 
 public:
 
+	UFUNCTION(BlueprintCallable)
+	void EmptyActionPoints();
 
 	UFUNCTION(BlueprintCallable, Category = "Health")
 		float GetHealth(); 
@@ -158,7 +160,7 @@ public:
 	bool CanFireShot();
 
 	UFUNCTION(BlueprintCallable)
-	virtual void FireShot();
+	virtual void FireShot(TSubclassOf<AProjectile> projectile);
 
 	UFUNCTION(BlueprintCallable)
 	void EnableRaycast();

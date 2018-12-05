@@ -142,7 +142,7 @@ void ABaseUnit::Move(float DeltaTime){
 
 void ABaseUnit::FinishMove() {
 	IsMoving = false;
-	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Blue, GetActorLocation().ToString());
+	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Blue, GetActorLocation().ToString());
 }
 
 float ABaseUnit::TakeDamage(float DamageAmount, struct FDamageEvent const & DamageEvent, class AController * EventInstigator, AActor * DamageCauser)
@@ -237,7 +237,7 @@ bool ABaseUnit::CanFireShot(){
 	return true;
 }
 
-void ABaseUnit::FireShot(){
+void ABaseUnit::FireShot(TSubclassOf<AProjectile> projectile){
 		
 	if(!CanFireShot()) return;
 		
@@ -273,7 +273,7 @@ void ABaseUnit::FireShot(){
 		bAllowRaycast = false;
 
 		// spawn the projectile
-		AProjectile *proj = World->SpawnActor<AProjectile>(start, direction);
+		AProjectile *proj = World->SpawnActor<AProjectile>(projectile, start, direction);
 
 
 	}

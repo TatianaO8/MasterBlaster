@@ -53,7 +53,7 @@ public:
 	int RegisterEnemyUnit(ABaseUnit* unit);
 	void RegisterMrBoom(AMrBoom* MrBoom);
 	void UnregisterPlayerUnit(ABaseUnit* unit);
-	void UnregisterEnemyUnit(int index);
+	void UnregisterEnemyUnit(ABaseUnit* unit);
 
 	UFUNCTION(BlueprintCallable)
 	void SetActiveUnit(int index);

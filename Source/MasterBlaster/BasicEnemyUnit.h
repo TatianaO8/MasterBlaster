@@ -20,10 +20,11 @@ private:
 	AMasterBlasterGameState *gameState;
 
 	UPROPERTY(BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
-		TArray<ABaseUnit*> PlayerTeam;
+	TArray<ABaseUnit*> PlayerTeam;
 
-	int repeatingCallsRemaining;
-	FTimerHandle FireShotTimeHandler;
+
+	float ClosestTargetDistance();
+
 	
 protected:
 	// Called when the game starts or when spawned
@@ -37,23 +38,20 @@ public:
 		APlayerUnit* AquireTarget();
 
 	UFUNCTION(BlueprintCallable)
-		bool PlayerWithinRangeOfEnemy();
-
-	UFUNCTION(BlueprintCallable)
 		bool IsActivated();
 
+	UFUNCTION(BlueprintCallable)
+		bool CheckActivation();
 
-	FVector dest;
 	//override
 	void BeginTurn() override;
 	
-	//override
-	// Fire a shot in the specified direction 
-
-	void OnFireShot();
+	UFUNCTION(BlueprintCallable)
+	bool ShouldMove();
 
 	UFUNCTION(BlueprintCallable)
-		virtual void FireShot2(FVector dest);
+	FVector PickMoveDestination();
+
 	
 	void Die() override;
 };
