@@ -3,7 +3,7 @@
 #include "BasicEnemyUnit.h"
 #include "GenericPlatformMath.h"
 #include "Kismet/KismetMathLibrary.h"
-#include "Projectile.h"
+#include "ProjectileEvil.h"
 #include "GameFramework/PlayerController.h"
 #include "Engine/Public/CollisionQueryParams.h"
 #include "Engine/World.h"
@@ -153,7 +153,7 @@ void ABasicEnemyUnit::FireShot2(FVector dest){
 			bAllowRaycast = false;
 
 			// spawn the projectile
-			AProjectile *proj = World->SpawnActor<AProjectile>(start, direction);
+			AProjectile *proj = World->SpawnActor<AProjectileEvil>(start, direction);
 
 		}
 
