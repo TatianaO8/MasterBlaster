@@ -142,7 +142,7 @@ void ABaseUnit::Move(float DeltaTime){
 
 void ABaseUnit::FinishMove() {
 	IsMoving = false;
-	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Blue, GetActorLocation().ToString());
+	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Blue, GetActorLocation().ToString());
 }
 
 float ABaseUnit::TakeDamage(float DamageAmount, struct FDamageEvent const & DamageEvent, class AController * EventInstigator, AActor * DamageCauser)
