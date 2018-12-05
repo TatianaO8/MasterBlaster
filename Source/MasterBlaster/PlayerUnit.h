@@ -26,5 +26,7 @@ protected:
 
 	void Die() override;
 	
+public:
+	APlayerUnit();
 	
 };

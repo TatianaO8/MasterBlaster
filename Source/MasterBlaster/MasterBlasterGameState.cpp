@@ -44,6 +44,10 @@ void AMasterBlasterGameState::UnregisterEnemyUnit(ABaseUnit* unit){
 	EnemyTeam.Remove(unit);
 }
 
+void AMasterBlasterGameState::UnregisterMrBoom(AMrBoom * MrBoom){
+	MrBooms.Remove(MrBoom);
+}
+
 
 void AMasterBlasterGameState::SetActiveUnit(int index){
 	activeUnit = index;

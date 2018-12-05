@@ -87,7 +87,7 @@ float AMrBoom::TakeDamage(float DamageAmount, struct FDamageEvent const & Damage
 }
 
 void AMrBoom::Tick(float DeltaTime){
-	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, TEXT("Oh death"));
+	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, TEXT("Oh death"));
 	Super::Tick(DeltaTime);
 
 	if (Health <= 0) {
@@ -96,5 +96,6 @@ void AMrBoom::Tick(float DeltaTime){
 }
 
 void AMrBoom::Die(){
+	GameState->UnregisterMrBoom(this);
 	GetWorld()->DestroyActor(this);
 }

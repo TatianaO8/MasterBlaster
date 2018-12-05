@@ -21,3 +21,9 @@ void APlayerUnit::Die(){
 	//GEngine->AddOnScreenDebugMessage(-1, 150.0f, FColor::Red, TEXT("Player Unit Dead"));
 }
 
+APlayerUnit::APlayerUnit(){
+	FullHealth = 150;
+	Health = 150;
+
+}
+
