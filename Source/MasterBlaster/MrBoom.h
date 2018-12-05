@@ -19,9 +19,6 @@ class MASTERBLASTER_API AMrBoom : public ADynamicLevelElement
 private:
 	void Die();
 	
-	//UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Health")
-	float FullHealth;
-
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Health")
 	float Health;
